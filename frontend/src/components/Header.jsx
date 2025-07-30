@@ -12,30 +12,46 @@ function Header() {
     { label: 'Hall of Fame', href: '/HallOfFame' }
   ];
 
+  const menuOptions = [
+    { label: 'Add new game', href: '/AddGame', icon: Plus },
+    { label: 'Update tier list', href: '/UpdateTier', icon: ArrowDownUp },
+    { label: 'Update data', href: '/UpdateData', icon: RefreshCw }
+  ];
+
   const isActive = (href) => currentPath === href;
 
   return (
-    // TODO: Poner borde gris claro
-    <header className="bg-gradient-to-br from-slate-900 to-zinc-900 text-white">
-      <div className="p-4 flex items-center justify-between">
-        {/* Espacio izquierdo para balancear */}
-        <div className="md:w-24" />
-        
-        {/* Links centrados */}
-        <nav className="space-x-15">
-          {navLinks.map(link => (
-            <a key={link.href} href={link.href}
-              className={`transition-colors ${
-                isActive(link.href) ? 'text-cyan-400' : 'hover:text-cyan-300'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* Botón de menú a la derecha */}
-        <div className="relative">
+    <header className="
+      bg-gradient-to-br from-slate-900 to-zinc-900
+      border-b border-gray-700
+      font-mono font-bold text-lg text-gray-100
+    ">
+      <div className="p-3 flex">
+        {/* Contenedor de navegación */}
+        <div className="flex-1 flex justify-center">
+          <nav className="
+            bg-gray-800/70
+            border border-gray-700 rounded-lg
+            inset-shadow-sm inset-shadow-zinc-900
+            px-10 py-2 space-x-20
+          ">
+            {navLinks.map(link => (
+              <a
+                key={link.href}
+                href={link.href}
+                className={`transition-colors ${
+                  isActive(link.href)
+                    ? 'text-cyan-200 drop-shadow-[0_0_10px_#22d3ee]'
+                    : 'hover:text-cyan-300'
+                }`}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+        {/* Menú desplegable */}
+        <div className="absolute right-6">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-2 rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
@@ -45,27 +61,16 @@ function Header() {
 
           {menuOpen && (
             <div className="absolute right-0 mt-0 w-52 bg-[#121212] bg-gradient-to-br from-slate-800 to-zinc-900 rounded-md shadow-xl z-10 p-2">
-              <a
-                href="/AddGame"
-                className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
-              >
-                <Plus className="w-4 h-4" />
-                Add new game
-              </a>
-              <a
-                href="/UpdateTier"
-                className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
-              >
-                <ArrowDownUp className="w-4 h-4" />
-                Update tier list
-              </a>
-              <a
-                href="/UpdateData"
-                className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
-              >
-                <RefreshCw className="w-4 h-4" />
-                Update data
-              </a>
+              {menuOptions.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
+                >
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </a>
+              ))}
             </div>
           )}
         </div>

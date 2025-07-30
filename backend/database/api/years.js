@@ -10,4 +10,9 @@ function getYears() {
   return stmt.all();
 }
 
-module.exports = { addYear, getYears };
+function deleteYear(year) {
+  const stmt = db.prepare('DELETE FROM years WHERE year = ?');
+  return stmt.run(year);
+}
+
+module.exports = { addYear, getYears, deleteYear };
