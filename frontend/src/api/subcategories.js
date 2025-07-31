@@ -9,3 +9,19 @@ export async function addSubcategory(name, category) {
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al añadir subcategoría');
 }
+
+export async function getSubcategories() {
+  const res = await fetch(`${API_URL}/subcategories`);
+  if (!res.ok) throw new Error('Error al obtener subcategorías');
+  return await res.json();
+}
+
+export async function deleteSubcategory(id) {
+  const res = await fetch(`${API_URL}/delete-subcategory`, {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al eliminar subcategoría');
+}

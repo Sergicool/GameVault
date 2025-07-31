@@ -10,9 +10,11 @@ const URL = 'http://localhost:5173';
 app.use(cors({ origin: URL }));
 app.use(express.json());
 
-// ------------------------------ Routes ------------------------------ //
+// -------------------------------------------------------------------- //
+//                                Routes                                //
+// -------------------------------------------------------------------- //
 
-// ----- Genres ----- //
+// ------------------------------ Genres ------------------------------ //
 app.post('/add-genre', (req, res) => {
   const { name, color } = req.body;
   try {
@@ -29,7 +31,12 @@ app.get('/genres', (req, res) => {
   res.json(genres);
 });
 
-// ----- Categories ----- //
+// ------------------------------ Categories ------------------------------ //
+app.get('/categories', (req, res) => {
+  const categories = db.prepare("SELECT * FROM categories").all();
+  res.json(categories);
+});
+
 app.post('/add-category', (req, res) => {
   const { name } = req.body;
   try {
@@ -41,12 +48,24 @@ app.post('/add-category', (req, res) => {
   }
 });
 
-app.get('/categories', (req, res) => {
-  const categories = db.prepare("SELECT * FROM categories").all();
-  res.json(categories);
+app.delete('/delete-category', (req, res) => {
+  const { id } = req.body;
+  try {
+    const stmt = db.prepare("DELETE FROM categories WHERE id = ?");
+    const result = stmt.run(id);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
-// ----- Subcategories ----- //
+
+// ------------------------------ Subcategories ------------------------------ //
+app.get('/subcategories', (req, res) => {
+  const subcategories = db.prepare("SELECT * FROM subcategories").all();
+  res.json(subcategories);
+});
+
 app.post('/add-subcategory', (req, res) => {
   const { name, category } = req.body;
   try {
@@ -58,12 +77,23 @@ app.post('/add-subcategory', (req, res) => {
   }
 });
 
-app.get('/subcategories', (req, res) => {
-  const subcategories = db.prepare("SELECT * FROM subcategories").all();
-  res.json(subcategories);
+app.delete('/delete-subcategory', (req, res) => {
+  const { id } = req.body;
+  try {
+    const stmt = db.prepare("DELETE FROM subcategories WHERE id = ?");
+    const result = stmt.run(id);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
-// ----- Origins ----- //
+// ------------------------------ Origins ------------------------------ //
+app.get('/origins', (req, res) => {
+  const origins = db.prepare("SELECT * FROM origins").all();
+  res.json(origins);
+});
+
 app.post('/add-origin', (req, res) => {
   const { name } = req.body;
   try {
@@ -75,12 +105,18 @@ app.post('/add-origin', (req, res) => {
   }
 });
 
-app.get('/origins', (req, res) => {
-  const origins = db.prepare("SELECT * FROM origins").all();
-  res.json(origins);
+app.delete('/delete-origin', (req, res) => {
+  const { id } = req.body;
+  try {
+    const stmt = db.prepare("DELETE FROM origins WHERE id = ?");
+    const result = stmt.run(id);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
-// ----- Tiers ----- //
+// ------------------------------ Tiers ------------------------------ //
 app.post('/add-tier', (req, res) => {
   const { name, color, position } = req.body;
   try {
@@ -97,24 +133,48 @@ app.get('/tiers', (req, res) => {
   res.json(tiers);
 });
 
-// ----- Years ----- //
+// ------------------------------ Years ------------------------------ //
+// Incluye la variable 'inUse' que indica si esta siendo utilizado en un juego
+app.get('/years', (req, res) => {
+  try {
+    const yearsStmt = db.prepare(`
+      SELECT y.year, 
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.year = y.year
+             ) AS inUse
+      FROM years y
+      ORDER BY y.year DESC
+    `);
+    const years = yearsStmt.all();
+    res.json(years);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 app.post('/add-year', (req, res) => {
   const { year } = req.body;
   try {
-    const stmt = db.prepare("INSERT INTO years (year) VALUES (?)");
-    const result = stmt.run(year);
+    const result = addYear(year);
     res.json({ success: true, id: result.lastInsertRowid });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
 });
 
-app.get('/years', (req, res) => {
-  const years = db.prepare("SELECT * FROM years ORDER BY year DESC").all();
-  res.json(years);
+app.delete('/delete-year', (req, res) => {
+  const { year } = req.body;
+  try {
+    const result = deleteYear(year);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
-// ------------------------------ Listener ------------------------------ //
+// -------------------------------------------------------------------- //
+//                                Listener                              //
+// -------------------------------------------------------------------- //
 
 app.listen(PORT, () => {
   console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
