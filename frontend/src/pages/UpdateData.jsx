@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { Pencil, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+import { Pencil, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
 
 import { addYear, getYears, deleteYear } from '../api/years';
@@ -31,7 +31,7 @@ function UpdateData() {
 
   const [tiers, setTiers] = useState([]);
   const [newTierName, setNewTierName] = useState('');
-  const [newTierColor, setNewTierColor] = useState('#000000');
+  const [newTierColor, setNewTierColor] = useState('#a855f7');
 
   // Load all on mount
   useEffect(() => {
@@ -263,23 +263,27 @@ function UpdateData() {
                 <span className="font-medium">{tier.name}</span>
               </div>
 
-              <div className="flex flex-wrap items-center mt-4 gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <button
                   onClick={() => handleMoveUp(index)}
                   disabled={index === 0}
-                  className={`text-gray-600 hover:text-gray-900 transition ${index === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`text-gray-600 transition ${
+                    index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                  }`}
                   aria-label="Move up"
                 >
-                  <ChevronUp size={18} />
+                  <ArrowUp size={18} />
                 </button>
 
                 <button
                   onClick={() => handleMoveDown(index)}
                   disabled={index === tiers.length - 1}
-                  className={`text-gray-600 hover:text-gray-900 transition ${index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`text-gray-600 transition ${
+                    index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                  }`}
                   aria-label="Move down"
                 >
-                  <ChevronDown size={18} />
+                  <ArrowDown size={18} />
                 </button>
 
                 <button
