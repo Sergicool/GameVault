@@ -48,6 +48,18 @@ app.post('/add-category', (req, res) => {
   }
 });
 
+app.post('/update-category', (req, res) => {
+  const { oldName, newName } = req.body;
+
+  try {
+    const updateCategory = db.prepare("UPDATE categories SET name = ? WHERE name = ?");
+    const categoryResult = updateCategory.run(newName, oldName);
+    res.json({ success: true, categoryChanges: categoryResult.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 app.post('/delete-category', (req, res) => {
   const { name } = req.body;
   try {
@@ -76,6 +88,17 @@ app.post('/add-subcategory', (req, res) => {
   }
 });
 
+app.post('/update-subcategory', (req, res) => {
+  const { oldName, newName } = req.body;
+  try {
+    const stmt = db.prepare("UPDATE subcategories SET name = ? WHERE name = ?");
+    const result = stmt.run(newName, oldName);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 app.post('/delete-subcategory', (req, res) => {
   const { name } = req.body;
   try {
@@ -99,6 +122,17 @@ app.post('/add-origin', (req, res) => {
     const stmt = db.prepare("INSERT INTO origins (name) VALUES (?)");
     const result = stmt.run(name);
     res.json({ success: true, id: result.lastInsertRowid });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/update-origin', (req, res) => {
+  const { oldName, newName } = req.body;
+  try {
+    const stmt = db.prepare("UPDATE origins SET name = ? WHERE name = ?");
+    const result = stmt.run(newName, oldName);
+    res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }

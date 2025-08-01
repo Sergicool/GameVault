@@ -16,6 +16,16 @@ export async function getSubcategories() {
   return await res.json();
 }
 
+export async function updateSubcategory(oldName, newName) {
+  const res = await fetch(`${API_URL}/update-subcategory`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ oldName, newName }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al actualizar subcategoría');
+}
+
 export async function deleteSubcategory(name) {
   const res = await fetch(`${API_URL}/delete-subcategory`, {
     method: 'POST',

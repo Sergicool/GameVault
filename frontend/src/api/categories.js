@@ -16,6 +16,16 @@ export async function getCategories() {
   return await res.json();
 }
 
+export async function updateCategory(oldName, newName) {
+  const res = await fetch(`${API_URL}/update-category`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ oldName, newName }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al actualizar categoria');
+}
+
 export async function deleteCategory(name) {
   const res = await fetch(`${API_URL}/delete-category`, {
     method: 'POST',

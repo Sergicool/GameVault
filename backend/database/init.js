@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS categories (
 CREATE TABLE IF NOT EXISTS subcategories (
   name TEXT PRIMARY KEY CHECK(length(name) <= 30),
   category TEXT NOT NULL,
-  FOREIGN KEY (category) REFERENCES categories(name) ON DELETE CASCADE
+  FOREIGN KEY (category) REFERENCES categories(name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS tiers (
@@ -54,8 +54,8 @@ CREATE TABLE IF NOT EXISTS game_genres (
   game_name TEXT,
   genre_name TEXT,
   PRIMARY KEY (game_name, genre_name),
-  FOREIGN KEY (game_name) REFERENCES games(name) ON DELETE CASCADE,
-  FOREIGN KEY (genre_name) REFERENCES genres(name) ON DELETE CASCADE
+  FOREIGN KEY (game_name) REFERENCES games(name) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY (genre_name) REFERENCES genres(name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 `);
