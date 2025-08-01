@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Pencil, Trash2 } from 'lucide-react';
+
+import { Pencil, Trash2, ChevronUp, ChevronDown } from 'lucide-react';
+import { HexColorPicker } from 'react-colorful';
+
 import { addYear, getYears, deleteYear } from '../api/years';
 import { getOrigins, addOrigin, updateOrigin, deleteOrigin } from '../api/origins';
 import { getCategories, addCategory, updateCategory, deleteCategory } from '../api/categories';
 import { getSubcategories, addSubcategory, updateSubcategory, deleteSubcategory } from '../api/subcategories';
+import { getTiers, addTier, deleteTier, moveTierUp, moveTierDown } from '../api/tiers';
 
 function UpdateData() {
   const [years, setYears] = useState([]);
@@ -25,6 +29,10 @@ function UpdateData() {
   const [editedSubcategory, setEditedSubcategory] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
 
+  const [tiers, setTiers] = useState([]);
+  const [newTierName, setNewTierName] = useState('');
+  const [newTierColor, setNewTierColor] = useState('#000000');
+
   // Load all on mount
   useEffect(() => {
     loadAll();
@@ -32,26 +40,42 @@ function UpdateData() {
 
   const loadAll = async () => {
     try {
-      const [yearsData, originsData, categoriesData, subcategoriesData] = await Promise.all([
+      const [yearsData, originsData, categoriesData, subcategoriesData, tiersData] = await Promise.all([
         getYears(),
         getOrigins(),
         getCategories(),
-        getSubcategories()
+        getSubcategories(),
+        getTiers()
       ]);
       setYears(yearsData);
       setOrigins(originsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
+      setTiers(tiersData);
 
       if (categoriesData.length > 0 && !selectedCategory) {
         setSelectedCategory(categoriesData[0].name);
       }
+
     } catch (error) {
       console.error('Error al cargar datos:', error);
     }
   };
 
   // Add handlers
+  const handleAddTier = async () => {
+    if (!newTierName.trim()) return;
+    try {
+      const position = tiers.length;
+      await addTier(newTierName.trim(), newTierColor, position);
+      setNewTierName('');
+      setNewTierColor('#a855f7');
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleAddYear = async () => {
     if (!newYear.trim()) return;
     try {
@@ -98,6 +122,26 @@ function UpdateData() {
   };
 
   // Update handlers
+  const handleMoveUp = async (index) => {
+    if (index === 0) return;
+    try {
+      await moveTierUp(tiers[index].name);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleMoveDown = async (index) => {
+    if (index === tiers.length - 1) return;
+    try {
+      await moveTierDown(tiers[index].name);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleUpdateOrigin = async (oldName, newName) => {
     if (!newName.trim() || newName === oldName) {
       setEditingOrigin(null);
@@ -118,7 +162,6 @@ function UpdateData() {
       return;
     }
     try {
-      // Asegurate que tengas esta función en api/categories.js
       await updateCategory(oldName, newName.trim());
       setEditingCategory(null);
       loadAll();
@@ -143,6 +186,15 @@ function UpdateData() {
   };
 
   // Delete handlers
+  const handleDeleteTier = async (tier) => {
+    try {
+      await deleteTier(tier.name);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleDeleteYear = async (year) => {
     try {
       await deleteYear(year);
@@ -180,9 +232,9 @@ function UpdateData() {
   };
 
   return (
-  <div className="grid grid-cols-1 md:grid-cols-5 gap-6 p-6">
+  <div className="grid md:grid-cols-10 gap-6 p-6">
     
-    <div className="col-span-2">
+    <div className="col-span-3">
       
       <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[49.5rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Genres</h2>
@@ -190,15 +242,89 @@ function UpdateData() {
 
     </div>
   
-    <div className="col-span-3 grid md:grid-cols-3 gap-6">
+    {/* Tiers */}
+    <div className="col-span-2 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col h-[49.5rem]">
+      <h2 className="text-2xl font-semibold text-center mb-4">Tiers</h2>
 
-      {/* Tiers */}
-      <div className="col-span-1 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
-        <h2 className="text-2xl font-semibold text-center mb-4">Tiers</h2>
+      <div className="overflow-y-auto bg-purple-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
+                      [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="space-y-2">
+          {tiers.map((tier, index) => (
+            <li
+              key={tier.name}
+              className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
+            >
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-6 h-6 rounded-full border border-gray-300"
+                  style={{ backgroundColor: tier.color }}
+                  title={tier.color}
+                />
+                <span className="font-medium">{tier.name}</span>
+              </div>
+
+              <div className="flex flex-wrap items-center mt-4 gap-2">
+                <button
+                  onClick={() => handleMoveUp(index)}
+                  disabled={index === 0}
+                  className={`text-gray-600 hover:text-gray-900 transition ${index === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  aria-label="Move up"
+                >
+                  <ChevronUp size={18} />
+                </button>
+
+                <button
+                  onClick={() => handleMoveDown(index)}
+                  disabled={index === tiers.length - 1}
+                  className={`text-gray-600 hover:text-gray-900 transition ${index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  aria-label="Move down"
+                >
+                  <ChevronDown size={18} />
+                </button>
+
+                <button
+                  onClick={() => handleDeleteTier(tier)}
+                  className="text-red-500 hover:text-red-700 transition"
+                  aria-label="Delete tier"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
 
+      <div className="mt-4">
+        <div className="flex justify-center">
+          <HexColorPicker
+            color={newTierColor}
+            onChange={setNewTierColor}
+            className="mb-4 rounded"
+          />
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            placeholder="New tier name"
+            value={newTierName}
+            onChange={(e) => setNewTierName(e.target.value)}
+            className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300"
+          />
+          <button
+            onClick={handleAddTier}
+            className="bg-white text-purple-700 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-purple-200 active:bg-purple-300 focus:outline-none"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div className="col-span-5 grid md:grid-cols-6 gap-6">
+
       {/* Years */}
-      <div className="col-span-1 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-2 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Years</h2>
         <div className="overflow-y-auto bg-pink-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -237,7 +363,7 @@ function UpdateData() {
       </div>
       
       {/* Origins */}
-      <div className="col-span-1 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-2 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Origins</h2>
         <div className="overflow-y-auto bg-orange-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -273,7 +399,10 @@ function UpdateData() {
 
                   <button
                     onClick={() => handleDeleteOrigin(origin.name)}
-                    className="text-red-500 hover:text-red-700"
+                    className={`transition ${
+                      origin.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                    }`}
+                    disabled={origin.inUse}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -300,7 +429,7 @@ function UpdateData() {
       </div>
 
       {/* Categories */}
-      <div className="col-span-1 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-2 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Categories</h2>
         <div className="overflow-y-auto bg-green-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -336,7 +465,10 @@ function UpdateData() {
 
                   <button
                     onClick={() => handleDeleteCategory(category.name)}
-                    className="text-red-500 hover:text-red-700"
+                    className={`transition ${
+                      category.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                    }`}
+                    disabled={category.inUse}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -363,7 +495,7 @@ function UpdateData() {
       </div>
 
       {/* Subcategories */}
-      <div className="col-span-2 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-6 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Subcategories</h2>
         <div className="overflow-y-auto bg-indigo-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -401,7 +533,10 @@ function UpdateData() {
 
                   <button
                     onClick={() => handleDeleteSubcategory(subcategory.name)}
-                    className="text-red-500 hover:text-red-700"
+                    className={`transition ${
+                      subcategory.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                    }`}
+                    disabled={subcategory.inUse}
                   >
                     <Trash2 size={18} />
                   </button>

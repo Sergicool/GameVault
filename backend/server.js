@@ -33,8 +33,20 @@ app.get('/genres', (req, res) => {
 
 // ------------------------------ Categories ------------------------------ //
 app.get('/categories', (req, res) => {
-  const categories = db.prepare("SELECT * FROM categories").all();
-  res.json(categories);
+  try {
+    const categoriesStmt = db.prepare(`
+      SELECT c.name,
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.category = c.name
+             ) AS inUse
+      FROM categories c
+      ORDER BY c.name
+    `);
+    const categories = categoriesStmt.all();
+    res.json(categories);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
 app.post('/add-category', (req, res) => {
@@ -73,8 +85,20 @@ app.post('/delete-category', (req, res) => {
 
 // ------------------------------ Subcategories ------------------------------ //
 app.get('/subcategories', (req, res) => {
-  const subcategories = db.prepare("SELECT * FROM subcategories").all();
-  res.json(subcategories);
+  try {
+    const subcategoriesStmt = db.prepare(`
+      SELECT s.name, s.category,
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.subcategory = s.name
+             ) AS inUse
+      FROM subcategories s
+      ORDER BY s.name
+    `);
+    const subcategories = subcategoriesStmt.all();
+    res.json(subcategories);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
 app.post('/add-subcategory', (req, res) => {
@@ -112,8 +136,20 @@ app.post('/delete-subcategory', (req, res) => {
 
 // ------------------------------ Origins ------------------------------ //
 app.get('/origins', (req, res) => {
-  const origins = db.prepare("SELECT * FROM origins").all();
-  res.json(origins);
+  try {
+    const originsStmt = db.prepare(`
+      SELECT o.name,
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.origin = o.name
+             ) AS inUse
+      FROM origins o
+      ORDER BY o.name
+    `);
+    const origins = originsStmt.all();
+    res.json(origins);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
 app.post('/add-origin', (req, res) => {
@@ -150,6 +186,23 @@ app.post('/delete-origin', (req, res) => {
 });
 
 // ------------------------------ Tiers ------------------------------ //
+app.get('/tiers', (req, res) => {
+  try {
+    const stmt = db.prepare(`
+      SELECT t.*, 
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.tier = t.name
+             ) AS inUse
+      FROM tiers t
+      ORDER BY t.position ASC
+    `);
+    const tiers = stmt.all();
+    res.json(tiers);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 app.post('/add-tier', (req, res) => {
   const { name, color, position } = req.body;
   try {
@@ -161,10 +214,63 @@ app.post('/add-tier', (req, res) => {
   }
 });
 
-app.get('/tiers', (req, res) => {
-  const tiers = db.prepare("SELECT * FROM tiers").all();
-  res.json(tiers);
+app.post('/delete-tier', (req, res) => {
+  const { name } = req.body;
+  try {
+    const stmt = db.prepare("DELETE FROM tiers WHERE name = ?");
+    const result = stmt.run(name);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
+
+app.post('/move-tier-up', (req, res) => {
+  const { name } = req.body;
+  try {
+    const current = db.prepare("SELECT * FROM tiers WHERE name = ?").get(name);
+    if (!current) throw new Error("Tier no encontrado");
+
+    const above = db.prepare("SELECT * FROM tiers WHERE position < ? ORDER BY position DESC LIMIT 1").get(current.position);
+    if (!above) return res.json({ success: false, message: "Ya está en la primera posición" });
+
+    const update = db.prepare("UPDATE tiers SET position = ? WHERE name = ?");
+
+    update.run(-1, above.name);
+
+    update.run(above.position, current.name);
+    update.run(current.position, above.name);
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/move-tier-down', (req, res) => {
+  const { name } = req.body;
+  try {
+    const current = db.prepare("SELECT * FROM tiers WHERE name = ?").get(name);
+    if (!current) throw new Error("Tier no encontrado");
+
+    const below = db.prepare("SELECT * FROM tiers WHERE position > ? ORDER BY position ASC LIMIT 1").get(current.position);
+    if (!below) return res.json({ success: false, message: "Ya está en la última posición" });
+
+    const update = db.prepare("UPDATE tiers SET position = ? WHERE name = ?");
+
+    // Paso 1: Valor temporal
+    update.run(-1, below.name);
+
+    // Paso 2: Swap
+    update.run(below.position, current.name);
+    update.run(current.position, below.name);
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 
 // ------------------------------ Years ------------------------------ //
 // Incluye la variable 'inUse' que indica si esta siendo utilizado en un juego
