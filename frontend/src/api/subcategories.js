@@ -16,11 +16,11 @@ export async function getSubcategories() {
   return await res.json();
 }
 
-export async function deleteSubcategory(id) {
+export async function deleteSubcategory(name) {
   const res = await fetch(`${API_URL}/delete-subcategory`, {
-    method: 'DELETE',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id }),
+    body: JSON.stringify({ name }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al eliminar subcategoría');

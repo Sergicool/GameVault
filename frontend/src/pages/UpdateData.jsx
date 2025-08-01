@@ -36,10 +36,14 @@ function UpdateData() {
       setOrigins(originsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
+
+      if (categoriesData.length > 0 && !selectedCategory) {
+        setSelectedCategory(categoriesData[0].name);
+      }
     } catch (error) {
       console.error('Error al cargar datos:', error);
     }
-  };
+};
 
   // Add handlers
   const handleAddYear = async () => {
@@ -69,7 +73,7 @@ function UpdateData() {
     try {
       await addCategory(newCategory.trim());
       setNewCategory('');
-      loadAll();
+      await loadAll();
     } catch (e) {
       console.error(e);
     }
@@ -97,27 +101,27 @@ function UpdateData() {
     }
   };
 
-  const handleDeleteOrigin = async (id) => {
+  const handleDeleteOrigin = async (origin) => {
     try {
-      await deleteOrigin(id);
+      await deleteOrigin(origin);
       loadAll();
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleDeleteCategory = async (id) => {
+  const handleDeleteCategory = async (category) => {
     try {
-      await deleteCategory(id);
+      await deleteCategory(category);
       loadAll();
     } catch (e) {
       console.error(e);
     }
   };
 
-  const handleDeleteSubcategory = async (id) => {
+  const handleDeleteSubcategory = async (subcategory) => {
     try {
-      await deleteSubcategory(id);
+      await deleteSubcategory(subcategory);
       loadAll();
     } catch (e) {
       console.error(e);
@@ -166,16 +170,16 @@ function UpdateData() {
     </div>
 
     {/* Origins */}
-    <div className="bg-gradient-to-br from-orange-400 to-amber-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+    <div className="bg-gradient-to-br from-amber-400 to-orange-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
       <h2 className="text-2xl font-semibold text-center mb-4">Origins</h2>
       <div className="overflow-y-auto bg-orange-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                       [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <ul className="space-y-2">
           {origins.map((origin) => (
-            <li key={origin.id} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
+            <li key={origin.name} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
               <span className="text-gray-800 font-medium">{origin.name}</span>
               <button
-                onClick={() => handleDeleteOrigin(origin.id)}
+                onClick={() => handleDeleteOrigin(origin.name)}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash2 size={18} />
@@ -202,16 +206,16 @@ function UpdateData() {
     </div>
 
     {/* Categories */}
-    <div className="bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+    <div className="bg-gradient-to-br from-emerald-400 to-green-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
       <h2 className="text-2xl font-semibold text-center mb-4">Categories</h2>
       <div className="overflow-y-auto bg-green-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                       [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <ul className="space-y-2">
-          {categories.map((cat) => (
-            <li key={cat.id} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
-              <span className="text-gray-800 font-medium">{cat.name}</span>
+          {categories.map((category) => (
+            <li key={category.name} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
+              <span className="text-gray-800 font-medium">{category.name}</span>
               <button
-                onClick={() => handleDeleteCategory(cat.id)}
+                onClick={() => handleDeleteCategory(category.name)}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash2 size={18} />
@@ -238,18 +242,18 @@ function UpdateData() {
     </div>
 
     {/* Subcategories */}
-    <div className="bg-gradient-to-br from-blue-500 to-indigo-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+    <div className="bg-gradient-to-br from-blue-400 to-indigo-500 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
       <h2 className="text-2xl font-semibold text-center mb-4">Subcategories</h2>
       <div className="overflow-y-auto bg-indigo-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                       [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         <ul className="space-y-2">
-          {subcategories.map((sub) => (
-            <li key={sub.id} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
+          {subcategories.map((subcategory) => (
+            <li key={subcategory.name} className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow">
               <span className="text-gray-800 font-medium">
-                {sub.name} <span className="text-xs text-gray-500">({sub.category})</span>
+                {subcategory.name} <span className="text-xs text-gray-500">({subcategory.category})</span>
               </span>
               <button
-                onClick={() => handleDeleteSubcategory(sub.id)}
+                onClick={() => handleDeleteSubcategory(subcategory.name)}
                 className="text-red-500 hover:text-red-700"
               >
                 <Trash2 size={18} />
@@ -262,13 +266,20 @@ function UpdateData() {
         <select
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          disabled={categories.length === 0}
+          className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-300 disabled:bg-gray-200 disabled:text-gray-500"
         >
-          <option value="">Select category</option>
-          {categories.map((cat) => (
-            <option key={cat.id} value={cat.name}>{cat.name}</option>
-          ))}
+          {categories.length === 0 ? (
+            <option>No category</option>
+          ) : (
+            categories.map((category) => (
+              <option key={category.name} value={category.name}>
+                {category.name}
+              </option>
+            ))
+          )}
         </select>
+
         <input
           type="text"
           placeholder="New subcategory"

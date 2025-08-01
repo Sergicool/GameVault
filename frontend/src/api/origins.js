@@ -16,11 +16,11 @@ export async function getOrigins() {
   return await res.json();
 }
 
-export async function deleteOrigin(id) {
+export async function deleteOrigin(name) {
   const res = await fetch(`${API_URL}/delete-origin`, {
-    method: 'DELETE',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id }),
+    body: JSON.stringify({ name }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al eliminar origen');

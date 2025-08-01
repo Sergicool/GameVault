@@ -18,7 +18,7 @@ export async function getYears() {
 
 export async function deleteYear(year) {
   const res = await fetch(`${API_URL}/delete-year`, {
-    method: 'DELETE',
+    method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ year }),
   });

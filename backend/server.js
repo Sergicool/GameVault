@@ -48,17 +48,16 @@ app.post('/add-category', (req, res) => {
   }
 });
 
-app.delete('/delete-category', (req, res) => {
-  const { id } = req.body;
+app.post('/delete-category', (req, res) => {
+  const { name } = req.body;
   try {
-    const stmt = db.prepare("DELETE FROM categories WHERE id = ?");
-    const result = stmt.run(id);
+    const stmt = db.prepare("DELETE FROM categories WHERE name = ?");
+    const result = stmt.run(name);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
 });
-
 
 // ------------------------------ Subcategories ------------------------------ //
 app.get('/subcategories', (req, res) => {
@@ -77,11 +76,11 @@ app.post('/add-subcategory', (req, res) => {
   }
 });
 
-app.delete('/delete-subcategory', (req, res) => {
-  const { id } = req.body;
+app.post('/delete-subcategory', (req, res) => {
+  const { name } = req.body;
   try {
-    const stmt = db.prepare("DELETE FROM subcategories WHERE id = ?");
-    const result = stmt.run(id);
+    const stmt = db.prepare("DELETE FROM subcategories WHERE name = ?");
+    const result = stmt.run(name);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -105,11 +104,11 @@ app.post('/add-origin', (req, res) => {
   }
 });
 
-app.delete('/delete-origin', (req, res) => {
-  const { id } = req.body;
+app.post('/delete-origin', (req, res) => {
+  const { name } = req.body;
   try {
-    const stmt = db.prepare("DELETE FROM origins WHERE id = ?");
-    const result = stmt.run(id);
+    const stmt = db.prepare("DELETE FROM origins WHERE name = ?");
+    const result = stmt.run(name);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -155,17 +154,19 @@ app.get('/years', (req, res) => {
 app.post('/add-year', (req, res) => {
   const { year } = req.body;
   try {
-    const result = addYear(year);
+    const stmt = db.prepare('INSERT INTO years (year) VALUES (?)');
+    const result = stmt.run(year);
     res.json({ success: true, id: result.lastInsertRowid });
   } catch (e) {
     res.status(400).json({ error: e.message });
   }
 });
 
-app.delete('/delete-year', (req, res) => {
+app.post('/delete-year', (req, res) => {
   const { year } = req.body;
   try {
-    const result = deleteYear(year);
+    const stmt = db.prepare('DELETE FROM years WHERE year = ?');
+    const result = stmt.run(year);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
