@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef  } from 'react';
+import { useClickAway } from 'react-use';
 
 import { Pencil, Trash2, ArrowUp, ArrowDown } from 'lucide-react';
 import { HexColorPicker } from 'react-colorful';
@@ -33,11 +34,16 @@ function UpdateData() {
   const [newTierName, setNewTierName] = useState('');
   const [newTierColor, setNewTierColor] = useState('#a855f7');
 
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const colorPickerRef = useRef(null);
+  
   // Load all on mount
   useEffect(() => {
     loadAll();
   }, []);
-
+  
+  useClickAway(colorPickerRef, () => setShowColorPicker(false))
+  
   const loadAll = async () => {
     try {
       const [yearsData, originsData, categoriesData, subcategoriesData, tiersData] = await Promise.all([
@@ -232,9 +238,9 @@ function UpdateData() {
   };
 
   return (
-  <div className="grid md:grid-cols-10 gap-6 p-6">
+  <div className="grid md:grid-cols-5 gap-6 p-6">
     
-    <div className="col-span-3">
+    <div className="col-span-2">
       
       <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[49.5rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Genres</h2>
@@ -242,93 +248,104 @@ function UpdateData() {
 
     </div>
   
-    {/* Tiers */}
-    <div className="col-span-2 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col h-[49.5rem]">
-      <h2 className="text-2xl font-semibold text-center mb-4">Tiers</h2>
+    <div className="col-span-3 grid md:grid-cols-3 gap-6">
 
-      <div className="overflow-y-auto bg-purple-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
-                      [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        <ul className="space-y-2">
-          {tiers.map((tier, index) => (
-            <li
-              key={tier.name}
-              className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
+      {/* Tiers */}
+      <div className="col-span-1 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col h-[24rem]">
+        <h2 className="text-2xl font-semibold text-center mb-4">Tiers</h2>
+
+        <div className="overflow-y-auto bg-purple-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
+                        [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="space-y-2">
+            {tiers.map((tier, index) => (
+              <li
+                key={tier.name}
+                className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-6 h-6 rounded-full border border-gray-300"
+                    style={{ backgroundColor: tier.color }}
+                    title={tier.color}
+                  />
+                  <span className="font-medium">{tier.name}</span>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  <button
+                    onClick={() => handleMoveUp(index)}
+                    disabled={index === 0}
+                    className={`text-gray-600 transition ${
+                      index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                    }`}
+                    aria-label="Move up"
+                  >
+                    <ArrowUp size={18} />
+                  </button>
+
+                  <button
+                    onClick={() => handleMoveDown(index)}
+                    disabled={index === tiers.length - 1}
+                    className={`text-gray-600 transition ${
+                      index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                    }`}
+                    aria-label="Move down"
+                  >
+                    <ArrowDown size={18} />
+                  </button>
+
+                  <button
+                    onClick={() => handleDeleteTier(tier)}
+                    className="text-red-500 hover:text-red-700 transition"
+                    aria-label="Delete tier"
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-4 relative" ref={colorPickerRef}>
+          <div className="flex items-center gap-2">
+            {/* Color Preview Circle */}
+            <button
+              className="w-8 h-8 rounded-full border-2 border-white shadow"
+              style={{ backgroundColor: newTierColor }}
+              onClick={() => setShowColorPicker((prev) => !prev)}
+              title="Choose color"
+            />
+            
+            {/* Tier Name Input */}
+            <input
+              type="text"
+              placeholder="New tier"
+              value={newTierName}
+              onChange={(e) => setNewTierName(e.target.value)}
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300"
+            />
+            
+            {/* Add Button */}
+            <button
+              onClick={handleAddTier}
+              className="bg-white text-purple-700 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-purple-200 active:bg-purple-300 focus:outline-none"
             >
-              <div className="flex items-center gap-3">
-                <div
-                  className="w-6 h-6 rounded-full border border-gray-300"
-                  style={{ backgroundColor: tier.color }}
-                  title={tier.color}
-                />
-                <span className="font-medium">{tier.name}</span>
-              </div>
+              Add
+            </button>
+          </div>
 
-              <div className="flex flex-wrap items-center gap-2">
-                <button
-                  onClick={() => handleMoveUp(index)}
-                  disabled={index === 0}
-                  className={`text-gray-600 transition ${
-                    index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
-                  }`}
-                  aria-label="Move up"
-                >
-                  <ArrowUp size={18} />
-                </button>
-
-                <button
-                  onClick={() => handleMoveDown(index)}
-                  disabled={index === tiers.length - 1}
-                  className={`text-gray-600 transition ${
-                    index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
-                  }`}
-                  aria-label="Move down"
-                >
-                  <ArrowDown size={18} />
-                </button>
-
-                <button
-                  onClick={() => handleDeleteTier(tier)}
-                  className="text-red-500 hover:text-red-700 transition"
-                  aria-label="Delete tier"
-                >
-                  <Trash2 size={18} />
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="mt-4">
-        <div className="flex justify-center">
-          <HexColorPicker
-            color={newTierColor}
-            onChange={setNewTierColor}
-            className="mb-4 rounded"
-          />
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="New tier name"
-            value={newTierName}
-            onChange={(e) => setNewTierName(e.target.value)}
-            className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300"
-          />
-          <button
-            onClick={handleAddTier}
-            className="bg-white text-purple-700 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-purple-200 active:bg-purple-300 focus:outline-none"
-          >
-            Add
-          </button>
+          {/* Conditional Color Picker */}
+          {showColorPicker && (
+            <div className="absolute z-10 mt-2 left-0 bg-white p-3 rounded-xl shadow-lg">
+              <HexColorPicker color={newTierColor} onChange={setNewTierColor} />
+            </div>
+          )}
         </div>
       </div>
-    </div>
-
-    <div className="col-span-5 grid md:grid-cols-6 gap-6">
 
       {/* Years */}
-      <div className="col-span-2 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-1 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Years</h2>
         <div className="overflow-y-auto bg-pink-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -367,7 +384,7 @@ function UpdateData() {
       </div>
       
       {/* Origins */}
-      <div className="col-span-2 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-1 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Origins</h2>
         <div className="overflow-y-auto bg-orange-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -433,7 +450,7 @@ function UpdateData() {
       </div>
 
       {/* Categories */}
-      <div className="col-span-2 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-1 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Categories</h2>
         <div className="overflow-y-auto bg-green-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -499,7 +516,7 @@ function UpdateData() {
       </div>
 
       {/* Subcategories */}
-      <div className="col-span-6 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-2 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Subcategories</h2>
         <div className="overflow-y-auto bg-indigo-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
