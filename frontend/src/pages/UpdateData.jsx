@@ -8,7 +8,9 @@ import { addYear, getYears, deleteYear } from '../api/years';
 import { getOrigins, addOrigin, updateOrigin, deleteOrigin } from '../api/origins';
 import { getCategories, addCategory, updateCategory, deleteCategory } from '../api/categories';
 import { getSubcategories, addSubcategory, updateSubcategory, deleteSubcategory } from '../api/subcategories';
-import { getTiers, addTier, deleteTier, moveTierUp, moveTierDown } from '../api/tiers';
+import { getTiers, addTier, updateTier, deleteTier, moveTierUp, moveTierDown } from '../api/tiers';
+import { getGenres, addGenre, updateGenre, deleteGenre } from '../api/genres';
+
 
 function UpdateData() {
   const [years, setYears] = useState([]);
@@ -33,31 +35,46 @@ function UpdateData() {
   const [tiers, setTiers] = useState([]);
   const [newTierName, setNewTierName] = useState('');
   const [newTierColor, setNewTierColor] = useState('#a855f7');
+  const [editingTier, setEditingTier] = useState(null);
+  const [editedTierName, setEditedTierName] = useState('');
 
   const [showColorPicker, setShowColorPicker] = useState(false);
-  const colorPickerRef = useRef(null);
+  const tierColorPickerRef = useRef(null);
+  
+  const [genres, setGenres] = useState([]);
+  const [newGenreName, setNewGenreName] = useState('');
+  const [newGenreColor, setNewGenreColor] = useState('#0ea5e9');
+  const [editingGenre, setEditingGenre] = useState(null);
+  const [editedGenreName, setEditedGenreName] = useState('');
+
+  const [showGenreColorPicker, setShowGenreColorPicker] = useState(false);
+  const genreColorPickerRef = useRef(null);
   
   // Load all on mount
   useEffect(() => {
     loadAll();
   }, []);
   
-  useClickAway(colorPickerRef, () => setShowColorPicker(false))
-  
+  useClickAway(tierColorPickerRef, () => setShowColorPicker(false))
+  useClickAway(genreColorPickerRef, () => setShowGenreColorPicker(false))
+
   const loadAll = async () => {
     try {
-      const [yearsData, originsData, categoriesData, subcategoriesData, tiersData] = await Promise.all([
+      const [yearsData, originsData, categoriesData, subcategoriesData, tiersData, genresData] = await Promise.all([
         getYears(),
         getOrigins(),
         getCategories(),
         getSubcategories(),
-        getTiers()
+        getTiers(),
+        getGenres()
       ]);
+      
       setYears(yearsData);
       setOrigins(originsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
       setTiers(tiersData);
+      setGenres(genresData);
 
       if (categoriesData.length > 0 && !selectedCategory) {
         setSelectedCategory(categoriesData[0].name);
@@ -127,6 +144,18 @@ function UpdateData() {
     }
   };
 
+  const handleAddGenre = async () => {
+    if (!newGenreName.trim()) return;
+    try {
+      await addGenre(newGenreName.trim(), newGenreColor);
+      setNewGenreName('');
+      setNewGenreColor('#0ea5e9');
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   // Update handlers
   const handleMoveUp = async (index) => {
     if (index === 0) return;
@@ -182,9 +211,36 @@ function UpdateData() {
       return;
     }
     try {
-      // Asegurate que tengas esta función en api/subcategories.js
       await updateSubcategory(oldName, newName.trim());
       setEditingSubcategory(null);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUpdateGenre = async (oldName, newName) => {
+    if (!newName.trim() || newName === oldName) {
+      setEditingGenre(null);
+      return;
+    }
+    try {
+      await updateGenre(oldName, newName.trim());
+      setEditingGenre(null);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUpdateTier = async (oldName, newName) => {
+    if (!newName.trim() || newName === oldName) {
+      setEditingTier(null);
+      return;
+    }
+    try {
+      await updateTier(oldName, newName.trim());
+      setEditingTier(null);
       loadAll();
     } catch (e) {
       console.error(e);
@@ -194,7 +250,7 @@ function UpdateData() {
   // Delete handlers
   const handleDeleteTier = async (tier) => {
     try {
-      await deleteTier(tier.name);
+      await deleteTier(tier);
       loadAll();
     } catch (e) {
       console.error(e);
@@ -237,13 +293,124 @@ function UpdateData() {
     }
   };
 
+  const handleDeleteGenre = async (name) => {
+    try {
+      await deleteGenre(name);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
   <div className="grid md:grid-cols-5 gap-6 p-6">
     
     <div className="col-span-2">
       
+      {/* Genres */}
       <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[49.5rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Genres</h2>
+
+        <div className="overflow-y-auto bg-cyan-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
+                        [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="space-y-2">
+            {genres.map(({ name, color }) => (
+              <li
+                key={name}
+                className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
+              >
+                <div className="flex items-center gap-3 flex-1">
+                  {editingGenre === name ? (
+                    <>
+                      <input
+                        value={editedGenreName}
+                        onChange={(e) => setEditedGenreName(e.target.value)}
+                        onBlur={() => handleUpdateGenre(name, editedGenreName)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') handleUpdateGenre(name, editedGenreName);
+                          if (e.key === 'Escape') setEditingGenre(null);
+                        }}
+                        autoFocus
+                        className="flex-1 px-2 py-1 rounded border border-gray-300"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className="w-6 h-6 rounded-full border border-gray-300 cursor-pointer"
+                        style={{ backgroundColor: color }}
+                        title={color}
+                        onClick={() => {
+                          setEditingGenre(name);
+                          setEditedGenreName(name);
+                        }}
+                      />
+                      <span className="font-medium">{name}</span>
+                    </>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {editingGenre !== name && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setEditingGenre(name);
+                          setEditedGenreName(name);
+                        }}
+                        className="text-blue-500 hover:text-blue-700"
+                        aria-label="Edit genre"
+                      >
+                        <Pencil size={18} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteGenre(name)}
+                        className="text-red-500 hover:text-red-700"
+                        aria-label="Delete genre"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </li>
+            ))}
+
+
+          </ul>
+        </div>
+
+        <div className="mt-4 relative" ref={genreColorPickerRef}>
+          <div className="flex items-center gap-2">
+            <button
+              className="w-8 h-8 rounded-full border-2 border-white shadow"
+              style={{ backgroundColor: newGenreColor }}
+              onClick={() => setShowGenreColorPicker((prev) => !prev)}
+              title="Choose color"
+            />
+
+            <input
+              type="text"
+              placeholder="New genre"
+              value={newGenreName}
+              onChange={(e) => setNewGenreName(e.target.value)}
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-cyan-300"
+            />
+
+            <button
+              onClick={handleAddGenre}
+              className="bg-white text-cyan-700 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-cyan-200 active:bg-cyan-300 focus:outline-none"
+            >
+              Add
+            </button>
+          </div>
+
+          {showGenreColorPicker && (
+            <div className="absolute z-10 mt-2 left-0 bottom-14 bg-white p-3 rounded-xl shadow-lg">
+              <HexColorPicker color={newGenreColor} onChange={setNewGenreColor} />
+            </div>
+          )}
+        </div>
       </div>
 
     </div>
@@ -262,52 +429,82 @@ function UpdateData() {
                 key={tier.name}
                 className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
               >
-                <div className="flex items-center gap-3">
-                  <div
-                    className="w-6 h-6 rounded-full border border-gray-300"
-                    style={{ backgroundColor: tier.color }}
-                    title={tier.color}
-                  />
-                  <span className="font-medium">{tier.name}</span>
-                </div>
+                {editingTier === tier.name ? (
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <input
+                      value={editedTierName}
+                      onChange={(e) => setEditedTierName(e.target.value)}
+                      onBlur={() => handleUpdateTier(tier.name, editedTierName)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleUpdateTier(tier.name, editedTierName);
+                        if (e.key === 'Escape') setEditingTier(null);
+                      }}
+                      autoFocus
+                      className="w-full max-w-full px-2 py-1 rounded border border-gray-300"
+                    />
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3 flex-1">
+                      <div
+                        className="w-6 h-6 rounded-full border border-gray-300"
+                        style={{ backgroundColor: tier.color }}
+                        title={tier.color}
+                      />
+                      <span className="font-medium">{tier.name}</span>
+                    </div>
 
-                <div className="flex flex-wrap items-center gap-2">
-                  <button
-                    onClick={() => handleMoveUp(index)}
-                    disabled={index === 0}
-                    className={`text-gray-600 transition ${
-                      index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
-                    }`}
-                    aria-label="Move up"
-                  >
-                    <ArrowUp size={18} />
-                  </button>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        onClick={() => handleMoveUp(index)}
+                        disabled={index === 0}
+                        className={`text-gray-600 transition ${
+                          index === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                        }`}
+                        aria-label="Move up"
+                      >
+                        <ArrowUp size={18} />
+                      </button>
 
-                  <button
-                    onClick={() => handleMoveDown(index)}
-                    disabled={index === tiers.length - 1}
-                    className={`text-gray-600 transition ${
-                      index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
-                    }`}
-                    aria-label="Move down"
-                  >
-                    <ArrowDown size={18} />
-                  </button>
+                      <button
+                        onClick={() => handleMoveDown(index)}
+                        disabled={index === tiers.length - 1}
+                        className={`text-gray-600 transition ${
+                          index === tiers.length - 1 ? 'opacity-50 cursor-not-allowed' : 'hover:text-gray-900'
+                        }`}
+                        aria-label="Move down"
+                      >
+                        <ArrowDown size={18} />
+                      </button>
 
-                  <button
-                    onClick={() => handleDeleteTier(tier)}
-                    className="text-red-500 hover:text-red-700 transition"
-                    aria-label="Delete tier"
-                  >
-                    <Trash2 size={18} />
-                  </button>
-                </div>
+                      <button
+                        onClick={() => {
+                          setEditingTier(tier.name);
+                          setEditedTierName(tier.name);
+                        }}
+                        className="text-blue-500 hover:text-blue-700"
+                        aria-label="Edit tier"
+                      >
+                        <Pencil size={18} />
+                      </button>
+
+                      <button
+                        onClick={() => handleDeleteTier(tier.name)}
+                        className="text-red-500 hover:text-red-700"
+                        aria-label="Delete tier"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+                  </>
+                )}
               </li>
             ))}
+
           </ul>
         </div>
 
-        <div className="mt-4 relative" ref={colorPickerRef}>
+        <div className="mt-4 relative" ref={tierColorPickerRef}>
           <div className="flex items-center gap-2">
             {/* Color Preview Circle */}
             <button
@@ -401,32 +598,36 @@ function UpdateData() {
                       if (e.key === 'Escape') setEditingOrigin(null);
                     }}
                     autoFocus
-                    className="flex-1 mr-2 px-2 py-1 rounded border border-gray-300"
+                    className="w-full max-w-full px-2 py-1 rounded border border-gray-300"
                   />
                 ) : (
                   <span className="text-gray-800 font-medium flex-1">{origin.name}</span>
                 )}
 
-                <div className="flex items-center gap-2 ml-2">
-                  <button
-                    onClick={() => {
-                      setEditingOrigin(origin.name);
-                      setEditedOrigin(origin.name);
-                    }}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    <Pencil size={18} />
-                  </button>
+                <div className="flex items-center gap-2">
+                  {editingOrigin !== origin.name && (
+                    <>
+                      <button
+                        onClick={() => {
+                          setEditingOrigin(origin.name);
+                          setEditedOrigin(origin.name);
+                        }}
+                        className="text-blue-500 hover:text-blue-700"
+                      >
+                        <Pencil size={18} />
+                      </button>
 
-                  <button
-                    onClick={() => handleDeleteOrigin(origin.name)}
-                    className={`transition ${
-                      origin.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
-                    }`}
-                    disabled={origin.inUse}
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                      <button
+                        onClick={() => handleDeleteOrigin(origin.name)}
+                        className={`transition ${
+                          origin.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={origin.inUse}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}
@@ -467,32 +668,36 @@ function UpdateData() {
                       if (e.key === 'Escape') setEditingCategory(null);
                     }}
                     autoFocus
-                    className="flex-1 mr-2 px-2 py-1 rounded border border-gray-300"
+                    className="w-full max-w-full px-2 py-1 rounded border border-gray-300"
                   />
                 ) : (
                   <span className="text-gray-800 font-medium flex-1">{category.name}</span>
                 )}
 
-                <div className="flex items-center gap-2 ml-2">
-                  <button
-                    onClick={() => {
-                      setEditingCategory(category.name);
-                      setEditedCategory(category.name);
-                    }}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    <Pencil size={18} />
-                  </button>
+                <div className="flex items-center gap-2">
+                  {editingCategory !== category.name && (
+                    <>
+                    <button
+                        onClick={() => {
+                          setEditingCategory(category.name);
+                          setEditedCategory(category.name);
+                        }}
+                        className="text-blue-500 hover:text-blue-700"
+                        >
+                        <Pencil size={18} />
+                      </button>
 
-                  <button
-                    onClick={() => handleDeleteCategory(category.name)}
-                    className={`transition ${
-                      category.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
-                    }`}
-                    disabled={category.inUse}
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                      <button
+                        onClick={() => handleDeleteCategory(category.name)}
+                        className={`transition ${
+                          category.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={category.inUse}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}
@@ -533,7 +738,7 @@ function UpdateData() {
                       if (e.key === 'Escape') setEditingSubcategory(null);
                     }}
                     autoFocus
-                    className="flex-1 mr-2 px-2 py-1 rounded border border-gray-300"
+                    className="w-full max-w-full px-2 py-1 rounded border border-gray-300"
                   />
                 ) : (
                   <span className="text-gray-800 font-medium flex-1">
@@ -541,26 +746,30 @@ function UpdateData() {
                   </span>
                 )}
 
-                <div className="flex items-center gap-2 ml-2">
-                  <button
-                    onClick={() => {
-                      setEditingSubcategory(subcategory.name);
-                      setEditedSubcategory(subcategory.name);
-                    }}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    <Pencil size={18} />
-                  </button>
+                <div className="flex items-center gap-2">
+                  {editingSubcategory !== subcategory.name && (
+                    <>
+                      <button
+                      onClick={() => {
+                        setEditingSubcategory(subcategory.name);
+                        setEditedSubcategory(subcategory.name);
+                      }}
+                      className="text-blue-500 hover:text-blue-700"
+                      >
+                        <Pencil size={18} />
+                      </button>
 
-                  <button
-                    onClick={() => handleDeleteSubcategory(subcategory.name)}
-                    className={`transition ${
-                      subcategory.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
-                    }`}
-                    disabled={subcategory.inUse}
-                  >
-                    <Trash2 size={18} />
-                  </button>
+                      <button
+                        onClick={() => handleDeleteSubcategory(subcategory.name)}
+                        className={`transition ${
+                          subcategory.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={subcategory.inUse}
+                        >
+                        <Trash2 size={18} />
+                      </button>
+                    </>
+                  )}
                 </div>
               </li>
             ))}

@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./database/db');
+db.exec('PRAGMA foreign_keys = ON'); // Para que ON UPDATE CASCADE funcione
 require('./database/init');
 
 const app = express();
@@ -27,8 +28,56 @@ app.post('/add-genre', (req, res) => {
 });
 
 app.get('/genres', (req, res) => {
-  const genres = db.prepare("SELECT * FROM genres").all();
-  res.json(genres);
+  try {
+    const genres = db.prepare(`
+      SELECT g.name, g.color,
+             EXISTS (
+               SELECT 1
+               FROM game_genres gg
+               WHERE gg.genre_name = g.name
+             ) AS inUse
+      FROM genres g
+      ORDER BY g.name
+    `).all();
+    res.json(genres);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/update-genre', (req, res) => {
+  const { oldName, newName } = req.body;
+  try {
+    const stmt = db.prepare("UPDATE genres SET name = ? WHERE name = ?");
+    const result = stmt.run(newName, oldName);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(500).json({ error: 'Error al actualizar género' });
+  }
+});
+
+app.post('/delete-genre', (req, res) => {
+  const { name } = req.body;
+  try {
+    const inUse = db.prepare(`
+      SELECT 1
+      FROM game_genres
+      WHERE genre_name = ?
+      LIMIT 1
+    `).get(name);
+
+    if (inUse) {
+      return res.status(400).json({
+        error: 'No se puede eliminar el género porque está asignado a uno o más juegos',
+      });
+    }
+
+    const stmt = db.prepare("DELETE FROM genres WHERE name = ?");
+    const result = stmt.run(name);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 });
 
 // ------------------------------ Categories ------------------------------ //
@@ -36,9 +85,12 @@ app.get('/categories', (req, res) => {
   try {
     const categoriesStmt = db.prepare(`
       SELECT c.name,
-             EXISTS (
-               SELECT 1 FROM games g WHERE g.category = c.name
-             ) AS inUse
+        EXISTS (
+          SELECT 1 FROM games g WHERE g.category = c.name
+        ) OR
+        EXISTS (
+          SELECT 1 FROM subcategories s WHERE s.category = c.name
+        ) AS inUse
       FROM categories c
       ORDER BY c.name
     `);
@@ -214,6 +266,17 @@ app.post('/add-tier', (req, res) => {
   }
 });
 
+app.post('/update-tier', (req, res) => {
+  const { oldName, newName } = req.body;
+  try {
+    const stmt = db.prepare("UPDATE tiers SET name = ? WHERE name = ?");
+    const result = stmt.run(newName, oldName);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(500).json({ error: 'Error al actualizar tier' });
+  }
+});
+
 app.post('/delete-tier', (req, res) => {
   const { name } = req.body;
   try {
@@ -258,10 +321,8 @@ app.post('/move-tier-down', (req, res) => {
 
     const update = db.prepare("UPDATE tiers SET position = ? WHERE name = ?");
 
-    // Paso 1: Valor temporal
     update.run(-1, below.name);
 
-    // Paso 2: Swap
     update.run(below.position, current.name);
     update.run(current.position, below.name);
 
