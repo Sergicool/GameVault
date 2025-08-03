@@ -22,6 +22,7 @@ function Header() {
 
   return (
     <header className="
+      fixed w-full z-100
       bg-gradient-to-br from-slate-900 to-zinc-900
       border-b border-gray-700
       font-mono font-bold text-lg text-gray-100

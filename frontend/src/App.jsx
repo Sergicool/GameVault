@@ -11,7 +11,8 @@ function App() {
   return (
     <Router>
       <Header />
-      <div className="min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800">
+      {/*Para que las paginas no se metan debajo del header: pt-18 */}
+      <div className="pt-18 min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800">
         <Routes>
           <Route path="/" element={<Navigate to="/Games" />} />
           <Route path="/TierList" element={<TierList />} />
