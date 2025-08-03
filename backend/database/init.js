@@ -33,13 +33,13 @@ CREATE TABLE IF NOT EXISTS genres (
 
 CREATE TABLE IF NOT EXISTS games (
   name TEXT PRIMARY KEY CHECK(length(name) <= 50),
-  image_path TEXT,
+  image BLOB,
   year INTEGER NOT NULL,
   origin TEXT NOT NULL,
   category TEXT NOT NULL,
   subcategory TEXT NOT NULL,
-  tier TEXT NOT NULL,
-  position INTEGER UNIQUE NOT NULL,
+  tier TEXT,
+  position INTEGER UNIQUE,
   extension_of TEXT,
 
   FOREIGN KEY (year) REFERENCES years(year),

@@ -314,7 +314,7 @@ function UpdateData() {
         <div className="overflow-y-auto bg-cyan-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <ul className="space-y-2">
-            {genres.map(({ name, color }) => (
+            {genres.map(({ name, color, inUse }) => (
               <li
                 key={name}
                 className="bg-gray-50 rounded-lg text-gray-800 px-3 py-2 flex items-center justify-between shadow"
@@ -365,7 +365,10 @@ function UpdateData() {
                       </button>
                       <button
                         onClick={() => handleDeleteGenre(name)}
-                        className="text-red-500 hover:text-red-700"
+                        className={`transition ${
+                          inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={inUse}
                         aria-label="Delete genre"
                       >
                         <Trash2 size={18} />
@@ -375,7 +378,6 @@ function UpdateData() {
                 </div>
               </li>
             ))}
-
 
           </ul>
         </div>
@@ -490,7 +492,10 @@ function UpdateData() {
 
                       <button
                         onClick={() => handleDeleteTier(tier.name)}
-                        className="text-red-500 hover:text-red-700"
+                        className={`transition ${
+                          tier.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={tier.inUse}
                         aria-label="Delete tier"
                       >
                         <Trash2 size={18} />

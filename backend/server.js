@@ -374,6 +374,163 @@ app.post('/delete-year', (req, res) => {
   }
 });
 
+// ------------------------------ Games ------------------------------ //
+
+
+app.get('/games', (req, res) => {
+  try {
+    const stmt = db.prepare('SELECT * FROM games');
+    const games = stmt.all();
+    res.json(games);
+  } catch (err) {
+    console.error('Error al obtener juegos:', err.message);
+    res.status(500).json({ error: 'Error al obtener juegos' });
+  }
+});
+
+const multer = require('multer');
+const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
+const upload = multer({ storage });
+
+app.post('/add-game', upload.single('image'), (req, res) => {
+  const {
+    name,
+    year,
+    origin,
+    category,
+    subcategory,
+    extension_of,
+  } = req.body;
+
+  const genres = req.body.genres
+  ? Array.isArray(req.body.genres)
+    ? req.body.genres
+    : [req.body.genres]
+  : [];
+
+
+  console.log('Genres recibidos:', genres);
+  const imageBuffer = req.file ? req.file.buffer : null;
+
+  try {
+    const insertGame = db.prepare(`
+      INSERT INTO games (
+        name, image, year, origin, category, subcategory, tier, position, extension_of
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    insertGame.run(
+      name,
+      imageBuffer,
+      parseInt(year),
+      origin,
+      category,
+      subcategory,
+      null,
+      null,
+      extension_of || null
+    );
+
+    const insertGenre = db.prepare(`
+      INSERT INTO game_genres (game_name, genre_name)
+      VALUES (?, ?)
+    `);
+
+    for (const genre of genres) {
+      insertGenre.run(name, genre);
+    }
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/update-game', upload.single('image'), (req, res) => {
+  const {
+    name,
+    year,
+    origin,
+    category,
+    subcategory,
+    extension_of,
+  } = req.body;
+
+  const genres = req.body['genres[]']
+    ? Array.isArray(req.body['genres[]'])
+      ? req.body['genres[]']
+      : [req.body['genres[]']]
+    : [];
+
+  const imageBuffer = req.file ? req.file.buffer : null;
+
+  try {
+    const stmt = db.prepare(`
+      UPDATE games SET
+        image = COALESCE(?, image),
+        year = ?, origin = ?, category = ?, subcategory = ?, extension_of = ?
+      WHERE name = ?
+    `);
+    stmt.run(
+      imageBuffer,
+      parseInt(year),
+      origin,
+      category,
+      subcategory,
+      extension_of || null,
+      name
+    );
+
+    // Actualizar generos
+    db.prepare('DELETE FROM game_genres WHERE game_name = ?').run(name);
+    const insertGenre = db.prepare(`
+      INSERT INTO game_genres (game_name, genre_name)
+      VALUES (?, ?)
+    `);
+    for (const genre of genres) {
+      insertGenre.run(name, genre);
+    }
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+// Imagen
+
+app.get('/game-image/:name', (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const stmt = db.prepare('SELECT image FROM games WHERE name = ?');
+    const result = stmt.get(name);
+
+    if (!result || !result.image) {
+      return res.status(404).send('Imagen no encontrada');
+    }
+
+    res.set('Content-Type', 'image/jpeg'); // o 'image/png' si usas PNG
+    res.send(result.image);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/update-game-image', upload.single('image'), (req, res) => {
+  const { name } = req.body;
+  const imageBuffer = req.file ? req.file.buffer : null;
+
+  try {
+    const stmt = db.prepare('UPDATE games SET image = ? WHERE name = ?');
+    const result = stmt.run(imageBuffer, name);
+
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // -------------------------------------------------------------------- //
 //                                Listener                              //
 // -------------------------------------------------------------------- //
