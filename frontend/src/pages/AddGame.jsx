@@ -35,13 +35,30 @@ function AddGame({ editingGame = null }) {
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
 
+  const loadAll = async () => {
+    try {
+      const [yearsData, originsData, categoriesData, subcategoriesData, genresData, gamesData] = await Promise.all([
+        getYears(),
+        getOrigins(),
+        getCategories(),
+        getSubcategories(),
+        getGenres(),
+        getGames(),
+      ]);
+      setYears(yearsData);
+      setOrigins(originsData);
+      setCategories(categoriesData);
+      setSubcategories(subcategoriesData);
+      setGenres(genresData);
+      setAllGames(gamesData);
+
+    } catch (error) {
+      console.error('Error al cargar datos:', error);
+    }
+  };
+
   useEffect(() => {
-    getYears().then(setYears);
-    getOrigins().then(setOrigins);
-    getCategories().then(setCategories);
-    getSubcategories().then(setSubcategories);
-    getGenres().then(setGenres);
-    getGames().then(setAllGames);
+    loadAll();
   }, []);
 
   useEffect(() => {
@@ -96,6 +113,7 @@ function AddGame({ editingGame = null }) {
         setExtensionOf('');
         setSelectedGenres([]);
       }
+      await loadAll();
     } catch (err) {
       alert(err.message || 'Error al procesar juego');
     }
