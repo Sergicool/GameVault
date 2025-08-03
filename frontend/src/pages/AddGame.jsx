@@ -150,178 +150,277 @@ function AddGame({ editingGame = null }) {
     genres: selectedGenres,
   };
 
+  const getSelectStyles = (isDisabled) =>
+  `w-full bg-neutral-800 text-white rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+    isDisabled ? 'border border-gray-700' : 'border border-white'
+  }`;
+
+  const getLabelStyles = (isDisabled) =>
+    `block font-semibold mb-1 ${isDisabled ? 'text-gray-400' : 'text-gray-100'}`;
+
   return (
-    <div className='grid grid-cols-5 overflow-hidden'>
-      <div className="col-span-3 mx-20 my-auto p-6 bg-gray-500 rounded-2xl shadow-md space-y-6">
+    <div className="flex justify-center gap-8 p-10 mt-20">
+      
+      {/* Formulario a la izquierda */}
+      <div className="
+        bg-gradient-to-br from-gray-800 to-gray-900
+        rounded-xl shadow-lg p-6 w-full max-w-[50rem]
+        border-4 border-gray-100/60
+      ">
         <form onSubmit={handleSubmit}>
-          <h2 className="text-2xl font-bold">Añadir Nuevo Juego</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">
+            {isEditMode ? 'Edit Game' : 'New Game'}
+          </h2>
 
-          {/* Nombre */}
-          <div>
-            <label className="block font-medium mb-1">Título del juego</label>
-            <input
-              type="text"
-              maxLength={50}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full border rounded-lg p-2"
-              disabled={isEditMode}
-            />
+          {/* Título + Imagen */}
+          <div className="flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <label
+                className={`block font-semibold mb-1 ${
+                  categories.length === 0 ? 'text-gray-400' : 'text-gray-100'
+                }`}
+              >
+                Game Title
+              </label>
+              <input
+                type="text"
+                maxLength={50}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full bg-neutral-800 border rounded-lg p-2"
+                disabled={isEditMode}
+              />
+            </div>
+
+            <div className="flex-1">
+              <label className="block font-semibold mb-1">Image</label>
+              <div className="flex items-center gap-4">
+                <label
+                  htmlFor="image-upload"
+                  className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+                >
+                  {image ? 'Change Image' : 'Upload Image'}
+                </label>
+                <span className="text-sm text-gray-300 max-w-[200px]">
+                  {image ? image.name : 'No image selected'}
+                </span>
+              </div>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
+            </div>
           </div>
 
-          {/* Imagen */}
-          <div>
-            <label className="block font-medium mb-1">Imagen / Portada</label>
-            <input type="file" accept="image/*" onChange={handleImageChange} />
-            {imagePreview && (
-              <img src={imagePreview} alt="Preview" className="mt-2 w-40 h-auto rounded-lg" />
-            )}
+          {/* Año + Categoría */}
+          <div className="mt-4 flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <label className={getLabelStyles(years.length === 0)}>Year</label>
+              <select
+                value={year}
+                onChange={(e) => setYear(e.target.value)}
+                className={getSelectStyles(years.length === 0)}
+                disabled={years.length === 0}
+              >
+                <option value="" disabled hidden></option>
+                {years.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay años disponibles
+                  </option>
+                ) : (
+                  years.map((y) => (
+                    <option key={y.year} value={y.year} className="bg-neutral-800 text-white">
+                      {y.year}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            <div className="flex-1">
+              <label className={getLabelStyles(categories.length === 0)}>Category</label>
+              <select
+                value={category}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setSubcategory('');
+                }}
+                className={getSelectStyles(categories.length === 0)}
+                disabled={categories.length === 0}
+              >
+                <option value="" disabled hidden></option>
+                {categories.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay categorías disponibles
+                  </option>
+                ) : (
+                  categories.map((c) => (
+                    <option key={c.name} value={c.name} className="bg-neutral-800 text-white">
+                      {c.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
           </div>
 
-          {/* Año */}
-          <div>
-            <label className="block font-medium mb-1">Año</label>
-            <select
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              className="w-full border rounded-lg p-2"
-              disabled={years.length === 0}
-            >
-              <option value="">Seleccionar año</option>
-              {years.map((y) => (
-                <option key={y.year} value={y.year}>{y.year}</option>
-              ))}
-            </select>
-          </div>
+          {/* Origen + Subcategoría */}
+          <div className="mt-4 flex flex-col lg:flex-row gap-4">
+            <div className="flex-1">
+              <label className={getLabelStyles(origins.length === 0)}>Origin</label>
+              <select
+                value={origin}
+                onChange={(e) => setOrigin(e.target.value)}
+                className={getSelectStyles(origins.length === 0)}
+                disabled={origins.length === 0}
+              >
+                <option value="" disabled hidden></option>
+                {origins.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay orígenes disponibles
+                  </option>
+                ) : (
+                  origins.map((o) => (
+                    <option key={o.name} value={o.name} className="bg-neutral-800 text-white">
+                      {o.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
 
-          {/* Origen */}
-          <div>
-            <label className="block font-medium mb-1">Origen</label>
-            <select
-              value={origin}
-              onChange={(e) => setOrigin(e.target.value)}
-              className="w-full border rounded-lg p-2"
-              disabled={origins.length === 0}
-            >
-              <option value="">Seleccionar origen</option>
-              {origins.map((o) => (
-                <option key={o.name} value={o.name}>{o.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Categoría */}
-          <div>
-            <label className="block font-medium mb-1">Categoría</label>
-            <select
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-                setSubcategory(''); // Reset subcategory
-              }}
-              className="w-full border rounded-lg p-2"
-              disabled={categories.length === 0}
-            >
-              <option value="">Seleccionar categoría</option>
-              {categories.map((c) => (
-                <option key={c.name} value={c.name}>{c.name}</option>
-              ))}
-            </select>
-          </div>
-
-          {/* Subcategoría */}
-          <div>
-            <label className="block font-medium mb-1">Subcategoría</label>
-            <select
-              value={subcategory}
-              onChange={(e) => setSubcategory(e.target.value)}
-              className="w-full border rounded-lg p-2"
-              disabled={filteredSubcategories.length === 0}
-            >
-              <option value="">Seleccionar subcategoría</option>
-              {filteredSubcategories.map((sub) => (
-                <option key={sub.name} value={sub.name}>{sub.name}</option>
-              ))}
-            </select>
+            <div className="flex-1">
+              <label className={getLabelStyles(filteredSubcategories.length === 0)}>Subcategory</label>
+              <select
+                value={subcategory}
+                onChange={(e) => setSubcategory(e.target.value)}
+                className={getSelectStyles(filteredSubcategories.length === 0)}
+                disabled={filteredSubcategories.length === 0}
+              >
+                <option value="" disabled hidden></option>
+                {filteredSubcategories.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay subcategorías disponibles
+                  </option>
+                ) : (
+                  filteredSubcategories.map((sub) => (
+                    <option key={sub.name} value={sub.name} className="bg-neutral-800 text-white">
+                      {sub.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
           </div>
 
           {/* Extension Switch */}
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="extension"
-              checked={isExtension}
-              onChange={(e) => {
-                setIsExtension(e.target.checked);
-                if (!e.target.checked) setExtensionOf('');
-              }}
-            />
-            <label htmlFor="extension" className="font-medium">¿Es una extensión?</label>
+          <div className="mt-6 flex items-center gap-3">
+            <span className="text-gray-100 font-semibold">
+              Is part of another game?
+            </span>
+
+            {/* Switch */}
+            <div className="relative w-12 h-6">
+              <input
+                type="checkbox"
+                checked={isExtension}
+                onChange={(e) => {
+                  setIsExtension(e.target.checked);
+                  if (!e.target.checked) setExtensionOf('');
+                }}
+                className="absolute w-full h-full opacity-0 cursor-pointer z-10"
+                aria-label="Toggle extension"
+              />
+              <div
+                className={`w-full h-full flex items-center rounded-full p-1 transition-colors duration-300 ${
+                  isExtension ? 'bg-blue-600' : 'bg-gray-600'
+                }`}
+              >
+                <div
+                  className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform duration-300 ${
+                    isExtension ? 'translate-x-6' : 'translate-x-0'
+                  }`}
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Si es extensión, selecciona juego base */}
+
+          {/* Juego base */}
           {isExtension && (
-            <div>
-              <label className="block font-medium mb-1">Juego base</label>
+            <div className="mt-4">
+              <label className={getLabelStyles(allGames.length === 0)}>Juego base</label>
               <select
                 value={extensionOf}
                 onChange={(e) => setExtensionOf(e.target.value)}
-                className="w-full border rounded-lg p-2"
+                className={getSelectStyles(allGames.length === 0)}
+                disabled={allGames.length === 0}
               >
-                <option value="">Seleccionar juego</option>
-                {allGames.map((g) => (
-                  <option key={g.name} value={g.name}>{g.name}</option>
-                ))}
+                {allGames.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay juegos disponibles
+                  </option>
+                ) : (
+                  allGames.map((g) => (
+                    <option key={g.name} value={g.name} className="bg-neutral-800 text-white">
+                      {g.name}
+                    </option>
+                  ))
+                )}
               </select>
             </div>
           )}
 
           {/* Géneros */}
-          <div>
-            <label className="block font-medium mb-2">Géneros</label>
-            <div className="flex flex-wrap gap-2">
-              {genres.map((genre) => (
-                <button
-                  key={genre.name}
-                  type="button"
-                  onClick={() => toggleGenre(genre.name)}
-                  className={`px-3 py-1 rounded-full border transition
-                    ${selectedGenres.includes(genre.name)
-                      ? 'text-white'
-                      : 'text-gray-700 border-gray-300'}
+          <div className="mt-4">
+            <label className="block font-medium mb-2 text-gray-100">Géneros</label>
+            <div className="bg-gradient-to-br from-gray-800 via-gray-900 rounded-xl p-4 border border-gray-600">
+              <div className="flex flex-wrap gap-2">
+                {genres.map((genre) => (
+                  <button
+                    key={genre.name}
+                    type="button"
+                    onClick={() => toggleGenre(genre.name)}
+                    className={`px-3 py-1 rounded-full border transition
+                      ${selectedGenres.includes(genre.name)
+                        ? 'text-white'
+                        : 'text-gray-300 border-gray-400'}
                     `}
-                  style={{
-                    backgroundColor: selectedGenres.includes(genre.name)
-                      ? genre.color
-                      : 'transparent',
-                    borderColor: genre.color,
-                  }}
-                >
-                  {genre.name}
-                </button>
-              ))}
+                    style={{
+                      backgroundColor: selectedGenres.includes(genre.name)
+                        ? genre.color
+                        : 'transparent',
+                      borderColor: genre.color,
+                    }}
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Submit */}
-          <div>
+          <div className="mt-6">
             <button
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-              onClick={handleSubmit}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
-              {isEditMode ? 'Guardar cambios' : 'Añadir Juego'}
+              {isEditMode ? 'Guardar Cambios' : 'Agregar Juego'}
             </button>
           </div>
         </form>
       </div>
-      {/* Preview - Derecha */}
-      <div className="col-span-2 sticky top-6 self-start flex justify-center items-center min-h-screen flex-col">
-        <h2 className="text-2xl font-semibold mb-4 text-center w-full">Vista previa</h2>
+
+      {/* GameCard a la derecha */}
+      <div className="flex-1 max-w-md">
         <GameCard game={gamePreview} />
       </div>
     </div>
-    
   );
+
 }
 
 export default AddGame;

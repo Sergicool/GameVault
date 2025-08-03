@@ -12,7 +12,7 @@ function App() {
     <Router>
       <Header />
       {/*Para que las paginas no se metan debajo del header: pt-18 */}
-      <div className="pt-18 min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800">
+      <div className="pt-18 min-h-screen bg-gradient-to-b from-gray-800 to-gray-700">
         <Routes>
           <Route path="/" element={<Navigate to="/Games" />} />
           <Route path="/TierList" element={<TierList />} />
