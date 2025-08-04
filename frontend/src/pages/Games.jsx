@@ -29,7 +29,7 @@ function Games() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800 p-6">
+    <div className="p-6">
       <h1 className="text-3xl text-white font-bold mb-6">Todos los Juegos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
         {games.map((game) => (
