@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS games (
   FOREIGN KEY (category) REFERENCES categories(name),
   FOREIGN KEY (subcategory) REFERENCES subcategories(name),
   FOREIGN KEY (tier) REFERENCES tiers(name),
-  FOREIGN KEY (extension_of) REFERENCES games(name)
+  FOREIGN KEY (extension_of) REFERENCES games(name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS game_genres (

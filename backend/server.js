@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const db = require('./database/db');
-db.exec('PRAGMA foreign_keys = ON'); // Para que ON UPDATE CASCADE funcione
+db.pragma('foreign_keys = ON'); // Para que ON UPDATE CASCADE funcione
 require('./database/init');
 
 const app = express();
@@ -379,14 +379,31 @@ app.post('/delete-year', (req, res) => {
 
 app.get('/games', (req, res) => {
   try {
-    const stmt = db.prepare('SELECT * FROM games');
-    const games = stmt.all();
-    res.json(games);
+    const gameStmt = db.prepare('SELECT * FROM games');
+    const genreStmt = db.prepare(`
+      SELECT g.name, g.color
+      FROM game_genres gg
+      JOIN genres g ON g.name = gg.genre_name
+      WHERE gg.game_name = ?
+    `);
+
+    const games = gameStmt.all();
+
+    const enrichedGames = games.map(game => {
+      const genres = genreStmt.all(game.name);
+      return {
+        ...game,
+        genres,
+      };
+    });
+
+    res.json(enrichedGames);
   } catch (err) {
     console.error('Error al obtener juegos:', err.message);
     res.status(500).json({ error: 'Error al obtener juegos' });
   }
 });
+
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
@@ -456,10 +473,10 @@ app.post('/update-game', upload.single('image'), (req, res) => {
     extension_of,
   } = req.body;
 
-  const genres = req.body['genres[]']
-    ? Array.isArray(req.body['genres[]'])
-      ? req.body['genres[]']
-      : [req.body['genres[]']]
+  const genres = req.body['genres']
+    ? Array.isArray(req.body['genres'])
+      ? req.body['genres']
+      : [req.body['genres']]
     : [];
 
   const imageBuffer = req.file ? req.file.buffer : null;
@@ -497,9 +514,9 @@ app.post('/update-game', upload.single('image'), (req, res) => {
   }
 });
 
-app.delete('/delete-game/:name', (req, res) => {
-  const { name } = req.params;
-
+app.post('/delete-game', (req, res) => {
+  const { name } = req.body;
+  
   try {
     const deleteGenres = db.prepare('DELETE FROM game_genres WHERE game_name = ?');
     deleteGenres.run(name);

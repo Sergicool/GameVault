@@ -1,7 +1,41 @@
+import { useEffect, useState } from 'react';
+import { getGames } from '../api/games';
+import { getGenres } from '../api/genres';
+import GameCard from '../components/GameCard';
+
 function Games() {
+  const [games, setGames] = useState([]);
+  const [genres, setGenres] = useState([]);
+
+  useEffect(() => {
+    const loadGames = async () => {
+      try {
+        const [gamesData, genresData] = await Promise.all([getGames(), getGenres()]);
+        console.log('gamesData:', gamesData);
+
+        const enrichedGames = gamesData.map((game) => ({
+          ...game,
+          imagePreview: `http://localhost:3001/game-image/${game.name}`,
+        }));
+        
+        setGames(enrichedGames);
+        setGenres(genresData);
+      } catch (error) {
+        console.error('Error al cargar juegos:', error);
+      }
+    };
+
+    loadGames();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800">
-      
+    <div className="min-h-screen bg-gradient-to-br from-slate-700 to-zinc-800 p-6">
+      <h1 className="text-3xl text-white font-bold mb-6">Todos los Juegos</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+        {games.map((game) => (
+          <GameCard key={game.name} game={game} expandible/>
+        ))}
+      </div>
     </div>
   );
 }

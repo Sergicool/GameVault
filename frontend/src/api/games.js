@@ -18,7 +18,7 @@ export async function addGame(gameData) {
   formData.append('extension_of', gameData.extension_of || '');
 
   gameData.genres.forEach((genre) => {
-    formData.append('genres[]', genre);
+    formData.append('genres', genre);
   });
 
   const res = await fetch(`${API_URL}/add-game`, {
@@ -66,8 +66,11 @@ export async function updateGame(gameData) {
 }
 
 export async function deleteGame(name) {
-  const res = await fetch(`${API_URL}/delete-game/${encodeURIComponent(name)}`, {
-    method: 'DELETE',
+
+  const res = await fetch(`${API_URL}/delete-game`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
   });
 
   if (!res.ok) {

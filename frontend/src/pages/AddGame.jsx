@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { getYears } from '../api/years';
 import { getOrigins } from '../api/origins';
@@ -9,7 +11,11 @@ import { getGames, addGame, updateGame, deleteGame } from '../api/games';
 
 import GameCard from '../components/GameCard';
 
-function AddGame({ editingGame = null }) {
+function AddGame() {
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const editingGame = location.state?.editingGame || null;
 
   const isEditMode = editingGame !== null;
 
@@ -72,7 +78,7 @@ function AddGame({ editingGame = null }) {
       setSubcategory(editingGame.subcategory || '');
       setIsExtension(Boolean(editingGame.extension_of));
       setExtensionOf(editingGame.extension_of || '');
-      setSelectedGenres(editingGame.genres || []);
+      setSelectedGenres(editingGame.genres?.map((g) => g.name) || []);
       setImagePreview(`http://localhost:3001/game-image/${editingGame.name}`); // Preview, la imagen no es real
     }
   }, [editingGame]);
@@ -80,8 +86,13 @@ function AddGame({ editingGame = null }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !image || !year || !origin || !category || !subcategory) {
-      alert('Por favor completa todos los campos obligatorios.');
+    if (!name || (!image && !isEditMode) || !year || !origin || !category || !subcategory ) {
+      alert('Please complete all fields.');
+      return;
+    }
+
+    if (selectedGenres.length === 0) {
+      alert('You must select at least one gender.');
       return;
     }
 
@@ -100,6 +111,7 @@ function AddGame({ editingGame = null }) {
       if (isEditMode) {
         await updateGame(gameData);
         alert('Juego actualizado correctamente');
+        navigate('/Games');
       } else {
         await addGame(gameData);
         alert('Juego agregado correctamente');
@@ -129,8 +141,7 @@ function AddGame({ editingGame = null }) {
     try {
       await deleteGame(editingGame.name);
       alert('Juego eliminado correctamente');
-      // Opcionalmente: recarga la página o redirige
-      window.location.reload();
+      navigate('/Games');
     } catch (err) {
       alert(err.message || 'Error al eliminar juego');
     }
@@ -419,7 +430,7 @@ function AddGame({ editingGame = null }) {
           </div>
 
           {/* Submit */}
-          <div className="mt-6">
+          <div className="mt-6 flex gap-4">
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
@@ -427,18 +438,16 @@ function AddGame({ editingGame = null }) {
             </button>
 
             {isEditMode && (
-              <div className="mt-2">
-                <button
-                  type="button"
-                  onClick={handleDelete}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
-                >
-                  Delete Game
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+              >
+                Delete Game
+              </button>
             )}
-
           </div>
+
         </form>
       </div>
 
