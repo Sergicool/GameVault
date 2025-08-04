@@ -65,3 +65,15 @@ export async function updateGame(gameData) {
   return res.json();
 }
 
+export async function deleteGame(name) {
+  const res = await fetch(`${API_URL}/delete-game/${encodeURIComponent(name)}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    const err = await res.json();
+    throw new Error(err.error || 'Error al eliminar juego');
+  }
+
+  return res.json();
+}

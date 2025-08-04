@@ -5,7 +5,7 @@ import { getOrigins } from '../api/origins';
 import { getCategories } from '../api/categories';
 import { getSubcategories } from '../api/subcategories';
 import { getGenres } from '../api/genres';
-import { getGames, addGame, updateGame } from '../api/games';
+import { getGames, addGame, updateGame, deleteGame } from '../api/games';
 
 import GameCard from '../components/GameCard';
 
@@ -93,7 +93,7 @@ function AddGame({ editingGame = null }) {
       category,
       subcategory,
       extension_of: isExtension ? extensionOf : '',
-      genres: selectedGenres,
+      genres: selectedGenres, // Se pasa solo los nombres
     };
 
     try {
@@ -118,6 +118,21 @@ function AddGame({ editingGame = null }) {
       await loadAll();
     } catch (err) {
       alert(err.message || 'Error al procesar juego');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!editingGame) return;
+    const confirmed = window.confirm(`¿Estás seguro de que quieres eliminar el juego "${editingGame.name}"?`);
+    if (!confirmed) return;
+
+    try {
+      await deleteGame(editingGame.name);
+      alert('Juego eliminado correctamente');
+      // Opcionalmente: recarga la página o redirige
+      window.location.reload();
+    } catch (err) {
+      alert(err.message || 'Error al eliminar juego');
     }
   };
 
@@ -147,7 +162,9 @@ function AddGame({ editingGame = null }) {
     category,
     subcategory,
     extension_of: isExtension ? extensionOf : '',
-    genres: selectedGenres,
+    genres: selectedGenres.map((name) =>
+      genres.find((g) => g.name === name)
+    ).filter(Boolean), // Se pasa el objeto completo
   };
 
   const getSelectStyles = (isDisabled) =>
@@ -161,7 +178,7 @@ function AddGame({ editingGame = null }) {
   return (
     <div className="flex justify-center gap-8 p-10 mt-20">
       
-      {/* Formulario a la izquierda */}
+      {/* Formulario */}
       <div className="
         bg-gradient-to-br from-gray-800 to-gray-900
         rounded-xl shadow-lg p-6 w-full max-w-[50rem]
@@ -352,7 +369,7 @@ function AddGame({ editingGame = null }) {
           {/* Juego base */}
           {isExtension && (
             <div className="mt-4">
-              <label className={getLabelStyles(allGames.length === 0)}>Juego base</label>
+              <label className={getLabelStyles(allGames.length === 0)}>Base Game</label>
               <select
                 value={extensionOf}
                 onChange={(e) => setExtensionOf(e.target.value)}
@@ -360,9 +377,7 @@ function AddGame({ editingGame = null }) {
                 disabled={allGames.length === 0}
               >
                 {allGames.length === 0 ? (
-                  <option className="bg-neutral-800 text-gray-400" disabled>
-                    No hay juegos disponibles
-                  </option>
+                  <option className="bg-neutral-800 text-gray-400" disabled></option>
                 ) : (
                   allGames.map((g) => (
                     <option key={g.name} value={g.name} className="bg-neutral-800 text-white">
@@ -376,8 +391,8 @@ function AddGame({ editingGame = null }) {
 
           {/* Géneros */}
           <div className="mt-4">
-            <label className="block font-medium mb-2 text-gray-100">Géneros</label>
-            <div className="bg-gradient-to-br from-gray-800 via-gray-900 rounded-xl p-4 border border-gray-600">
+            <label className="block font-semibold mb-2 text-gray-100">Genres</label>
+            <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 inset-shadow-sm inset-shadow-gray-900">
               <div className="flex flex-wrap gap-2">
                 {genres.map((genre) => (
                   <button
@@ -408,14 +423,27 @@ function AddGame({ editingGame = null }) {
             <button
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
             >
-              {isEditMode ? 'Guardar Cambios' : 'Agregar Juego'}
+              {isEditMode ? 'Save Changes' : 'Add Game'}
             </button>
+
+            {isEditMode && (
+              <div className="mt-2">
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
+                >
+                  Delete Game
+                </button>
+              </div>
+            )}
+
           </div>
         </form>
       </div>
 
-      {/* GameCard a la derecha */}
-      <div className="flex-1 max-w-md">
+      {/* GameCard */}
+      <div className="flex items-center justify-center">
         <GameCard game={gamePreview} />
       </div>
     </div>

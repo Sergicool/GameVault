@@ -497,6 +497,27 @@ app.post('/update-game', upload.single('image'), (req, res) => {
   }
 });
 
+app.delete('/delete-game/:name', (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const deleteGenres = db.prepare('DELETE FROM game_genres WHERE game_name = ?');
+    deleteGenres.run(name);
+
+    const deleteGame = db.prepare('DELETE FROM games WHERE name = ?');
+    const result = deleteGame.run(name);
+
+    if (result.changes === 0) {
+      return res.status(404).json({ error: 'Juego no encontrado' });
+    }
+
+    res.json({ success: true });
+  } catch (e) {
+    console.error('Error al eliminar juego:', e.message);
+    res.status(500).json({ error: 'Error al eliminar juego' });
+  }
+});
+
 // Imagen
 
 app.get('/game-image/:name', (req, res) => {
