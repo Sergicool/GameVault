@@ -1,5 +1,41 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getGameByName } from '../api/games'; // asegúrate de tener esta función
+
+function ExtensionContent({ gameName }) {
+  const [parentGame, setParentGame] = useState(null);
+
+  useEffect(() => {
+    const fetchParentGame = async () => {
+      try {
+        const data = await getGameByName(gameName);
+        setParentGame(data);
+      } catch (err) {
+        console.error('Error al obtener juego base:', err);
+      }
+    };
+
+    fetchParentGame();
+  }, [gameName]);
+
+  if (!parentGame) return <p className="text-gray-500">Cargando juego base...</p>;
+
+  return (
+    <div className="flex items-center gap-4">
+      <div className="w-20 h-20 bg-gray-700 rounded overflow-hidden flex-shrink-0">
+        <img
+          src={`http://localhost:3001/game-image/${encodeURIComponent(parentGame.name)}`}
+          alt={parentGame.name}
+          className="w-full h-full object-cover"
+        />
+      </div>
+      <div>
+        <h4 className="text-lg font-semibold">{parentGame.name}</h4>
+        <p className="text-xs text-gray-400">{parentGame.year} · {parentGame.origin}</p>
+      </div>
+    </div>
+  );
+}
 
 function isColorDark(hexColor) {
   const hex = hexColor.replace('#', '');
@@ -10,14 +46,15 @@ function isColorDark(hexColor) {
   return luminance < 128;
 }
 
-function GameCard({ game, expandible = false }) {
-  
+function GameCard({ game, expandible = false, inTierList = false }) {
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const [visibleCount, setVisibleCount] = useState(game.genres.length);
   const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
+    if (inTierList) return;
+
     const container = containerRef.current;
     if (!container) return;
 
@@ -35,13 +72,13 @@ function GameCard({ game, expandible = false }) {
     const shouldReserveMore = game.genres.length > count;
     const adjusted = shouldReserveMore ? Math.max(0, count - 1) : count;
     setVisibleCount(adjusted);
-  }, [game.genres]);
+  }, [game.genres, inTierList]);
 
   const visibleGenres = game.genres.slice(0, visibleCount);
   const hiddenCount = game.genres.length - visibleCount;
 
   const openModal = () => {
-    if (expandible) setIsExpanded(true);
+    if (expandible && !inTierList) setIsExpanded(true);
   };
 
   const closeModal = () => {
@@ -52,10 +89,38 @@ function GameCard({ game, expandible = false }) {
     navigate('/AddGame', { state: { editingGame: game } });
   };
 
+  if (inTierList) {
+    return (
+      <div
+        className="border-gray-500
+          border-10 rounded-lg
+          flex items-center justify-center
+          overflow-hidden scale-30 cursor-pointer
+      ">
+        {game.imagePreview ? (
+          <img
+            src={game.imagePreview}
+            alt={game.name}
+            className="object-cover w-full h-full"
+          />
+        ) : (
+          <span className="text-gray-400 text-xs">No Image</span>
+        )}
+      </div>
+    );
+  }
+
   return (
     <>
       <div
-        className="flex flex-col cursor-pointer hover:scale-[1.02] transition-transform duration-200 bg-gradient-to-br from-gray-800 to-gray-900 w-100 rounded-lg overflow-hidden shadow-lg"
+        className={`
+          flex flex-col transition-transform duration-200 
+          bg-gradient-to-br from-gray-800 to-gray-900 
+          w-[400px] 
+          rounded-lg overflow-hidden 
+          shadow-lg ${
+          expandible ? 'cursor-pointer hover:scale-[1.1]' : ''
+        }`}
         onClick={openModal}
       >
         <div className="h-48 bg-gray-200 flex items-center justify-center">
@@ -106,79 +171,90 @@ function GameCard({ game, expandible = false }) {
         </div>
       </div>
 
-      {/* Modal expandido */}
       {expandible && isExpanded && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 z-50 flex items-center justify-center p-4">
-          <div className="bg-zinc-900 text-white max-w-3xl w-full rounded-2xl shadow-lg p-6 relative overflow-y-auto max-h-[90vh]">
+        <div
+          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6"
+          onClick={closeModal} // cerrar al hacer click en fondo
+        >
+          <div
+            className="bg-zinc-900 text-white w-full max-w-5xl rounded-2xl shadow-2xl p-8 overflow-y-auto max-h-[90vh] relative"
+            onClick={(e) => e.stopPropagation()} // evita que el click interior cierre
+          >
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-white text-xl hover:text-red-400"
+              className="absolute top-4 right-4 text-white text-2xl hover:text-red-500"
             >
               ✕
             </button>
 
-            <div className="flex flex-col md:flex-row gap-6">
-              <div className="flex-shrink-0 w-full md:w-1/2">
-                {game.imagePreview ? (
-                  <img
-                    src={game.imagePreview}
-                    alt={game.name}
-                    className="w-full h-auto rounded-xl"
-                  />
-                ) : (
-                  <div className="bg-gray-700 text-gray-300 p-6 rounded-xl">No Image</div>
+            <div className="flex flex-col items-center">
+              {game.imagePreview && (
+                <img
+                  src={game.imagePreview}
+                  alt={game.name}
+                  className="w-full max-w-md rounded-xl mb-6 object-cover"
+                />
+              )}
+
+              <h2 className="text-4xl font-bold mb-2 text-center">{game.name}</h2>
+              <p className="text-sm text-gray-400 mb-4">
+                {game.year} · {game.origin}
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl mb-6">
+                <div>
+                  <p className="mb-1"><strong>Categoría:</strong> {game.category}</p>
+                  <p><strong>Subcategoría:</strong> {game.subcategory}</p>
+                </div>
+                {game.genres?.length > 0 && (
+                  <div>
+                    <p className="mb-1"><strong>Géneros:</strong></p>
+                    <div className="flex flex-wrap gap-2">
+                      {game.genres.map((g, i) => {
+                        const textColor = isColorDark(g.color) ? 'white' : 'black';
+                        return (
+                          <span
+                            key={i}
+                            className="text-xs rounded-full px-2 py-0.5"
+                            style={{
+                              backgroundColor: g.color,
+                              color: textColor,
+                            }}
+                          >
+                            {g.name}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  </div>
                 )}
               </div>
 
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-2">{game.name}</h2>
-                <p className="text-sm text-gray-400 mb-4">{game.year} · {game.origin}</p>
-                <p className="mb-2">
-                  <strong>Categoría:</strong> {game.category}
-                </p>
-                <p className="mb-2">
-                  <strong>Subcategoría:</strong> {game.subcategory}
-                </p>
-                {game.extension_of && (
-                  <p className="mb-2 italic text-sm text-gray-400">
-                    Extensión de: {game.extension_of}
+              {/* Mostrar juego del que es extensión */}
+              {game.extension_of && (
+                <div className="w-full max-w-3xl mt-8 bg-zinc-800 p-4 rounded-xl">
+                  <p className="text-sm text-gray-400 italic mb-2">
+                    Este juego es una extensión de:
                   </p>
-                )}
 
-                {game.genres?.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {game.genres.map((g, i) => {
-                      const textColor = isColorDark(g.color) ? 'white' : 'black';
-                      return (
-                        <span
-                          key={i}
-                          className="text-xs rounded-full px-2 py-0.5"
-                          style={{
-                            backgroundColor: g.color,
-                            color: textColor,
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {g.name}
-                        </span>
-                      );
-                    })}
-                  </div>
-                )}
-
-                <div className="mt-6">
-                  <button
-                    onClick={handleEdit}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg"
-                  >
-                    Edit Game
-                  </button>
+                  {/* Juego padre */}
+                  <ExtensionContent gameName={game.extension_of} />
                 </div>
+              )}
+
+              <div className="mt-6">
+                <button
+                  onClick={handleEdit}
+                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg"
+                >
+                  Editar juego
+                </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
     </>
   );
 }

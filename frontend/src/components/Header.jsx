@@ -1,5 +1,5 @@
 import { Menu, Plus, ArrowDownUp, RefreshCw } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +19,24 @@ function Header() {
   ];
 
   const isActive = (href) => currentPath === href;
+  
+  const menuRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [menuOpen]);
 
   return (
     <header className="
@@ -52,7 +70,7 @@ function Header() {
           </nav>
         </div>
         {/* Menú desplegable */}
-        <div className="absolute right-6">
+        <div className="absolute right-6" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-2 rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"

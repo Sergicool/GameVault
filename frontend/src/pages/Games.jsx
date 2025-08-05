@@ -17,7 +17,10 @@ function Games() {
           ...game,
           imagePreview: `http://localhost:3001/game-image/${game.name}`,
         }));
-        
+
+        // Ordenar por nombre
+        enrichedGames.sort((a, b) => a.name.localeCompare(b.name));
+
         setGames(enrichedGames);
         setGenres(genresData);
       } catch (error) {
@@ -31,7 +34,7 @@ function Games() {
   return (
     <div className="p-6">
       <h1 className="text-3xl text-white font-bold mb-6">Todos los Juegos</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="flex flex-wrap gap-6 justify-around ">
         {games.map((game) => (
           <GameCard key={game.name} game={game} expandible/>
         ))}

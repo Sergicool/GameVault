@@ -6,6 +6,12 @@ export async function getGames() {
   return res.json();
 }
 
+export async function getGameByName(name) {
+  const res = await fetch(`${API_URL}/games/${encodeURIComponent(name)}`);
+  if (!res.ok) throw new Error('Error al obtener juego');
+  return res.json();
+}
+
 export async function addGame(gameData) {
   const formData = new FormData();
 

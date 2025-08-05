@@ -404,6 +404,26 @@ app.get('/games', (req, res) => {
   }
 });
 
+app.get('/games/:name', (req, res) => {
+  try {
+    const gameStmt = db.prepare('SELECT * FROM games WHERE name = ?');
+    const genreStmt = db.prepare(`
+      SELECT g.name, g.color
+      FROM game_genres gg
+      JOIN genres g ON g.name = gg.genre_name
+      WHERE gg.game_name = ?
+    `);
+
+    const game = gameStmt.get(req.params.name);
+    if (!game) return res.status(404).json({ error: 'Juego no encontrado' });
+
+    const genres = genreStmt.all(game.name);
+    res.json({ ...game, genres });
+  } catch (err) {
+    console.error('Error al obtener juego:', err.message);
+    res.status(500).json({ error: 'Error al obtener juego' });
+  }
+});
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
