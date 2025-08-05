@@ -15,7 +15,7 @@ function Games() {
 
         const enrichedGames = gamesData.map((game) => ({
           ...game,
-          imagePreview: `http://localhost:3001/game-image/${game.name}`,
+          imagePreview: `http://localhost:3001/game-image/${game.name}?t=${Date.now()}`, // Date para que al editar una imagen la actualize y no se vea la misma
         }));
 
         // Ordenar por nombre

@@ -110,11 +110,11 @@ function AddGame() {
     try {
       if (isEditMode) {
         await updateGame(gameData);
-        alert('Juego actualizado correctamente');
+        alert('Game updated successfully');
         navigate('/Games');
       } else {
         await addGame(gameData);
-        alert('Juego agregado correctamente');
+        alert('Game added successfully');
         // Limpiar formulario
         setName('');
         setImage(null);
@@ -129,21 +129,21 @@ function AddGame() {
       }
       await loadAll();
     } catch (err) {
-      alert(err.message || 'Error al procesar juego');
+      alert(err.message || 'Error processing game');
     }
   };
 
   const handleDelete = async () => {
     if (!editingGame) return;
-    const confirmed = window.confirm(`¿Estás seguro de que quieres eliminar el juego "${editingGame.name}"?`);
+    const confirmed = window.confirm(`Are you sure you want to delete the game? "${editingGame.name}"?`);
     if (!confirmed) return;
 
     try {
       await deleteGame(editingGame.name);
-      alert('Juego eliminado correctamente');
+      alert('Successfully deleted game');
       navigate('/Games');
     } catch (err) {
-      alert(err.message || 'Error al eliminar juego');
+      alert(err.message || 'Error when deleting game');
     }
   };
 

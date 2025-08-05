@@ -18,11 +18,11 @@ function ExtensionContent({ gameName }) {
     fetchParentGame();
   }, [gameName]);
 
-  if (!parentGame) return <p className="text-gray-500">Cargando juego base...</p>;
+  if (!parentGame) return <p className="text-gray-500">Loading base game...</p>;
 
   return (
     <div className="flex items-center gap-4">
-      <div className="w-20 h-20 bg-gray-700 rounded overflow-hidden flex-shrink-0">
+      <div className="w-40 h-20 bg-gray-700 rounded overflow-hidden flex-shrink-0">
         <img
           src={`http://localhost:3001/game-image/${encodeURIComponent(parentGame.name)}`}
           alt={parentGame.name}
@@ -31,7 +31,7 @@ function ExtensionContent({ gameName }) {
       </div>
       <div>
         <h4 className="text-lg font-semibold">{parentGame.name}</h4>
-        <p className="text-xs text-gray-400">{parentGame.year} · {parentGame.origin}</p>
+        <p className="text-xs text-gray-400">{parentGame.year} · {parentGame.origin} · {parentGame.category} - {parentGame.subcategory}</p>
       </div>
     </div>
   );
@@ -138,9 +138,9 @@ function GameCard({ game, expandible = false, inTierList = false }) {
           <h3 className="text-xl font-bold mb-2">{game.name}</h3>
 
           {game.genres && game.genres.length > 0 && (
-            <div className="mt-2">
+            <div className="mt-3">
               <div
-                className="flex flex-wrap gap-2 max-w-full overflow-hidden"
+                className="flex flex-wrap font-semibold gap-2 max-w-full overflow-hidden"
                 ref={containerRef}
               >
                 {visibleGenres.map((g, i) => {
@@ -174,86 +174,110 @@ function GameCard({ game, expandible = false, inTierList = false }) {
       {expandible && isExpanded && (
         <div
           className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6"
-          onClick={closeModal} // cerrar al hacer click en fondo
+          onClick={closeModal}
         >
           <div
-            className="bg-zinc-900 text-white w-full max-w-5xl rounded-2xl shadow-2xl p-8 overflow-y-auto max-h-[90vh] relative"
-            onClick={(e) => e.stopPropagation()} // evita que el click interior cierre
+            className="
+              relative w-full max-w-[50rem] h-[46rem]
+              bg-zinc-900 text-white rounded-2xl shadow-2xl
+              flex flex-col overflow-hidden
+            "
+            onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={closeModal}
-              className="absolute top-4 right-4 text-white text-2xl hover:text-red-500"
-            >
-              ✕
-            </button>
-
-            <div className="flex flex-col items-center">
-              {game.imagePreview && (
+            {/* Imagen */}
+            {game.imagePreview ? (
+              <div className="relative w-full aspect-[11/5] bg-gray-700 overflow-hidden flex-shrink-0">
                 <img
                   src={game.imagePreview}
                   alt={game.name}
-                  className="w-full max-w-md rounded-xl mb-6 object-cover"
+                  className="absolute inset-0 w-full h-full object-cover"
                 />
-              )}
+                {/* Botón cerrar */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-2 right-4 text-white z-10 text-2xl hover:text-red-500"
+                >
+                  ✕
+                </button>
+              </div>
+            ) : (
+              <div className="w-full aspect-[16/9] bg-gray-700 flex items-center justify-center text-gray-300">
+                No Image
+              </div>
+            )}
 
-              <h2 className="text-4xl font-bold mb-2 text-center">{game.name}</h2>
-              <p className="text-sm text-gray-400 mb-4">
-                {game.year} · {game.origin}
-              </p>
+            {/* Contenido que hace scroll */}
+            <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-between space-y-6">
+              <div className="w-full flex flex-col items-center">
+                {/* Título */}
+                <h2 className="text-4xl font-bold text-center mb-4">{game.name}</h2>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-3xl mb-6">
-                <div>
-                  <p className="mb-1"><strong>Categoría:</strong> {game.category}</p>
-                  <p><strong>Subcategoría:</strong> {game.subcategory}</p>
+                {/* Subtítulo con año, origen y categoría como etiquetas */}
+                <div className="flex flex-wrap justify-center gap-2 mb-4">
+                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                    Played in {game.year}
+                  </span>
+                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                    {game.origin} game
+                  </span>
+                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                    {game.category}{game.subcategory && ` - ${game.subcategory}`}
+                  </span>
                 </div>
+
+                {/* Géneros */}
                 {game.genres?.length > 0 && (
-                  <div>
-                    <p className="mb-1"><strong>Géneros:</strong></p>
-                    <div className="flex flex-wrap gap-2">
-                      {game.genres.map((g, i) => {
-                        const textColor = isColorDark(g.color) ? 'white' : 'black';
-                        return (
-                          <span
-                            key={i}
-                            className="text-xs rounded-full px-2 py-0.5"
-                            style={{
-                              backgroundColor: g.color,
-                              color: textColor,
-                            }}
-                          >
-                            {g.name}
-                          </span>
-                        );
-                      })}
+                  <div className="w-full max-w-3xl">
+                    <p className="mb-2 font-semibold text-gray-300 text-center text-xl">Genres</p>
+                    <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-3">
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {game.genres.map((g, i) => {
+                          const textColor = isColorDark(g.color) ? "white" : "black";
+                          return (
+                            <span
+                              key={i}
+                              className="text-sm font-semibold rounded-full px-2 py-0.5"
+                              style={{
+                                backgroundColor: g.color,
+                                color: textColor,
+                              }}
+                            >
+                              {g.name}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
+                  </div>
+                )}
+
+                {/* Juego del que es extensión */}
+                {game.extension_of && (
+                  <div className="w-full max-w-3xl mt-4 bg-zinc-800 border border-zinc-700 p-4 rounded-xl">
+                    <p className="text-sm text-gray-400 italic mb-2">
+                      This game is an extension of:
+                    </p>
+                    <ExtensionContent gameName={game.extension_of} />
                   </div>
                 )}
               </div>
 
-              {/* Mostrar juego del que es extensión */}
-              {game.extension_of && (
-                <div className="w-full max-w-3xl mt-8 bg-zinc-800 p-4 rounded-xl">
-                  <p className="text-sm text-gray-400 italic mb-2">
-                    Este juego es una extensión de:
-                  </p>
-
-                  {/* Juego padre */}
-                  <ExtensionContent gameName={game.extension_of} />
-                </div>
-              )}
-
-              <div className="mt-6">
+              {/* Botón Editar */}
+              <div className="w-full flex justify-center">
                 <button
                   onClick={handleEdit}
                   className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg"
                 >
-                  Editar juego
+                  Edit game
                 </button>
               </div>
             </div>
+
+
           </div>
         </div>
       )}
+
 
     </>
   );
