@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getGameByName } from '../api/games'; // asegúrate de tener esta función
+import { getGameByName } from '../api/games';
 
 function ExtensionContent({ gameName }) {
   const [parentGame, setParentGame] = useState(null);
@@ -216,7 +216,7 @@ function GameCard({ game, expandible = false, inTierList = false }) {
                           return (
                             <span
                               key={i}
-                              className="text-sm font-semibold rounded-full px-2 py-0.5"
+                              className="text-md font-semibold rounded-full px-2 py-0.5"
                               style={{
                                 backgroundColor: g.color,
                                 color: textColor,

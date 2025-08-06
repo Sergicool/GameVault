@@ -381,16 +381,17 @@ app.get('/games', (req, res) => {
   try {
     const gameStmt = db.prepare('SELECT * FROM games');
     const genreStmt = db.prepare(`
-      SELECT g.name, g.color
+      SELECT g.name, g.color, gg.order_index
       FROM game_genres gg
       JOIN genres g ON g.name = gg.genre_name
       WHERE gg.game_name = ?
+      ORDER BY gg.order_index ASC
     `);
 
     const games = gameStmt.all();
 
     const enrichedGames = games.map(game => {
-      const genres = genreStmt.all(game.name);
+      const genres = genreStmt.all(game.name).sort((a, b) => a.order_index - b.order_index);
       return {
         ...game,
         genres,
@@ -408,10 +409,11 @@ app.get('/games/:name', (req, res) => {
   try {
     const gameStmt = db.prepare('SELECT * FROM games WHERE name = ?');
     const genreStmt = db.prepare(`
-      SELECT g.name, g.color
+      SELECT g.name, g.color, gg.order_index
       FROM game_genres gg
       JOIN genres g ON g.name = gg.genre_name
       WHERE gg.game_name = ?
+      ORDER BY gg.order_index ASC;
     `);
 
     const game = gameStmt.get(req.params.name);
@@ -450,8 +452,6 @@ app.post('/games/tierlist', (req, res) => {
   }
 });
 
-
-
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
 const upload = multer({ storage });
@@ -467,13 +467,11 @@ app.post('/add-game', upload.single('image'), (req, res) => {
   } = req.body;
 
   const genres = req.body.genres
-  ? Array.isArray(req.body.genres)
-    ? req.body.genres
-    : [req.body.genres]
-  : [];
+    ? Array.isArray(req.body.genres)
+      ? req.body.genres
+      : [req.body.genres]
+    : [];
 
-
-  console.log('Genres recibidos:', genres);
   const imageBuffer = req.file ? req.file.buffer : null;
 
   try {
@@ -496,12 +494,12 @@ app.post('/add-game', upload.single('image'), (req, res) => {
     );
 
     const insertGenre = db.prepare(`
-      INSERT INTO game_genres (game_name, genre_name)
-      VALUES (?, ?)
+      INSERT INTO game_genres (game_name, genre_name, order_index)
+      VALUES (?, ?, ?)
     `);
 
-    for (const genre of genres) {
-      insertGenre.run(name, genre);
+    for (let i = 0; i < genres.length; i++) {
+      insertGenre.run(name, genres[i], i);
     }
 
     res.json({ success: true });
@@ -520,10 +518,10 @@ app.post('/update-game', upload.single('image'), (req, res) => {
     extension_of,
   } = req.body;
 
-  const genres = req.body['genres']
-    ? Array.isArray(req.body['genres'])
-      ? req.body['genres']
-      : [req.body['genres']]
+  const genres = req.body.genres
+    ? Array.isArray(req.body.genres)
+      ? req.body.genres
+      : [req.body.genres]
     : [];
 
   const imageBuffer = req.file ? req.file.buffer : null;
@@ -545,14 +543,16 @@ app.post('/update-game', upload.single('image'), (req, res) => {
       name
     );
 
-    // Actualizar generos
+    // Actualizar géneros con nuevo orden
     db.prepare('DELETE FROM game_genres WHERE game_name = ?').run(name);
+
     const insertGenre = db.prepare(`
-      INSERT INTO game_genres (game_name, genre_name)
-      VALUES (?, ?)
+      INSERT INTO game_genres (game_name, genre_name, order_index)
+      VALUES (?, ?, ?)
     `);
-    for (const genre of genres) {
-      insertGenre.run(name, genre);
+
+    for (let i = 0; i < genres.length; i++) {
+      insertGenre.run(name, genres[i], i);
     }
 
     res.json({ success: true });

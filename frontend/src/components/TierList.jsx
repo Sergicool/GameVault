@@ -9,7 +9,7 @@ function TierList({
   unassignedGames = [],
 }) {
   if (!editable) {
-    // 🧱 Vista de solo lectura (sin edición)
+    // Vista de solo lectura (sin edición)
     return (
       <div className="p-6">
         <h1 className="text-3xl text-white text-center font-bold mb-6">Tier List</h1>
@@ -43,7 +43,7 @@ function TierList({
     );
   }
 
-  // 🧱 Vista editable (con drag & drop)
+  // Vista editable (con drag & drop)
   return (
     <div className="p-6">
       <h1 className="text-3xl text-white text-center font-bold mb-6">Update Data</h1>
