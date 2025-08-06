@@ -427,23 +427,29 @@ app.get('/games/:name', (req, res) => {
 
 app.post('/games/tierlist', (req, res) => {
   try {
-    const updates = req.body; // Array de juegos: { name, tier, position }
+    const updates = req.body;
 
-    const stmt = db.prepare('UPDATE games SET tier = ?, position = ? WHERE name = ?');
+    const transaction = db.transaction(() => {
+      // Liberar todas las posiciones de golpe
+      db.prepare('UPDATE games SET position = NULL').run();
 
-    const transaction = db.transaction((games) => {
-      for (const game of games) {
+      // Aplicar actualizaciones
+      const stmt = db.prepare('UPDATE games SET tier = ?, position = ? WHERE name = ?');
+
+      for (const game of updates) {
         stmt.run(game.tier, game.position, game.name);
       }
     });
 
-    transaction(updates);
+    transaction();
 
     res.json({ success: true });
   } catch (e) {
+    console.error("❌ Error en /games/tierlist:", e.message);
     res.status(400).json({ error: e.message });
   }
 });
+
 
 
 const multer = require('multer');

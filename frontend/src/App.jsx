@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
-import TierList from './pages/TierList';
+import TierListView from './pages/TierListView';
 import Games from './pages/Games';
 import HallOfFame from './pages/HallOfFame';
 import AddGame from './pages/AddGame';
@@ -15,7 +15,7 @@ function App() {
       <div className="pt-18 min-h-screen bg-gradient-to-b from-gray-800 to-gray-700">
         <Routes>
           <Route path="/" element={<Navigate to="/Games" />} />
-          <Route path="/TierList" element={<TierList />} />
+          <Route path="/TierList" element={<TierListView />} />
           <Route path="/Games" element={<Games />} />
           <Route path="/HallOfFame" element={<HallOfFame />} />
           <Route path="/AddGame" element={<AddGame />} />
