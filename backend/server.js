@@ -425,6 +425,27 @@ app.get('/games/:name', (req, res) => {
   }
 });
 
+app.post('/games/tierlist', (req, res) => {
+  try {
+    const updates = req.body; // Array de juegos: { name, tier, position }
+
+    const stmt = db.prepare('UPDATE games SET tier = ?, position = ? WHERE name = ?');
+
+    const transaction = db.transaction((games) => {
+      for (const game of games) {
+        stmt.run(game.tier, game.position, game.name);
+      }
+    });
+
+    transaction(updates);
+
+    res.json({ success: true });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+
 const multer = require('multer');
 const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
 const upload = multer({ storage });

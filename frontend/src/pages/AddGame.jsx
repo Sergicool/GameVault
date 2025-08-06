@@ -205,7 +205,7 @@ function AddGame() {
             <div className="flex-1">
               <label
                 className={`block font-semibold mb-1 ${
-                  categories.length === 0 ? 'text-gray-400' : 'text-gray-100'
+                  isEditMode ? 'text-gray-400' : 'text-gray-100'
                 }`}
               >
                 Game Title
@@ -215,7 +215,9 @@ function AddGame() {
                 maxLength={50}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full bg-neutral-800 border rounded-lg p-2"
+                className={`w-full bg-neutral-800 border rounded-lg p-2 ${
+                  isEditMode ? 'text-gray-400' : 'text-gray-100'
+                }`}
                 disabled={isEditMode}
               />
             </div>

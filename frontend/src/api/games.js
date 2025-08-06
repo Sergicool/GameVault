@@ -71,6 +71,17 @@ export async function updateGame(gameData) {
   return res.json();
 }
 
+export async function updateGamesTierList(games) {
+  const res = await fetch(`${API_URL}/games/tierlist`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(games),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Error al actualizar tier list');
+  return data;
+}
+
 export async function deleteGame(name) {
 
   const res = await fetch(`${API_URL}/delete-game`, {
