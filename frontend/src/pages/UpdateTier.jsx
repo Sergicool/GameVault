@@ -117,7 +117,7 @@ function UpdateTier() {
   };
 
   if (tiers.length === 0) {
-    return <div className="text-white p-6">Cargando tier list...</div>;
+    return <div className="text-white p-6">Loading data...</div>;
   }
 
   return (
@@ -130,12 +130,12 @@ function UpdateTier() {
         onDragEnd={onDragEnd}
       />
 
-      <div className="p-6">
+      <div className="pl-6 pr-6 pb-6">
         <button
           onClick={handleSave}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
         >
-          Confirmar Cambios
+          Save Changes
         </button>
       </div>
     </div>

@@ -9,40 +9,66 @@ function TierList({
   unassignedGames = [],
 }) {
   if (!editable) {
-    // Modo solo lectura
+    // 🧱 Vista de solo lectura (sin edición)
     return (
       <div className="p-6">
-        <h1 className="text-3xl text-white font-bold mb-6">Tier List</h1>
+        <h1 className="text-3xl text-white text-center font-bold mb-6">Tier List</h1>
+
         {tiers.map((tier) => (
-          <div key={tier.name} className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2" style={{ color: tier.color }}>{tier.name}</h2>
-            <div className="flex flex-wrap gap-4 p-2 min-h-[120px] bg-gray-800 rounded">
+          <div
+            key={tier.name}
+            className="flex flex-row items-stretch mb-2 border-2 border-gray-400 rounded overflow-hidden"
+          >
+            <div
+              className="w-32 flex items-center justify-center text-xl font-bold text-center px-2 py-1"
+              style={{
+                backgroundColor: tier.color,
+                color: 'white',
+                minWidth: '8rem',
+              }}
+            >
+              {tier.name}
+            </div>
+            <div className="flex flex-wrap gap-2 p-2 min-h-[110px] bg-gray-900 flex-1">
               {(gamesByTier[tier.name] || []).map((game) => (
                 <div key={game.name}>
-                  <GameCard game={game} inTierList />
+                  <GameCard game={game} expandible inTierList />
                 </div>
               ))}
             </div>
           </div>
         ))}
       </div>
+
     );
   }
 
-  // Modo editable con drag & drop
+  // 🧱 Vista editable (con drag & drop)
   return (
     <div className="p-6">
-      <h1 className="text-3xl text-white font-bold mb-6">Editar Tier List</h1>
+      <h1 className="text-3xl text-white text-center font-bold mb-6">Update Data</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         {tiers.map((tier) => (
-          <div key={tier.name} className="mb-6">
-            <h2 className="text-2xl font-semibold mb-2" style={{ color: tier.color }}>{tier.name}</h2>
+          <div
+            key={tier.name}
+            className="flex flex-row items-stretch mb-2 border border-white rounded overflow-hidden"
+          >
+            <div
+              className="w-32 flex items-center justify-center text-xl font-bold px-2 py-1"
+              style={{
+                backgroundColor: tier.color,
+                color: 'white',
+                minWidth: '8rem',
+              }}
+            >
+              {tier.name}
+            </div>
             <Droppable droppableId={tier.name} direction="horizontal">
               {(provided) => (
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="flex flex-wrap gap-4 p-2 min-h-[120px] bg-gray-800 rounded"
+                  className="flex flex-wrap gap-2 p-2 min-h-[110px] bg-gray-800 flex-1"
                 >
                   {(gamesByTier[tier.name] || []).map((game, index) => (
                     <Draggable key={game.name} draggableId={game.name} index={index}>
@@ -64,15 +90,14 @@ function TierList({
           </div>
         ))}
 
-        {/* Área sin asignar */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold mb-2 text-white">No asignados</h2>
+        {/* Zona de juegos no asignados */}
+        <div className="flex flex-row items-stretch border border-white rounded overflow-hidden">
           <Droppable droppableId="unassigned" direction="horizontal">
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-wrap gap-4 p-2 min-h-[120px] bg-gray-700 rounded"
+                className="flex flex-wrap gap-2 p-2 min-h-[110px] bg-gray-700 flex-1"
               >
                 {unassignedGames.map((game, index) => (
                   <Draggable key={game.name} draggableId={game.name} index={index}>
@@ -94,6 +119,7 @@ function TierList({
         </div>
       </DragDropContext>
     </div>
+
   );
 }
 

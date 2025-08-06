@@ -92,7 +92,7 @@ function GameCard({ game, expandible = false, inTierList = false }) {
   return (
     <>
       {inTierList && (
-        <div className={`w-[10rem] rounded overflow-hidden shadow-lg bg-gray-600" onClick={openModal} ${
+        <div className={`w-[10rem] rounded overflow-hidden shadow-lg bg-gradient-to-br from-gray-700 via-gray-500 to-gray-700 ${
             expandible ? 'transition-transform duration-200 cursor-pointer hover:scale-[1.05]' : ''
           }`}
           onClick={openModal}
