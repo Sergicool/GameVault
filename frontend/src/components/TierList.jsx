@@ -9,7 +9,6 @@ function TierList({
   unassignedGames = [],
 }) {
   if (!editable) {
-    // Vista de solo lectura (sin edición)
     return (
       <div className="p-6">
         <h1 className="text-3xl text-white text-center font-bold mb-6">Tier List</h1>
@@ -39,11 +38,9 @@ function TierList({
           </div>
         ))}
       </div>
-
     );
   }
 
-  // Vista editable (con drag & drop)
   return (
     <div className="p-6">
       <h1 className="text-3xl text-white text-center font-bold mb-6">Update Data</h1>
@@ -68,7 +65,8 @@ function TierList({
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="flex flex-wrap gap-2 p-2 min-h-[110px] bg-gray-800 flex-1"
+                  className="flex gap-2 p-2 min-h-[110px] bg-gray-800 flex-1 overflow-x-auto whitespace-nowrap"
+                  style={{ scrollbarWidth: 'thin' }} // opcional para Firefox
                 >
                   {(gamesByTier[tier.name] || []).map((game, index) => (
                     <Draggable key={game.name} draggableId={game.name} index={index}>
@@ -77,6 +75,10 @@ function TierList({
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
+                          style={{
+                            display: 'inline-block',
+                            ...provided.draggableProps.style,
+                          }}
                         >
                           <GameCard game={game} inTierList />
                         </div>
@@ -97,7 +99,8 @@ function TierList({
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex flex-wrap gap-2 p-2 min-h-[110px] bg-gray-700 flex-1"
+                className="flex gap-2 p-2 min-h-[110px] bg-gray-700 flex-1 overflow-x-auto whitespace-nowrap"
+                style={{ scrollbarWidth: 'thin' }}
               >
                 {unassignedGames.map((game, index) => (
                   <Draggable key={game.name} draggableId={game.name} index={index}>
@@ -106,6 +109,10 @@ function TierList({
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
+                        style={{
+                          display: 'inline-block',
+                          ...provided.draggableProps.style,
+                        }}
                       >
                         <GameCard game={game} inTierList />
                       </div>
@@ -119,7 +126,6 @@ function TierList({
         </div>
       </DragDropContext>
     </div>
-
   );
 }
 

@@ -187,7 +187,7 @@ function AddGame() {
     `block font-semibold mb-1 ${isDisabled ? 'text-gray-400' : 'text-gray-100'}`;
 
   return (
-    <div className="flex justify-center gap-8 p-10 mt-20">
+    <div className="flex justify-center gap-8 p-10">
       
       {/* Formulario */}
       <div className="

@@ -98,7 +98,7 @@ function GameCard({ game, expandible = false, inTierList = false }) {
           onClick={openModal}
         >
           <img className="w-[10rem] h-16 object-cover" src={game.imagePreview} alt={game.name} />
-          <div className="px-2 py-1 text-white text-sm text-center">{game.name}</div>
+          <div className="px-2 py-1 text-white text-sm text-center truncate">{game.name}</div>
         </div>
       )}
 
