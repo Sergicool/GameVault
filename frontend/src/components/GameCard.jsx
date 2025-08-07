@@ -165,7 +165,7 @@ function GameCard({ game, expandible = false, inTierList = false }) {
           >
             {/* Imagen */}
             {game.imagePreview ? (
-              <div className="relative w-full aspect-[11/5] bg-gray-700 overflow-hidden flex-shrink-0">
+              <div className="relative w-full aspect-[16/7] bg-gray-700 overflow-hidden flex-shrink-0">
                 <img
                   src={game.imagePreview}
                   alt={game.name}
