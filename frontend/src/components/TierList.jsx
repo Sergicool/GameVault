@@ -10,8 +10,8 @@ function TierList({
 }) {
   if (!editable) {
     return (
-      <div className="p-6">
-        <h1 className="text-3xl text-white text-center font-bold mb-6">Tier List</h1>
+      <div className="p-6 ">
+        <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">Tier List</h1>
 
         {tiers.map((tier) => (
           <div
@@ -42,8 +42,8 @@ function TierList({
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-3xl text-white text-center font-bold mb-6">Update Data</h1>
+    <div className="p-6 ">
+      <h1 className="text-3xl text-white text-center font-bold mb-6 ">Update Data</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         {tiers.map((tier) => (
           <div

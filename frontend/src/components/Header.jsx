@@ -41,16 +41,16 @@ function Header() {
   return (
     <header className="
       fixed w-full z-100
-      bg-gradient-to-br from-slate-900 to-zinc-900
-      border-b border-gray-700
+      bg-gradient-to-br from-slate-900 to-slate-900
+      border-b border-slate-700
       font-mono font-bold text-lg text-gray-100
     ">
       <div className="p-3 flex">
         {/* Contenedor de navegación */}
         <div className="flex-1 flex justify-center">
           <nav className="
-            bg-gray-800/70
-            border border-gray-700 rounded-lg
+            bg-slate-800/70
+            border border-slate-700 rounded-lg
             inset-shadow-sm inset-shadow-zinc-900
             px-10 py-2 space-x-20
           ">

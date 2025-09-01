@@ -123,7 +123,7 @@ function TierListView() {
   }, [filteredGames, tiers]);
 
   if (tiers.length === 0) {
-    return <div className="text-white p-6">Cargando tier list...</div>;
+    return <div className="text-md text-gray-400 italic p-6">Loading tier list...</div>;
   }
 
   return (
@@ -139,7 +139,7 @@ function TierListView() {
         setFilters={setFilters}
       />
 
-      <div className="ml-[50px] flex-1 p-6">
+      <div className="ml-[50px] flex-1 p-6 bg-gradient-to-t from-slate-950 to-slate-900">
         <TierList tiers={tiers} gamesByTier={gamesByTier} editable={false} />
       </div>
     </div>

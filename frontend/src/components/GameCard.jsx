@@ -30,8 +30,8 @@ function ExtensionContent({ gameName }) {
         />
       </div>
       <div>
-        <h4 className="text-lg font-semibold">{parentGame.name}</h4>
-        <p className="text-xs text-gray-400">
+        <h4 className="text-lg font-semibold mb-1">{parentGame.name}</h4>
+        <p className="text-sm text-gray-400">
           {parentGame.year} · {parentGame.origin} · {parentGame.category} - {parentGame.subcategory}
         </p>
       </div>
@@ -104,9 +104,10 @@ function GameCard({ game, expandible = false, inTierList = false }) {
 
       {!inTierList && (
         <div
-          className={`flex flex-col transition-transform duration-200 bg-gradient-to-br from-gray-800 to-gray-900 w-[400px] rounded-lg overflow-hidden shadow-lg ${
-            expandible ? 'cursor-pointer hover:scale-[1.1]' : ''
-          }`}
+          className={`flex flex-col transition-transform duration-200 
+            bg-gradient-to-br from-gray-800 to-gray-900 w-[400px] rounded-lg overflow-hidden 
+            ${expandible ? 'cursor-pointer hover:scale-[1.1]' : ''} 
+            shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] border border-white/15`}
           onClick={openModal}
         >
           <div className="h-48 bg-gray-200 flex items-center justify-center">
@@ -160,7 +161,8 @@ function GameCard({ game, expandible = false, inTierList = false }) {
           onClick={closeModal}
         >
           <div
-            className="relative w-full max-w-[50rem] h-[46rem] bg-zinc-900 text-white rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="relative w-full max-w-[50rem] h-[46rem] bg-zinc-900 text-white rounded-2xl 
+                      shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden border border-white/15"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Imagen */}
@@ -189,17 +191,19 @@ function GameCard({ game, expandible = false, inTierList = false }) {
             <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-between space-y-6">
               <div className="w-full flex flex-col items-center">
                 {/* Título */}
-                <h2 className="text-4xl font-bold text-center mb-4">{game.name}</h2>
+                <h2 className="text-4xl font-bold text-center mb-6 text-gray-100 tracking-wide drop-shadow-md">
+                  {game.name}
+                </h2>
 
                 {/* Subtítulo con año, origen y categoría como etiquetas */}
                 <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
                     Played in {game.year}
                   </span>
-                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
                     {game.origin} game
                   </span>
-                  <span className="bg-zinc-800 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
                     {game.category}
                     {game.subcategory && ` - ${game.subcategory}`}
                   </span>
@@ -207,9 +211,11 @@ function GameCard({ game, expandible = false, inTierList = false }) {
 
                 {/* Géneros */}
                 {game.genres?.length > 0 && (
-                  <div className="w-full max-w-3xl">
-                    <p className="mb-2 font-semibold text-gray-300 text-center text-xl">Genres</p>
-                    <div className="bg-zinc-800 border border-zinc-700 rounded-lg p-3">
+                  <div className="mt-2 w-full max-w-3xl">
+                    <p className="mb-2 text-lg text-center font-semibold text-gray-400 uppercase tracking-wide px-2">
+                      Genres
+                    </p>
+                    <div className="bg-zinc-800 border-2 border-zinc-600 rounded-lg p-3">
                       <div className="flex flex-wrap justify-center gap-2">
                         {game.genres.map((g, i) => {
                           const textColor = isColorDark(g.color) ? 'white' : 'black';
@@ -233,8 +239,8 @@ function GameCard({ game, expandible = false, inTierList = false }) {
 
                 {/* Juego del que es extensión */}
                 {game.extension_of && (
-                  <div className="w-full max-w-3xl mt-4 bg-zinc-800 border border-zinc-700 p-4 rounded-xl">
-                    <p className="text-sm text-gray-400 italic mb-2">This game is an extension of:</p>
+                  <div className="w-full max-w-3xl mt-4 bg-zinc-800 border-2 border-zinc-600 p-4 rounded-xl">
+                    <p className="text-md text-gray-400 italic mb-2">This game is an extension of:</p>
                     <ExtensionContent gameName={game.extension_of} />
                   </div>
                 )}

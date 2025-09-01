@@ -104,6 +104,9 @@ function Games() {
     });
   }, [games, filters]);
 
+  if (filteredGames.length === 0) {
+    return <div className="text-md text-gray-400 italic p-6">Loading games...</div>;
+  }
 
   return (
     <div className="flex">
@@ -118,8 +121,13 @@ function Games() {
         setFilters={setFilters}
       />
 
-      <div className="ml-[50px] flex-1 p-6">
-        <h1 className="text-3xl text-white font-bold mb-6">Todos los Juegos</h1>
+      <div className="ml-[50px] flex-1 p-6 bg-gradient-to-t from-slate-950 to-slate-900">
+        {/* Título */}
+        <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
+          All Games
+        </h1>
+
+        {/* Grid de cards */}
         <div className="flex flex-wrap gap-6 justify-around">
           {filteredGames.map((game) => (
             <GameCard key={game.name} game={game} expandible />

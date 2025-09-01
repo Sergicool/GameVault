@@ -31,22 +31,21 @@ function SidebarFilters({
         <motion.div
             animate={{ width: open ? sidebarWidth : 50 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="h-[calc(100vh-4.4rem)] bg-gray-900 text-white fixed top-17.5 left-0
-                 shadow-lg flex flex-col overflow-y-auto overflow-x-hidden z-10"
+            className="h-[calc(100vh-4.4rem)] bg-slate-900 text-white fixed top-17.5 left-0
+                 shadow-lg flex flex-col overflow-y-auto overflow-x-hidden z-10
+                 border-r border-gray-700"
         >
-            {/* Encabezado con título y botón toggle */}
+            {/* Encabezado con boton */}
             <div
-                className={`flex justify-between items-center p-2 sticky top-0 bg-gray-900 z-20 ${open ? "border-b border-gray-500" : ""
-                    }`}
+                className={`flex justify-between items-center p-2 sticky top-0 bg-gray-900 z-1
+                    ${open ? "border-b border-gray-500 shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]" : ""}`}
             >
-                {/* Título solo si open es true */}
                 {open && (
                     <h1 className="text-white text-xl font-semibold">
                         Game Filters
                     </h1>
                 )}
 
-                {/* Botón toggle a la derecha */}
                 <button
                     onClick={() => setOpen(!open)}
                     className="bg-gray-700 text-white p-2 rounded-md shadow-lg hover:bg-gray-600 transition-all duration-300"
@@ -131,16 +130,18 @@ function FilterSection({ title, items, selected, onToggle, colored }) {
                             key={value}
                             onClick={() => onToggle(value)}
                             className={`px-3 py-1 rounded-full text-sm font-medium transition 
-                ${isActive
-                                    ? "text-white shadow"
-                                    : "text-gray-300 border border-gray-600 hover:bg-gray-700"}`}
+                                ${isActive ? colored
+                                    ? "text-white shadow" // Si es colored (genres, tiers) usamos el color original
+                                    : "bg-blue-600 text-white font-bold border border-blue-400 shadow-lg shadow-blue-500/30"
+                                : "text-gray-300 border border-gray-600 hover:bg-gray-700"}`}
                             style={{
-                                backgroundColor: isActive && color ? color : "transparent",
-                                borderColor: color || undefined,
+                                backgroundColor: isActive && colored && color ? color : undefined,
+                                borderColor: colored && color ? color : undefined,
                             }}
                         >
                             {value}
                         </button>
+
                     );
                 })}
             </div>
