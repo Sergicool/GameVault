@@ -2,6 +2,15 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+function isColorDark(hexColor) {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  return luminance < 128;
+}
+
 function SidebarFilters({
     filters,
     setFilters,
@@ -31,17 +40,17 @@ function SidebarFilters({
         <motion.div
             animate={{ width: open ? sidebarWidth : 50 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
-            className="h-[calc(100vh-4.4rem)] bg-slate-900 text-white fixed top-17.5 left-0
+            className="h-[calc(100vh-4.4rem)] bg-gradient-to-t from-slate-950 via-indigo-950 to-slate-950 text-white fixed top-17.5 left-0
                  shadow-lg flex flex-col overflow-y-auto overflow-x-hidden z-10
                  border-r border-gray-700"
         >
             {/* Encabezado con boton */}
             <div
-                className={`flex justify-between items-center p-2 sticky top-0 bg-gray-900 z-1
+                className={`flex justify-between items-center p-2 sticky top-0 bg-slate-950 z-1
                     ${open ? "border-b border-gray-500 shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]" : ""}`}
             >
                 {open && (
-                    <h1 className="text-white text-xl font-semibold">
+                    <h1 className="text-white text-xl font-semibold whitespace-nowrap">
                         Game Filters
                     </h1>
                 )}
@@ -113,7 +122,7 @@ function SidebarFilters({
 function FilterSection({ title, items, selected, onToggle, colored }) {
     return (
         <div>
-            <h2 className="text-sm uppercase tracking-wide font-bold text-gray-400 mb-3 border-b border-gray-700 pb-1">
+            <h2 className="text-sm uppercase tracking-wide font-bold text-gray-200 mb-3 border-b border-gray-400 pb-1">
                 {title}
             </h2>
             <div className="flex flex-wrap gap-2 max-w-full">
@@ -125,15 +134,22 @@ function FilterSection({ title, items, selected, onToggle, colored }) {
                     const color = typeof item === "object" ? item.color : undefined;
                     const isActive = selected.includes(value);
 
+                    // 👇 decide textColor dinámicamente
+                    let textColor = "text-white";
+                    if (isActive && colored && color) {
+                        textColor = isColorDark(color) ? "text-white" : "text-black";
+                    }
+
                     return (
                         <button
                             key={value}
                             onClick={() => onToggle(value)}
                             className={`px-3 py-1 rounded-full text-sm font-medium transition 
-                                ${isActive ? colored
-                                    ? "text-white shadow" // Si es colored (genres, tiers) usamos el color original
-                                    : "bg-blue-600 text-white font-bold border border-blue-400 shadow-lg shadow-blue-500/30"
-                                : "text-gray-300 border border-gray-600 hover:bg-gray-700"}`}
+                                ${isActive
+                                    ? colored
+                                        ? `shadow ${textColor}` // usamos el color y adaptamos texto
+                                        : "bg-blue-600 text-white font-bold border border-blue-400 shadow-lg shadow-blue-500/30"
+                                    : "text-gray-300 border border-gray-600 hover:bg-gray-700/50"}`}
                             style={{
                                 backgroundColor: isActive && colored && color ? color : undefined,
                                 borderColor: colored && color ? color : undefined,
@@ -141,12 +157,12 @@ function FilterSection({ title, items, selected, onToggle, colored }) {
                         >
                             {value}
                         </button>
-
                     );
                 })}
             </div>
         </div>
     );
 }
+
 
 export default SidebarFilters;

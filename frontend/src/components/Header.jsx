@@ -41,7 +41,7 @@ function Header() {
   return (
     <header className="
       fixed w-full z-100
-      bg-gradient-to-br from-slate-900 to-slate-900
+      bg-gradient-to-t from-slate-950 via-slate-950 to-slate-900
       border-b border-slate-700
       font-mono font-bold text-lg text-gray-100
     ">
