@@ -1,15 +1,24 @@
-const express = require('express');
-const cors = require('cors');
-const db = require('./database/db');
-db.pragma('foreign_keys = ON'); // Para que ON UPDATE CASCADE funcione
-require('./database/init');
+const path = require("path");
+const express = require("express");
+const cors = require("cors");
+const db = require("./database/db");
 
 const app = express();
 const PORT = 3001;
-const URL = 'http://localhost:5173';
 
-app.use(cors({ origin: URL }));
+app.use(cors());
 app.use(express.json());
+
+// servir frontend
+app.use(express.static(path.join(__dirname, "public")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor en http://localhost:${PORT}`);
+});
 
 // -------------------------------------------------------------------- //
 //                                Routes                                //
