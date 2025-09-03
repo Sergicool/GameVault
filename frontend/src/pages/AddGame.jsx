@@ -378,7 +378,6 @@ function AddGame() {
             </div>
           </div>
 
-
           {/* Juego base */}
           {isExtension && (
             <div className="mt-4">
@@ -392,11 +391,14 @@ function AddGame() {
                 {allGames.length === 0 ? (
                   <option className="bg-neutral-800 text-gray-400" disabled></option>
                 ) : (
-                  allGames.map((g) => (
-                    <option key={g.name} value={g.name} className="bg-neutral-800 text-white">
-                      {g.name}
-                    </option>
-                  ))
+                  allGames
+                    // 👇 Filtramos el juego en edición para que no aparezca
+                    .filter((g) => !isEditMode || g.name !== editingGame.name)
+                    .map((g) => (
+                      <option key={g.name} value={g.name} className="bg-neutral-800 text-white">
+                        {g.name}
+                      </option>
+                    ))
                 )}
               </select>
             </div>

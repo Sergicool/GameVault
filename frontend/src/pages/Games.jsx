@@ -8,7 +8,7 @@ import { getSubcategories } from '../api/subcategories';
 import { getTiers } from '../api/tiers';
 import GameCard from '../components/GameCard';
 import SidebarFilters from "../components/SidebarFilters";
-import { Search } from "lucide-react"; // Icono de lupa
+import { Search } from "lucide-react";
 
 function Games() {
   const [games, setGames] = useState([]);
@@ -29,12 +29,12 @@ function Games() {
   });
 
   const [searchQuery, setSearchQuery] = useState(""); 
-  const [loading, setLoading] = useState(true); // 👈 nuevo estado
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoading(true); // empieza la carga
+        setLoading(true);
         const [
           gamesData,
           yearsData,
@@ -130,20 +130,18 @@ function Games() {
       />
 
       <div className="ml-[50px] flex-1 p-6 min-h-screen">
-        
-
-        {/* Contenido principal */}
         {loading ? (
           <p className="text-md text-gray-400 italic text-center mt-20">
             Loading games...
           </p>
-        ) : filteredGames.length > 0 ? (
+        ) : (
           <>
             {/* Título */}
             <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
               All Played Games
             </h1>
-            {/* Barra de búsqueda */}
+
+            {/* Barra de búsqueda siempre visible */}
             <div className="relative max-w-md mx-auto mb-8">
               <input
                 type="text"
@@ -154,20 +152,25 @@ function Games() {
               />
               <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
-            <div className="flex flex-wrap gap-6 justify-around">
-              {filteredGames.map((game) => (
-                <GameCard key={game.name} game={game} expandible />
-              ))}
-            </div>
+
+            {/* Resultados */}
+            {filteredGames.length > 0 ? (
+              <div className="flex flex-wrap gap-6 justify-around">
+                {filteredGames.map((game) => (
+                  <GameCard key={game.name} game={game} expandible />
+                ))}
+              </div>
+            ) : (
+              <p className="text-md text-gray-400 italic text-center mt-20">
+                No games found matching the filters
+              </p>
+            )}
           </>
-        ) : (
-          <p className="text-md text-gray-400 italic text-center mt-20">
-            No games found matching the filters
-          </p>
         )}
       </div>
     </div>
   );
+
 }
 
 export default Games;
