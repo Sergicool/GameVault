@@ -235,6 +235,57 @@ app.post('/delete-origin', (req, res) => {
   }
 });
 
+// ------------------------------ Platforms ------------------------------ //
+app.get('/platforms', (req, res) => {
+  try {
+    const originsStmt = db.prepare(`
+      SELECT p.name,
+             EXISTS (
+               SELECT 1 FROM games g WHERE g.platform = p.name
+             ) AS inUse
+      FROM platforms p
+      ORDER BY p.name
+    `);
+    const origins = originsStmt.all();
+    res.json(origins);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/add-platform', (req, res) => {
+  const { name } = req.body;
+  try {
+    const stmt = db.prepare("INSERT INTO platforms (name) VALUES (?)");
+    const result = stmt.run(name);
+    res.json({ success: true, id: result.lastInsertRowid });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/update-platform', (req, res) => {
+  const { oldName, newName } = req.body;
+  try {
+    const stmt = db.prepare("UPDATE paltforms SET name = ? WHERE name = ?");
+    const result = stmt.run(newName, oldName);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
+app.post('/delete-platform', (req, res) => {
+  const { name } = req.body;
+  try {
+    const stmt = db.prepare("DELETE FROM platforms WHERE name = ?");
+    const result = stmt.run(name);
+    res.json({ success: true, changes: result.changes });
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+});
+
 // ------------------------------ Tiers ------------------------------ //
 app.get('/tiers', (req, res) => {
   try {
@@ -459,6 +510,7 @@ app.post('/add-game', upload.single('image'), (req, res) => {
     name,
     year,
     origin,
+    platform,
     category,
     subcategory,
     extension_of,
@@ -475,7 +527,7 @@ app.post('/add-game', upload.single('image'), (req, res) => {
   try {
     const insertGame = db.prepare(`
       INSERT INTO games (
-        name, image, year, origin, category, subcategory, tier, position, extension_of
+        name, image, year, origin, platform, category, subcategory, tier, position, extension_of
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
@@ -484,6 +536,7 @@ app.post('/add-game', upload.single('image'), (req, res) => {
       imageBuffer,
       parseInt(year),
       origin,
+      platform,
       category,
       subcategory,
       null,
@@ -511,6 +564,7 @@ app.post('/update-game', upload.single('image'), (req, res) => {
     name,
     year,
     origin,
+    platform,
     category,
     subcategory,
     extension_of,
@@ -528,13 +582,14 @@ app.post('/update-game', upload.single('image'), (req, res) => {
     const stmt = db.prepare(`
       UPDATE games SET
         image = COALESCE(?, image),
-        year = ?, origin = ?, category = ?, subcategory = ?, extension_of = ?
+        year = ?, origin = ?, platform = ?, category = ?, subcategory = ?, extension_of = ?
       WHERE name = ?
     `);
     stmt.run(
       imageBuffer,
       parseInt(year),
       origin,
+      platform,
       category,
       subcategory,
       extension_of || null,

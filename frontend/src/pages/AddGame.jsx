@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { getYears } from '../api/years';
 import { getOrigins } from '../api/origins';
+import { getPlatforms } from '../api/platforms';
 import { getCategories } from '../api/categories';
 import { getSubcategories } from '../api/subcategories';
 import { getGenres } from '../api/genres';
@@ -29,6 +30,9 @@ function AddGame() {
 
   const [origins, setOrigins] = useState([]);
   const [origin, setOrigin] = useState('');
+  
+  const [platforms, setPlatforms] = useState([]);
+  const [platform, setPlatform] = useState('');
 
   const [categories, setCategories] = useState([]);
   const [category, setCategory] = useState('');
@@ -45,9 +49,10 @@ function AddGame() {
 
   const loadAll = async () => {
     try {
-      const [yearsData, originsData, categoriesData, subcategoriesData, genresData, gamesData] = await Promise.all([
+      const [yearsData, originsData, platformsData, categoriesData, subcategoriesData, genresData, gamesData] = await Promise.all([
         getYears(),
         getOrigins(),
+        getPlatforms(),
         getCategories(),
         getSubcategories(),
         getGenres(),
@@ -55,6 +60,7 @@ function AddGame() {
       ]);
       setYears(yearsData);
       setOrigins(originsData);
+      setPlatforms(platformsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
       setGenres(genresData);
@@ -74,6 +80,7 @@ function AddGame() {
       setName(editingGame.name);
       setYear(editingGame.year || '');
       setOrigin(editingGame.origin || '');
+      setPlatform(editingGame.platform || '');
       setCategory(editingGame.category || '');
       setSubcategory(editingGame.subcategory || '');
       setIsExtension(Boolean(editingGame.extension_of));
@@ -86,7 +93,7 @@ function AddGame() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || (!image && !isEditMode) || !year || !origin || !category || !subcategory ) {
+    if (!name || (!image && !isEditMode) || !year || !origin || !platform || !category || !subcategory ) {
       alert('Please complete all fields.');
       return;
     }
@@ -101,6 +108,7 @@ function AddGame() {
       image,
       year,
       origin,
+      platform,
       category,
       subcategory,
       extension_of: isExtension ? extensionOf : '',
@@ -121,6 +129,7 @@ function AddGame() {
         setImagePreview(null);
         setYear('');
         setOrigin('');
+        setPlatform('');
         setCategory('');
         setSubcategory('');
         setIsExtension(false);
@@ -170,6 +179,7 @@ function AddGame() {
     imagePreview,
     year,
     origin,
+    platform,
     category,
     subcategory,
     extension_of: isExtension ? extensionOf : '',
@@ -215,10 +225,7 @@ function AddGame() {
                 maxLength={50}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`w-full bg-neutral-800 border rounded-lg p-2 ${
-                  isEditMode ? 'text-gray-400' : 'text-gray-100'
-                }`}
-                disabled={isEditMode}
+                className={`w-full bg-neutral-800 border rounded-lg p-2 text-gray-100`}
               />
             </div>
 
@@ -297,7 +304,7 @@ function AddGame() {
             </div>
           </div>
 
-          {/* Origen + Subcategoría */}
+          {/* Origen + Plataforma + Subcategoria */}
           <div className="mt-4 flex flex-col lg:flex-row gap-4">
             <div className="flex-1">
               <label className={getLabelStyles(origins.length === 0)}>Origin</label>
@@ -323,6 +330,29 @@ function AddGame() {
             </div>
 
             <div className="flex-1">
+              <label className={getLabelStyles(platforms.length === 0)}>Platform</label>
+              <select
+                value={platform}
+                onChange={(e) => setPlatform(e.target.value)}
+                className={getSelectStyles(platforms.length === 0)}
+                disabled={platforms.length === 0}
+              >
+                <option value="" disabled hidden></option>
+                {platforms.length === 0 ? (
+                  <option className="bg-neutral-800 text-gray-400" disabled>
+                    No hay orígenes disponibles
+                  </option>
+                ) : (
+                  platforms.map((o) => (
+                    <option key={o.name} value={o.name} className="bg-neutral-800 text-white">
+                      {o.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+
+            <div className="flex-2">
               <label className={getLabelStyles(filteredSubcategories.length === 0)}>Subcategory</label>
               <select
                 value={subcategory}

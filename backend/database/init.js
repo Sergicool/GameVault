@@ -10,6 +10,10 @@ CREATE TABLE IF NOT EXISTS origins (
   name TEXT PRIMARY KEY CHECK(length(name) <= 20)
 );
 
+CREATE TABLE IF NOT EXISTS platforms (
+  name TEXT PRIMARY KEY CHECK(length(name) <= 50)
+);
+
 CREATE TABLE IF NOT EXISTS categories (
   name TEXT PRIMARY KEY CHECK(length(name) <= 20)
 );
@@ -32,10 +36,11 @@ CREATE TABLE IF NOT EXISTS genres (
 );
 
 CREATE TABLE IF NOT EXISTS games (
-  name TEXT PRIMARY KEY CHECK(length(name) <= 50),
+  name TEXT PRIMARY KEY CHECK(length(name) <= 80),
   image BLOB,
   year INTEGER NOT NULL,
   origin TEXT NOT NULL,
+  platform TEXT NOT NULL,
   category TEXT NOT NULL,
   subcategory TEXT NOT NULL,
   tier TEXT,
@@ -44,6 +49,7 @@ CREATE TABLE IF NOT EXISTS games (
 
   FOREIGN KEY (year) REFERENCES years(year),
   FOREIGN KEY (origin) REFERENCES origins(name),
+  FOREIGN KEY (platform) REFERENCES platforms(name),
   FOREIGN KEY (category) REFERENCES categories(name),
   FOREIGN KEY (subcategory) REFERENCES subcategories(name),
   FOREIGN KEY (tier) REFERENCES tiers(name),

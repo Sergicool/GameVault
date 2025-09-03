@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getGameByName } from '../api/games';
+import { Monitor, Smartphone, Gamepad, Laptop } from "lucide-react";
+
+const platformIcons = {
+  PC: <Monitor className="w-4 h-4 inline-block mr-1" />,
+  Mobile: <Smartphone className="w-4 h-4 inline-block mr-1" />,
+  Console: <Gamepad className="w-4 h-4 inline-block mr-1" />,
+};
 
 function ExtensionContent({ gameName }) {
   const [parentGame, setParentGame] = useState(null);
@@ -32,7 +39,7 @@ function ExtensionContent({ gameName }) {
       <div>
         <h4 className="text-lg font-semibold mb-1">{parentGame.name}</h4>
         <p className="text-sm text-gray-400">
-          {parentGame.year} · {parentGame.origin} · {parentGame.category} - {parentGame.subcategory}
+          {parentGame.year} · {parentGame.origin} · {parentGame.platform} · {parentGame.category} - {parentGame.subcategory}
         </p>
       </div>
     </div>
@@ -48,7 +55,129 @@ function isColorDark(hexColor) {
   return luminance < 128;
 }
 
-function GameCard({ game, expandible = false, inTierList = false }) {
+function GameModal({ game, onClose }) {
+  const navigate = useNavigate();
+
+  if (!game) return null;
+
+  const handleEdit = () => {
+    navigate("/AddGame", { state: { editingGame: game } });
+  };
+
+  return (
+    <div
+      className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6"
+      onClick={onClose}
+    >
+      <div
+        className="relative w-full max-w-[50rem] h-[46rem] 
+                  bg-gradient-to-bl from-slate-950 via-indigo-950 to-slate-950 text-white rounded-2xl 
+                  shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden border border-white/15"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Imagen */}
+        {game.imagePreview ? (
+          <div className="relative w-full aspect-[16/7] bg-gray-700 overflow-hidden flex-shrink-0">
+            <img
+              src={game.imagePreview}
+              alt={game.name}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            {/* Botón cerrar */}
+            <button
+              onClick={onClose}
+              className="absolute top-2 right-4 text-white z-10 text-2xl hover:text-red-500"
+            >
+              ✕
+            </button>
+          </div>
+        ) : (
+          <div className="w-full aspect-[16/9] bg-gray-700 flex items-center justify-center text-gray-300">
+            No Image
+          </div>
+        )}
+
+        {/* Contenido que hace scroll */}
+        <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-between space-y-6">
+          <div className="w-full flex flex-col items-center">
+            {/* Título */}
+            <h2 className="text-4xl font-bold text-center mb-6 text-gray-100 tracking-wide drop-shadow-md">
+              {game.name}
+            </h2>
+
+            {/* Subtítulo */}
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                🗓 Played in {game.year}
+              </span>
+              <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                🌍 {game.origin} game
+              </span>
+              <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                {platformIcons[game.platform] || <Laptop className="w-4 h-4 inline-block mr-1" />}
+                {game.platform}
+              </span>
+              <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
+                🏷 {game.category}
+                {game.subcategory && ` - ${game.subcategory}`}
+              </span>
+            </div>
+
+            {/* Géneros */}
+            {game.genres?.length > 0 && (
+              <div className="mt-2 w-full max-w-3xl">
+                <p className="mb-2 text-lg text-center font-semibold text-gray-400 uppercase tracking-wide px-2">
+                  Genres
+                </p>
+                <div className="bg-zinc-800 border-2 border-zinc-600 rounded-lg p-3">
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {game.genres.map((g, i) => {
+                      const textColor = isColorDark(g.color) ? "white" : "black";
+                      return (
+                        <span
+                          key={i}
+                          className="text-md font-semibold rounded-full px-2 py-0.5"
+                          style={{
+                            backgroundColor: g.color,
+                            color: textColor,
+                          }}
+                        >
+                          {g.name}
+                        </span>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Juego del que es extensión */}
+            {game.extension_of && (
+              <div className="w-full max-w-3xl mt-4 bg-zinc-800 border-2 border-zinc-600 p-4 rounded-xl">
+                <p className="text-md text-gray-400 italic mb-2">
+                  This game is an extension of:
+                </p>
+                <ExtensionContent gameName={game.extension_of} />
+              </div>
+            )}
+          </div>
+
+          {/* Botón Editar */}
+          <div className="w-full flex justify-center">
+            <button
+              onClick={handleEdit}
+              className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg"
+            >
+              Edit game
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function GameCard({ game, expandible = false, inTierList = false, inLeaderboard = false })  {
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const [visibleCount, setVisibleCount] = useState(game.genres.length);
@@ -81,13 +210,89 @@ function GameCard({ game, expandible = false, inTierList = false }) {
     if (expandible) setIsExpanded(true);
   };
 
-  const closeModal = () => {
-    setIsExpanded(false);
-  };
+  const closeModal = () => setIsExpanded(false);
 
   const handleEdit = () => {
     navigate('/AddGame', { state: { editingGame: game } });
   };
+
+  if (inLeaderboard) {
+    let bgClass =
+    "bg-gradient-to-r from-gray-800 via-slate-700 to-gray-800 shadow-md"; // default oscuro
+
+    if (game.position === 0) {
+      bgClass =
+        "bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 " +
+        "border-2 border-yellow-400/70 " +
+        "shadow-[0_0_15px_rgba(202,138,4,0.7),0_0_30px_rgba(234,179,8,0.6),0_0_45px_rgba(250,204,21,0.4)] " +
+        "hover:border-yellow-300 hover:shadow-[0_0_20px_rgba(202,138,4,0.9),0_0_40px_rgba(234,179,8,0.8),0_0_60px_rgba(250,204,21,0.6)]";
+    } else if (game.position === 1) {
+      bgClass =
+        "bg-gradient-to-r from-gray-500 via-gray-400 to-gray-600 " +
+        "border-2 border-gray-300/60 " +
+        "shadow-[0_0_15px_rgba(156,163,175,0.6),0_0_30px_rgba(209,213,219,0.4)] " +
+        "hover:border-gray-200 hover:shadow-[0_0_20px_rgba(156,163,175,0.8),0_0_40px_rgba(209,213,219,0.6)]";
+    } else if (game.position === 2) {
+      bgClass =
+        "bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 " +
+        "border-2 border-[#b86a2f] " +
+        "shadow-[0_0_15px_rgba(180,83,9,0.7),0_0_30px_rgba(245,158,11,0.5)] " +
+        "hover:border-amber-400 hover:shadow-[0_0_20px_rgba(180,83,9,0.9),0_0_40px_rgba(245,158,11,0.7)]";
+    } else if (game.position < 10) {
+      bgClass =
+        "bg-gradient-to-r from-indigo-600 via-purple-500 to-purple-700 " +
+        "border-2 border-purple-400/60 " +
+        "shadow-[0_0_12px_rgba(139,92,246,0.6),0_0_25px_rgba(236,72,153,0.4)] " +
+        "hover:border-pink-400 hover:shadow-[0_0_18px_rgba(139,92,246,0.8),0_0_35px_rgba(236,72,153,0.6)]";
+    } else {
+      bgClass =
+        "bg-gradient-to-r from-gray-900 via-slate-800 to-gray-900 " +
+        "border border-slate-600 " +
+        "shadow-[0_0_6px_rgba(0,0,0,0.4)] hover:border-slate-400/70 hover:shadow-[0_0_12px_rgba(100,116,139,0.4)]";
+    }
+
+    return (
+      <>
+        <div
+          className={`flex items-center justify-between ${bgClass} 
+                    text-white rounded-xl px-4 py-3 mb-3 
+                    hover:scale-[1.02] transition cursor-pointer`}
+          onClick={openModal}
+        >
+          {/* Posición */}
+          <div className="text-2xl font-bold text-gray-100 w-12 text-center mr-4">
+            #{game.position + 1}
+          </div>
+
+          {/* Imagen */}
+          <div className="w-30 h-14 rounded-md overflow-hidden flex-shrink-0">
+            {game.imagePreview ? (
+              <img
+                src={game.imagePreview}
+                alt={game.name}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-700 text-sm text-gray-400">
+                No Img
+              </div>
+            )}
+          </div>
+
+          {/* Info */}
+          <div className="flex-1 ml-4">
+            <h3 className="text-lg font-semibold truncate">{game.name}</h3>
+            <p className="text-sm text-gray-200">
+              {game.year} · {game.origin} · {game.platform} · {game.category}{" "}
+              {game.subcategory && `- ${game.subcategory}`}
+            </p>
+          </div>
+        </div>
+
+        {isExpanded && <GameModal game={game} onClose={closeModal} />}
+      </>
+    );
+  }
 
   return (
     <>
@@ -155,111 +360,7 @@ function GameCard({ game, expandible = false, inTierList = false }) {
         </div>
       )}
 
-      {expandible && isExpanded && (
-        <div
-          className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-6"
-          onClick={closeModal}
-        >
-          <div
-            className="relative w-full max-w-[50rem] h-[46rem] 
-                      bg-gradient-to-bl from-slate-950 via-indigo-950 to-slate-950 text-white rounded-2xl 
-                      shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden border border-white/15"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Imagen */}
-            {game.imagePreview ? (
-              <div className="relative w-full aspect-[16/7] bg-gray-700 overflow-hidden flex-shrink-0">
-                <img
-                  src={game.imagePreview}
-                  alt={game.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* Botón cerrar */}
-                <button
-                  onClick={closeModal}
-                  className="absolute top-2 right-4 text-white z-10 text-2xl hover:text-red-500"
-                >
-                  ✕
-                </button>
-              </div>
-            ) : (
-              <div className="w-full aspect-[16/9] bg-gray-700 flex items-center justify-center text-gray-300">
-                No Image
-              </div>
-            )}
-
-            {/* Contenido que hace scroll */}
-            <div className="flex-1 overflow-y-auto p-6 flex flex-col items-center justify-between space-y-6">
-              <div className="w-full flex flex-col items-center">
-                {/* Título */}
-                <h2 className="text-4xl font-bold text-center mb-6 text-gray-100 tracking-wide drop-shadow-md">
-                  {game.name}
-                </h2>
-
-                {/* Subtítulo con año, origen y categoría como etiquetas */}
-                <div className="flex flex-wrap justify-center gap-2 mb-4">
-                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
-                    Played in {game.year}
-                  </span>
-                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
-                    {game.origin} game
-                  </span>
-                  <span className="bg-zinc-700 border-2 border-zinc-600 text-gray-200 text-sm font-semibold px-3 py-1 rounded-md">
-                    {game.category}
-                    {game.subcategory && ` - ${game.subcategory}`}
-                  </span>
-                </div>
-
-                {/* Géneros */}
-                {game.genres?.length > 0 && (
-                  <div className="mt-2 w-full max-w-3xl">
-                    <p className="mb-2 text-lg text-center font-semibold text-gray-400 uppercase tracking-wide px-2">
-                      Genres
-                    </p>
-                    <div className="bg-zinc-800 border-2 border-zinc-600 rounded-lg p-3">
-                      <div className="flex flex-wrap justify-center gap-2">
-                        {game.genres.map((g, i) => {
-                          const textColor = isColorDark(g.color) ? 'white' : 'black';
-                          return (
-                            <span
-                              key={i}
-                              className="text-md font-semibold rounded-full px-2 py-0.5"
-                              style={{
-                                backgroundColor: g.color,
-                                color: textColor,
-                              }}
-                            >
-                              {g.name}
-                            </span>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Juego del que es extensión */}
-                {game.extension_of && (
-                  <div className="w-full max-w-3xl mt-4 bg-zinc-800 border-2 border-zinc-600 p-4 rounded-xl">
-                    <p className="text-md text-gray-400 italic mb-2">This game is an extension of:</p>
-                    <ExtensionContent gameName={game.extension_of} />
-                  </div>
-                )}
-              </div>
-
-              {/* Botón Editar */}
-              <div className="w-full flex justify-center">
-                <button
-                  onClick={handleEdit}
-                  className="bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2 px-6 rounded-lg"
-                >
-                  Edit game
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      {expandible && isExpanded && <GameModal game={game} onClose={closeModal} />}
     </>
   );
 }

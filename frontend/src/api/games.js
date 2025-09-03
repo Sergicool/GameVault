@@ -19,6 +19,7 @@ export async function addGame(gameData) {
   formData.append('image', gameData.image);
   formData.append('year', gameData.year);
   formData.append('origin', gameData.origin);
+  formData.append('platform', gameData.platform);
   formData.append('category', gameData.category);
   formData.append('subcategory', gameData.subcategory);
   formData.append('extension_of', gameData.extension_of || '');
@@ -46,6 +47,7 @@ export async function updateGame(gameData) {
   formData.append('name', gameData.name);
   formData.append('year', gameData.year);
   formData.append('origin', gameData.origin);
+  formData.append('platform', gameData.platform);
   formData.append('category', gameData.category);
   formData.append('subcategory', gameData.subcategory);
   formData.append('extension_of', gameData.extension_of || '');

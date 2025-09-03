@@ -6,6 +6,7 @@ import { HexColorPicker } from 'react-colorful';
 
 import { addYear, getYears, deleteYear } from '../api/years';
 import { getOrigins, addOrigin, updateOrigin, deleteOrigin } from '../api/origins';
+import { getPlatforms, addPlatform, updatePlatform, deletePlatform } from '../api/platforms';
 import { getCategories, addCategory, updateCategory, deleteCategory } from '../api/categories';
 import { getSubcategories, addSubcategory, updateSubcategory, deleteSubcategory } from '../api/subcategories';
 import { getTiers, addTier, updateTier, deleteTier, moveTierUp, moveTierDown } from '../api/tiers';
@@ -20,6 +21,11 @@ function UpdateData() {
   const [newOrigin, setNewOrigin] = useState('');
   const [editingOrigin, setEditingOrigin] = useState(null);
   const [editedOrigin, setEditedOrigin] = useState('');
+
+  const [platforms, setPlatforms] = useState([]);
+  const [newPlatform, setNewPlatform] = useState('');
+  const [editingPlatform, setEditingPlatform] = useState(null);
+  const [editedPlatform, setEditedPlatform] = useState('');
 
   const [categories, setCategories] = useState([]);
   const [newCategory, setNewCategory] = useState('');
@@ -60,9 +66,10 @@ function UpdateData() {
 
   const loadAll = async () => {
     try {
-      const [yearsData, originsData, categoriesData, subcategoriesData, tiersData, genresData] = await Promise.all([
+      const [yearsData, originsData, platformsData, categoriesData, subcategoriesData, tiersData, genresData] = await Promise.all([
         getYears(),
         getOrigins(),
+        getPlatforms(),
         getCategories(),
         getSubcategories(),
         getTiers(),
@@ -71,6 +78,7 @@ function UpdateData() {
       
       setYears(yearsData);
       setOrigins(originsData);
+      setPlatforms(platformsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
       setTiers(tiersData);
@@ -115,6 +123,17 @@ function UpdateData() {
     try {
       await addOrigin(newOrigin.trim());
       setNewOrigin('');
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAddPlatform = async () => {
+    if (!newPlatform.trim()) return;
+    try {
+      await addPlatform(newPlatform.trim());
+      setNewPlatform('');
       loadAll();
     } catch (e) {
       console.error(e);
@@ -185,6 +204,20 @@ function UpdateData() {
     try {
       await updateOrigin(oldName, newName.trim());
       setEditingOrigin(null);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleUpdatePlatform = async (oldName, newName) => {
+    if (!newName.trim() || newName === oldName) {
+      setEditingOrigin(null);
+      return;
+    }
+    try {
+      await updatePlatform(oldName, newName.trim());
+      setEditingPlatform(null);
       loadAll();
     } catch (e) {
       console.error(e);
@@ -275,6 +308,15 @@ function UpdateData() {
     }
   };
 
+  const handleDeletePlatform = async (platform) => {
+    try {
+      await deletePlatform(platform);
+      loadAll();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const handleDeleteCategory = async (category) => {
     try {
       await deleteCategory(category);
@@ -303,9 +345,9 @@ function UpdateData() {
   };
 
   return (
-  <div className="grid md:grid-cols-5 gap-6 p-6">
+  <div className="grid md:grid-cols-10 gap-6 p-6">
     
-    <div className="col-span-2">
+    <div className="col-span-3">
       
       {/* Genres */}
       <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[49.5rem]">
@@ -417,10 +459,10 @@ function UpdateData() {
 
     </div>
   
-    <div className="col-span-3 grid md:grid-cols-3 gap-6">
+    <div className="col-span-7 grid md:grid-cols-12 gap-9">
 
       {/* Tiers */}
-      <div className="col-span-1 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col h-[24rem]">
+      <div className="col-span-4 bg-gradient-to-br from-fuchsia-400 to-purple-700 rounded-xl shadow p-4 flex flex-col h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Tiers</h2>
 
         <div className="overflow-y-auto bg-purple-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
@@ -547,7 +589,7 @@ function UpdateData() {
       </div>
 
       {/* Years */}
-      <div className="col-span-1 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-4 bg-gradient-to-br from-pink-400 to-red-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Years</h2>
         <div className="overflow-y-auto bg-pink-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -586,7 +628,7 @@ function UpdateData() {
       </div>
       
       {/* Origins */}
-      <div className="col-span-1 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-4 bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Origins</h2>
         <div className="overflow-y-auto bg-orange-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -656,7 +698,7 @@ function UpdateData() {
       </div>
 
       {/* Categories */}
-      <div className="col-span-1 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-3 bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Categories</h2>
         <div className="overflow-y-auto bg-green-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -726,7 +768,7 @@ function UpdateData() {
       </div>
 
       {/* Subcategories */}
-      <div className="col-span-2 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+      <div className="col-span-6 bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Subcategories</h2>
         <div className="overflow-y-auto bg-indigo-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
                         [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
@@ -808,6 +850,76 @@ function UpdateData() {
           <button
             onClick={handleAddSubcategory}
             className="whitespace-nowrap bg-white text-indigo-600 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-indigo-200 active:bg-indigo-300 focus:outline-none"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+
+      {/* Platforms */}
+      <div className="col-span-3 bg-gradient-to-br from-gray-400 to-slate-700 rounded-xl shadow p-4 flex flex-col justify-between h-[24rem]">
+        <h2 className="text-2xl font-semibold text-center mb-4">Platforms</h2>
+        <div className="overflow-y-auto bg-slate-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow 
+                        [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <ul className="space-y-2">
+            {platforms.map((platform) => (
+              <li key={platform.name} className="bg-gray-50 text-gray-800 rounded-lg px-3 py-2 flex items-center justify-between shadow">
+                {editingPlatform === platform.name ? (
+                  <input
+                    value={editedPlatform}
+                    onChange={(e) => setEditedPlatform(e.target.value)}
+                    onBlur={() => handleUpdatePlatform(platform.name, editedPlatform)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleUpdatePlatform(platform.name, editedPlatform);
+                      if (e.key === 'Escape') setEditingPlatform(null);
+                    }}
+                    autoFocus
+                    className="w-full max-w-full px-2 py-1 rounded border border-gray-300"
+                  />
+                ) : (
+                  <span className="text-gray-800 font-medium flex-1">{platform.name}</span>
+                )}
+
+                <div className="flex items-center gap-2">
+                  {editingPlatform !== platform.name && (
+                    <>
+                    <button
+                        onClick={() => {
+                          setEditingPlatform(platform.name);
+                          setEditedPlatform(platform.name);
+                        }}
+                        className="text-blue-500 hover:text-blue-700"
+                        >
+                        <Pencil size={18} />
+                      </button>
+
+                      <button
+                        onClick={() => handleDeletePlatform(platform.name)}
+                        className={`transition ${
+                          platform.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'
+                        }`}
+                        disabled={platform.inUse}
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="flex flex-wrap items-center mt-4 gap-2">
+          <input
+            type="text"
+            placeholder="New platform"
+            value={newPlatform}
+            onChange={(e) => setNewPlatform(e.target.value)}
+            className="flex-1 min-w-0 px-3 py-2 rounded-lg bg-white text-gray-800 shadow-md focus:outline-none focus:ring-2 focus:ring-slate-300"
+          />
+          <button
+            onClick={handleAddPlatform}
+            className="whitespace-nowrap bg-white text-slate-600 font-semibold px-5 py-2 rounded-lg shadow-md transition hover:bg-slate-200 active:bg-slate-300 focus:outline-none"
           >
             Add
           </button>
