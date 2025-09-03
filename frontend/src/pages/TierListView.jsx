@@ -68,7 +68,13 @@ function TierListView() {
   }, []);
 
   const filteredGames = useMemo(() => {
-    return games.filter((game) => {
+    let juegos = [...games];
+
+    if (filters.ignoreExtensions) {
+      juegos = juegos.filter((g) => !g.extension_of);
+    }
+
+    return juegos.filter((game) => {
       if (filters.years.length > 0 && !filters.years.includes(game.year))
         return false;
 
@@ -78,10 +84,7 @@ function TierListView() {
       )
         return false;
 
-      if (
-        filters.origins.length > 0 &&
-        !filters.origins.includes(game.origin)
-      )
+      if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
         return false;
 
       if (
@@ -102,6 +105,7 @@ function TierListView() {
       return true;
     });
   }, [games, filters]);
+
 
   const gamesByTier = useMemo(() => {
     const grouped = {};

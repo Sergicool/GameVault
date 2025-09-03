@@ -76,7 +76,13 @@ function HallOfFame() {
   }, []);
 
   const filteredGames = useMemo(() => {
-    return games.filter((game) => {
+    let juegos = [...games];
+
+    if (filters.ignoreExtensions) {
+      juegos = juegos.filter((g) => !g.extension_of);
+    }
+
+    return juegos.filter((game) => {
       if (!game.tier) return false;
 
       if (filters.years.length > 0 && !filters.years.includes(game.year))
@@ -135,8 +141,8 @@ function HallOfFame() {
             </h1>
 
             <div className="flex flex-col gap-3 max-w-3xl mx-auto">
-              {filteredGames.map((game) => (
-                <GameCard key={game.name} game={game} inLeaderboard expandible/>
+              {filteredGames.map((game, index) => (
+                <GameCard key={game.name} game={game} inLeaderboard expandible displayIndex={index + 1}/>
               ))}
             </div>
           </>

@@ -78,7 +78,13 @@ function Games() {
   }, []);
 
   const filteredGames = useMemo(() => {
-    return games.filter((game) => {
+    let juegos = [...games];
+
+    if (filters.ignoreExtensions) {
+      juegos = juegos.filter((g) => !g.extension_of);
+    }
+
+    return juegos.filter((game) => {
       if (
         searchQuery.trim() !== "" &&
         !game.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -115,6 +121,7 @@ function Games() {
       return true;
     });
   }, [games, filters, searchQuery]);
+
 
   return (
     <div className="flex">

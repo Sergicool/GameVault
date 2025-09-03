@@ -193,7 +193,7 @@ function GameModal({ game, onClose }) {
   );
 }
 
-function GameCard({ game, expandible = false, inTierList = false, inLeaderboard = false })  {
+function GameCard({ game, expandible = false, inTierList = false, inLeaderboard = false, displayIndex})  {
   const navigate = useNavigate();
   const containerRef = useRef(null);
   const [visibleCount, setVisibleCount] = useState(game.genres.length);
@@ -236,25 +236,25 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
     let bgClass =
     "bg-gradient-to-r from-gray-800 via-slate-700 to-gray-800 shadow-md"; // default oscuro
 
-    if (game.position === 0) {
+    if (displayIndex === 1) {
       bgClass =
         "bg-gradient-to-r from-yellow-600 via-yellow-500 to-yellow-700 " +
         "border-2 border-yellow-400/70 " +
         "shadow-[0_0_15px_rgba(202,138,4,0.7),0_0_30px_rgba(234,179,8,0.6),0_0_45px_rgba(250,204,21,0.4)] " +
         "hover:border-yellow-300 hover:shadow-[0_0_20px_rgba(202,138,4,0.9),0_0_40px_rgba(234,179,8,0.8),0_0_60px_rgba(250,204,21,0.6)]";
-    } else if (game.position === 1) {
+    } else if (displayIndex === 2) {
       bgClass =
         "bg-gradient-to-r from-gray-500 via-gray-400 to-gray-600 " +
         "border-2 border-gray-300/60 " +
         "shadow-[0_0_15px_rgba(156,163,175,0.6),0_0_30px_rgba(209,213,219,0.4)] " +
         "hover:border-gray-200 hover:shadow-[0_0_20px_rgba(156,163,175,0.8),0_0_40px_rgba(209,213,219,0.6)]";
-    } else if (game.position === 2) {
+    } else if (displayIndex === 3) {
       bgClass =
         "bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 " +
         "border-2 border-[#b86a2f] " +
         "shadow-[0_0_15px_rgba(180,83,9,0.7),0_0_30px_rgba(245,158,11,0.5)] " +
         "hover:border-amber-400 hover:shadow-[0_0_20px_rgba(180,83,9,0.9),0_0_40px_rgba(245,158,11,0.7)]";
-    } else if (game.position < 10) {
+    } else if (displayIndex <= 20) {
       bgClass =
         "bg-gradient-to-r from-indigo-600 via-purple-500 to-purple-700 " +
         "border-2 border-purple-400/60 " +
@@ -277,7 +277,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
         >
           {/* Posición */}
           <div className="text-2xl font-bold text-gray-100 w-12 text-center mr-4">
-            #{game.position + 1}
+            #{displayIndex}
           </div>
 
           {/* Imagen */}
