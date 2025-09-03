@@ -17,7 +17,7 @@ function AddGame() {
   const navigate = useNavigate();
   const location = useLocation();
   const editingGame = location.state?.editingGame || null;
-
+  
   const isEditMode = editingGame !== null;
 
   const [name, setName] = useState('');
@@ -85,10 +85,11 @@ function AddGame() {
       setSubcategory(editingGame.subcategory || '');
       setIsExtension(Boolean(editingGame.extension_of));
       setExtensionOf(editingGame.extension_of || '');
-      setSelectedGenres(editingGame.genres?.map((g) => g.name) || []);
-      setImagePreview(`http://localhost:3001/game-image/${editingGame.name}`); // Preview, la imagen no es real
+      setSelectedGenres(editingGame.genres?.map(g => g.name) || []);
+      setImagePreview(editingGame.imagePreview || `http://localhost:3001/game-image/${encodeURIComponent(editingGame.name)}`);
     }
   }, [editingGame]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

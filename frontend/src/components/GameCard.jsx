@@ -60,8 +60,24 @@ function GameModal({ game, onClose }) {
 
   if (!game) return null;
 
+  // Excluir imagen por tamaño
   const handleEdit = () => {
-    navigate("/AddGame", { state: { editingGame: game } });
+    navigate("/AddGame", { 
+      state: { 
+        editingGame: {
+          name: game.name,
+          year: game.year,
+          origin: game.origin,
+          platform: game.platform,
+          category: game.category,
+          subcategory: game.subcategory,
+          tier: game.tier,
+          extension_of: game.extension_of,
+          genres: game.genres?.map(g => ({ name: g.name, color: g.color })) || [],
+          imagePreview: game.imagePreview // solo la URL
+        }
+      } 
+    });
   };
 
   return (
