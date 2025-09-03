@@ -222,10 +222,13 @@ function AddGame() {
               </label>
               <input
                 type="text"
-                maxLength={50}
+                maxLength={80}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`w-full bg-neutral-800 border rounded-lg p-2 text-gray-100`}
+                className={`w-full bg-neutral-800 border rounded-lg p-2 ${
+                  isEditMode ? 'text-gray-400' : 'text-gray-100'
+                }`}
+                disabled={isEditMode}
               />
             </div>
 

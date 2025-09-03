@@ -528,7 +528,7 @@ app.post('/add-game', upload.single('image'), (req, res) => {
     const insertGame = db.prepare(`
       INSERT INTO games (
         name, image, year, origin, platform, category, subcategory, tier, position, extension_of
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     insertGame.run(
