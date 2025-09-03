@@ -141,8 +141,19 @@ function Games() {
           <>
             {/* Título */}
             <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
-              All Games
+              All Played Games
             </h1>
+            {/* Barra de búsqueda */}
+            <div className="relative max-w-md mx-auto mb-8">
+              <input
+                type="text"
+                placeholder="Search games..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 rounded-2xl border border-gray-600 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+              />
+              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+            </div>
             <div className="flex flex-wrap gap-6 justify-around">
               {filteredGames.map((game) => (
                 <GameCard key={game.name} game={game} expandible />
