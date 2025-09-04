@@ -40,6 +40,7 @@ function Stats() {
         getOrigins(),
         getPlatforms(),
         getCategories(),
+        getSubcategories(),
         getTiers(),
         getYears(),
       ]);
