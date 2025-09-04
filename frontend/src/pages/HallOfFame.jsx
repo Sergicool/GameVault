@@ -3,6 +3,7 @@ import { getGames } from '../api/games';
 import { getGenres } from '../api/genres';
 import { getYears } from '../api/years';
 import { getOrigins } from '../api/origins';
+import { getPlatforms } from '../api/platforms';
 import { getCategories } from '../api/categories';
 import { getSubcategories } from '../api/subcategories';
 import { getTiers } from '../api/tiers';
@@ -14,6 +15,7 @@ function HallOfFame() {
   const [years, setYears] = useState([]);
   const [genres, setGenres] = useState([]);
   const [origins, setOrigins] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [tiers, setTiers] = useState([]);
@@ -21,6 +23,7 @@ function HallOfFame() {
     years: [],
     genres: [],
     origins: [],
+    platforms: [],
     categories: [],
     subcategories: [],
     tiers: [],
@@ -36,6 +39,7 @@ function HallOfFame() {
           yearsData,
           genresData,
           originsData,
+          platformsData,
           categoriesData,
           subcategoriesData,
           tiersData,
@@ -44,6 +48,7 @@ function HallOfFame() {
           getYears(),
           getGenres(),
           getOrigins(),
+          getPlatforms(),
           getCategories(),
           getSubcategories(),
           getTiers(),
@@ -64,6 +69,7 @@ function HallOfFame() {
         setYears(yearsData);
         setGenres(genresData);
         setOrigins(originsData);
+        setPlatforms(platformsData);
         setCategories(categoriesData);
         setSubcategories(subcategoriesData);
         setTiers(tiersData);
@@ -97,6 +103,9 @@ function HallOfFame() {
       if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
         return false;
 
+      if (filters.platforms.length > 0 && !filters.platforms.includes(game.platform))
+        return false;
+
       if (
         filters.categories.length > 0 &&
         !filters.categories.includes(game.category)
@@ -122,6 +131,7 @@ function HallOfFame() {
         years={years}
         genres={genres}
         origins={origins}
+        platforms={platforms}
         categories={categories}
         subcategories={subcategories}
         tiers={tiers}

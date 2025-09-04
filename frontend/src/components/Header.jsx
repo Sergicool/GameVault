@@ -9,7 +9,8 @@ function Header() {
   const navLinks = [
     { label: 'Tier List', href: '/TierList' },
     { label: 'Games', href: '/Games' },
-    { label: 'Hall of Fame', href: '/HallOfFame' }
+    { label: 'Hall of Fame', href: '/HallOfFame' },
+    { label: 'Stats', href: '/Stats' }
   ];
 
   const menuOptions = [

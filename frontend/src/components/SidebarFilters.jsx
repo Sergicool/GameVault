@@ -36,6 +36,7 @@ function SidebarFilters({
   years,
   genres,
   origins,
+  platforms,
   categories,
   subcategories,
   tiers,
@@ -128,6 +129,13 @@ function SidebarFilters({
             items={origins.map((o) => o.name)}
             selected={filters.origins}
             onToggle={(val) => toggleFilter("origins", val)}
+          />
+
+          <FilterSection
+            title="Platforms"
+            items={platforms.map((o) => o.name)}
+            selected={filters.platforms}
+            onToggle={(val) => toggleFilter("platforms", val)}
           />
 
           <FilterSection

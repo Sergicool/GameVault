@@ -3,6 +3,7 @@ import Header from './components/Header';
 import TierListView from './pages/TierListView';
 import Games from './pages/Games';
 import HallOfFame from './pages/HallOfFame';
+import Stats from './pages/Stats';
 import AddGame from './pages/AddGame';
 import UpdateTier from './pages/UpdateTier';
 import UpdateData from './pages/UpdateData';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/TierList" element={<TierListView />} />
           <Route path="/Games" element={<Games />} />
           <Route path="/HallOfFame" element={<HallOfFame />} />
+          <Route path="/Stats" element={<Stats />} />
           <Route path="/AddGame" element={<AddGame />} />
           <Route path="/UpdateTier" element={<UpdateTier />} />
           <Route path="/UpdateData" element={<UpdateData />} />

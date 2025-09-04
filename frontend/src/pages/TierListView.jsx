@@ -4,6 +4,7 @@ import { getTiers } from '../api/tiers';
 import { getGenres } from '../api/genres';
 import { getYears } from '../api/years';
 import { getOrigins } from '../api/origins';
+import { getPlatforms } from '../api/platforms';
 import { getCategories } from '../api/categories';
 import { getSubcategories } from '../api/subcategories';
 import SidebarFilters from "../components/SidebarFilters";
@@ -16,6 +17,7 @@ function TierListView() {
   const [years, setYears] = useState([]);
   const [genres, setGenres] = useState([]);
   const [origins, setOrigins] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
 
@@ -23,6 +25,7 @@ function TierListView() {
     years: [],
     genres: [],
     origins: [],
+    platforms: [],
     categories: [],
     subcategories: [],
     tiers: [],
@@ -36,6 +39,7 @@ function TierListView() {
         yearsData,
         genresData,
         originsData,
+        platformsData,
         categoriesData,
         subcategoriesData,
       ] = await Promise.all([
@@ -44,6 +48,7 @@ function TierListView() {
         getYears(),
         getGenres(),
         getOrigins(),
+        getPlatforms(),
         getCategories(),
         getSubcategories(),
       ]);
@@ -60,6 +65,7 @@ function TierListView() {
       setYears(yearsData);
       setGenres(genresData);
       setOrigins(originsData);
+      setPlatforms(platformsData);
       setCategories(categoriesData);
       setSubcategories(subcategoriesData);
     };
@@ -85,6 +91,9 @@ function TierListView() {
         return false;
 
       if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
+        return false;
+
+      if (filters.platforms.length > 0 && !filters.platforms.includes(game.platform))
         return false;
 
       if (
@@ -136,6 +145,7 @@ function TierListView() {
         years={years}
         genres={genres}
         origins={origins}
+        platforms={platforms}
         categories={categories}
         subcategories={subcategories}
         tiers={tiers}

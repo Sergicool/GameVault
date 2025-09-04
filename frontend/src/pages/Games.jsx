@@ -3,6 +3,7 @@ import { getGames } from '../api/games';
 import { getGenres } from '../api/genres';
 import { getYears } from '../api/years';
 import { getOrigins } from '../api/origins';
+import { getPlatforms } from '../api/platforms';
 import { getCategories } from '../api/categories';
 import { getSubcategories } from '../api/subcategories';
 import { getTiers } from '../api/tiers';
@@ -15,6 +16,7 @@ function Games() {
   const [years, setYears] = useState([]);
   const [genres, setGenres] = useState([]);
   const [origins, setOrigins] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [tiers, setTiers] = useState([]);
@@ -23,6 +25,7 @@ function Games() {
     years: [],
     genres: [],
     origins: [],
+    platforms: [],
     categories: [],
     subcategories: [],
     tiers: [],
@@ -40,6 +43,7 @@ function Games() {
           yearsData,
           genresData,
           originsData,
+          platformsData,
           categoriesData,
           subcategoriesData,
           tiersData,
@@ -48,6 +52,7 @@ function Games() {
           getYears(),
           getGenres(),
           getOrigins(),
+          getPlatforms(),
           getCategories(),
           getSubcategories(),
           getTiers(),
@@ -66,6 +71,7 @@ function Games() {
         setYears(yearsData);
         setGenres(genresData);
         setOrigins(originsData);
+        setPlatforms(platformsData);
         setCategories(categoriesData);
         setSubcategories(subcategoriesData);
         setTiers(tiersData);
@@ -103,6 +109,9 @@ function Games() {
       if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
         return false;
 
+      if (filters.platforms.length > 0 && !filters.platforms.includes(game.platform))
+        return false;
+
       if (
         filters.categories.length > 0 &&
         !filters.categories.includes(game.category)
@@ -129,6 +138,7 @@ function Games() {
         years={years}
         genres={genres}
         origins={origins}
+        platforms={platforms}
         categories={categories}
         subcategories={subcategories}
         tiers={tiers}
