@@ -102,20 +102,19 @@ pm2 save
 
 ## 7️⃣ Set Up Auto-Start on Windows
 
-1. Create a `pm2-start.bat` file with this content:
+PM2 puede configurarse para arrancar automáticamente como un **servicio de Windows**, sin necesidad de scripts manuales.
 
-```bat
-@echo off
-cd /d %USERPROFILE%
-pm run pm2 resurrect
+1. Instala el soporte de auto-start para Windows:
+
+```powershell
+npm install pm2-windows-startup -g
 ```
 
-2. Add it to the Windows Startup folder:
+2. Registra el servicio:
 
-* Press `Win + R` → type `shell:startup` → Enter.
-* Copy the `.bat` file there.
-
-✅ On Windows startup, PM2 will automatically start **backend and frontend**.
+```powershell
+pm2-startup install
+```
 
 ---
 
