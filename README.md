@@ -102,7 +102,7 @@ pm2 save
 
 ## 7️⃣ Set Up Auto-Start on Windows
 
-1. Create a `pm2-start.bat` file (In `C:\Users\<User>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup`) with this content:
+1. Create a `pm2-start.bat` file with this content:
 
 ```bat
 @echo off
