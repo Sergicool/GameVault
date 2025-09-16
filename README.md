@@ -90,17 +90,7 @@ pm2 serve frontend/dist 5173 --name gamevault-frontend --spa
 
 ---
 
-## 6️⃣ Save Processes for Auto-Start
-
-```powershell
-pm2 save
-```
-
-* Saves the current processes so they can be restored later.
-
----
-
-## 7️⃣ Set Up Auto-Start on Windows
+## 6️⃣ Set Up Auto-Start on Windows
 
 PM2 puede configurarse para arrancar automáticamente como un **servicio de Windows**, sin necesidad de scripts manuales.
 
@@ -115,6 +105,16 @@ npm install pm2-windows-startup -g
 ```powershell
 pm2-startup install
 ```
+
+---
+
+## 7️⃣ Save Processes for Auto-Start
+
+```powershell
+pm2 save
+```
+
+* Saves the current processes so they can be restored later.
 
 ---
 
