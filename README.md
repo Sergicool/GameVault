@@ -1,22 +1,3 @@
-# Installation
-Pull project
-
-Install Node.js: https://nodejs.org/es/download
-
-npm install
-
-cd /frontend
-
-npm install
-
-cd ../backend
-
-npm install
-
-cd ..
-
-npm run ...
-
 # Dependencies
 
 npm install concurrently@8.2.2
