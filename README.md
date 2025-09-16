@@ -1,11 +1,20 @@
 # Installation
-Pull
+Pull project
+
+Install Node.js: https://nodejs.org/es/download
+
 npm install
+
 cd /frontend
+
 npm install
+
 cd ../backend
+
 npm install
-cs ..
+
+cd ..
+
 npm run ...
 
 # Dependencies
