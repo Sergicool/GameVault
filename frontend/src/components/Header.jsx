@@ -43,15 +43,15 @@ function Header() {
     <header className="
       fixed w-full z-100
       bg-gradient-to-t from-slate-950 via-slate-950 to-slate-900
-      border-b border-slate-700
+      border-b border-indigo-500
       font-mono font-bold text-lg text-gray-100
     ">
       <div className="p-3 flex">
         {/* Contenedor de navegación */}
         <div className="flex-1 flex justify-center">
           <nav className="
-            bg-slate-800/70
-            border border-slate-700 rounded-lg
+            bg-indigo-950/50
+            border border-indigo-500 rounded-lg
             inset-shadow-sm inset-shadow-zinc-900
             px-10 py-2 space-x-20
           ">
@@ -61,8 +61,8 @@ function Header() {
                 href={link.href}
                 className={`transition-colors ${
                   isActive(link.href)
-                    ? 'text-cyan-200 drop-shadow-[0_0_10px_#22d3ee]'
-                    : 'hover:text-cyan-300'
+                    ? 'text-violet-200 drop-shadow-[0_0_10px_#22d3ee]'
+                    : 'hover:text-violet-300'
                 }`}
               >
                 {link.label}
@@ -74,13 +74,18 @@ function Header() {
         <div className="absolute right-6" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="p-2 rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
+            className={`p-2 rounded-md transition-colors ${
+              menuOpen
+                ? 'bg-indigo-600'
+                : 'hover:bg-indigo-600 active:bg-gray-500'
+            }`}
           >
             <Menu className="w-6 h-6" />
           </button>
 
+
           {menuOpen && (
-            <div className="absolute right-0 mt-0 w-52 bg-[#121212] bg-gradient-to-br from-slate-800 to-zinc-900 rounded-md shadow-xl z-10 p-2">
+            <div className="absolute right-0 mt-1 w-52 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md rounded-md border border-indigo-500/70 z-10 p-2">
               {menuOptions.map(({ label, href, icon: Icon }) => (
                 <a
                   key={href}

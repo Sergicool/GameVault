@@ -69,14 +69,14 @@ function SidebarFilters({
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
       className="h-[calc(100vh-4.4rem)] bg-gradient-to-t from-slate-950 via-indigo-950 to-slate-950 text-white fixed top-17.5 left-0
                  shadow-lg flex flex-col overflow-y-auto overflow-x-hidden z-10
-                 border-r border-gray-700"
+                 border-r border-indigo-500"
     >
       {/* Encabezado con boton */}
       <div
         className={`flex justify-between items-center p-2 sticky top-0 bg-slate-950 z-1
                     ${
                       open
-                        ? "border-b border-gray-500 shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]"
+                        ? "border-b border-indigo-500 shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]"
                         : ""
                     }`}
       >
@@ -88,7 +88,7 @@ function SidebarFilters({
 
         <button
           onClick={() => setOpen(!open)}
-          className="bg-gray-700 text-white p-2 rounded-md shadow-lg hover:bg-gray-600 transition-all duration-300"
+          className="bg-gray-700 text-white p-2 rounded-md shadow-lg hover:bg-indigo-600 transition-all duration-300"
         >
           {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>
@@ -172,7 +172,7 @@ function SidebarFilters({
 function FilterSection({ title, items, selected, onToggle, colored }) {
   return (
     <div>
-      <h2 className="text-sm uppercase tracking-wide font-bold text-gray-200 mb-3 border-b border-gray-400 pb-1">
+      <h2 className="text-sm uppercase tracking-wide font-bold text-gray-200 mb-3 border-b border-indigo-500/60 pb-2">
         {title}
       </h2>
       <div className="flex flex-wrap gap-2 max-w-full">
@@ -198,7 +198,7 @@ function FilterSection({ title, items, selected, onToggle, colored }) {
                                   isActive
                                     ? colored
                                       ? `shadow ${textColor}`
-                                      : "bg-blue-600 text-white font-bold border border-blue-400 shadow-lg shadow-blue-500/30"
+                                      : "bg-indigo-600 text-white font-bold border border-indigo-400 shadow-lg shadow-blue-500/30"
                                     : "text-gray-300 border border-gray-600 hover:bg-gray-700/50"
                                 }`}
               style={{

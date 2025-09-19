@@ -16,7 +16,7 @@ function TierList({
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className="flex flex-row items-stretch mb-2 border-2 border-gray-400 rounded overflow-hidden"
+            className="flex flex-row items-stretch mb-2 border-2 border-indigo-500 rounded overflow-hidden"
           >
             <div
               className="w-32 flex items-center justify-center text-xl font-bold text-center px-2 py-1"
@@ -48,7 +48,7 @@ function TierList({
         {tiers.map((tier) => (
           <div
             key={tier.name}
-            className="flex flex-row items-stretch mb-2 border border-white rounded overflow-hidden"
+            className="flex flex-row items-stretch mb-2 border-2 border-indigo-500 rounded overflow-hidden"
           >
             <div
               className="w-32 flex items-center justify-center text-xl font-bold px-2 py-1"
@@ -65,7 +65,7 @@ function TierList({
                 <div
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  className="flex gap-2 p-2 min-h-[110px] bg-gray-800 flex-1 overflow-x-auto whitespace-nowrap"
+                  className="flex gap-2 p-2 min-h-[110px] bg-gray-900 flex-1 overflow-x-auto whitespace-nowrap"
                   style={{ scrollbarWidth: 'thin' }} // opcional para Firefox
                 >
                   {(gamesByTier[tier.name] || []).map((game, index) => (
@@ -93,13 +93,13 @@ function TierList({
         ))}
 
         {/* Zona de juegos no asignados */}
-        <div className="flex flex-row items-stretch border border-white rounded overflow-hidden">
+        <div className="flex flex-row items-stretch border-2 border-indigo-500 rounded overflow-hidden">
           <Droppable droppableId="unassigned" direction="horizontal">
             {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className="flex gap-2 p-2 min-h-[110px] bg-gray-700 flex-1 overflow-x-auto whitespace-nowrap"
+                className="flex gap-2 p-2 min-h-[110px] bg-gray-950 flex-1 overflow-x-auto whitespace-nowrap"
                 style={{ scrollbarWidth: 'thin' }}
               >
                 {unassignedGames.map((game, index) => (

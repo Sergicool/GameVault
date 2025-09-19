@@ -202,9 +202,9 @@ function AddGame() {
       
       {/* Formulario */}
       <div className="
-        bg-gradient-to-br from-gray-800 to-gray-900
+        bg-gradient-to-t from-slate-950 via-indigo-950 to-slate-950
         rounded-xl shadow-lg p-6 w-full max-w-[50rem]
-        border-4 border-gray-100/60
+        border-2 border-indigo-500
       ">
         <form onSubmit={handleSubmit}>
           <h2 className="text-2xl font-bold text-center mb-4">
@@ -441,7 +441,7 @@ function AddGame() {
           {/* Géneros */}
           <div className="mt-4">
             <label className="block font-semibold mb-2 text-gray-100">Genres</label>
-            <div className="bg-gray-800 rounded-xl p-4 border border-gray-600 inset-shadow-sm inset-shadow-gray-900">
+            <div className="bg-slate-950/50 rounded-xl p-4 border-2 border-indigo-500 inset-shadow-sm inset-shadow-gray-900">
               <div className="flex flex-wrap gap-2">
                 {genres.map((genre) => (
                   <button

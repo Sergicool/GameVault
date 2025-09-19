@@ -88,7 +88,7 @@ function GameModal({ game, onClose }) {
       <div
         className="relative w-full max-w-[50rem] h-[46rem] 
                   bg-gradient-to-bl from-slate-950 via-indigo-950 to-slate-950 text-white rounded-2xl 
-                  shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden border border-white/15"
+                  shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] flex flex-col overflow-hidden border border-indigo-500"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Imagen */}
@@ -328,7 +328,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
           className={`flex flex-col transition-transform duration-200 
             bg-gradient-to-b from-slate-900 via-indigo-900 to-slate-950 w-[400px] rounded-lg overflow-hidden 
             ${expandible ? 'cursor-pointer hover:scale-[1.1]' : ''} 
-            shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] border border-slate-100/15`}
+            shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] border border-indigo-500`}
           onClick={openModal}
         >
           <div className="h-48 bg-gray-200 flex items-center justify-center">

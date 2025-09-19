@@ -144,36 +144,42 @@ function Stats() {
   // ---- RENDER ----
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100 p-8 space-y-12">
-      <h1 className="text-4xl font-bold text-center mb-8">📊 Stats 📊</h1>
+      <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
+        Stats
+      </h1>
 
-      {/* Totales centrados */}
-      <section className="flex justify-center gap-12 mb-8">
-        <div className="bg-slate-800 p-4 rounded-xl shadow text-center">
+      {/* Totals */}
+      <section className="grid grid-cols-4 gap-12 mb-8">
+        <div className="col-start-2 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md 
+                        p-4 rounded-xl text-center border border-indigo-500/70">
           <h3 className="text-lg font-semibold">Total Games</h3>
-          <p className="text-3xl font-bold text-cyan-300">{mainGames.length}</p>
+          <p className="text-3xl font-bold text-cyan-300 drop-shadow-[0_0_10px_#90D5FF]">{mainGames.length}</p>
         </div>
-        <div className="bg-slate-800 p-4 rounded-xl shadow text-center">
+        <div className="col-start-3 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md
+                        p-4 rounded-xl text-center border border-indigo-500/70">
           <h3 className="text-lg font-semibold">Extensions</h3>
-          <p className="text-3xl font-bold text-pink-300">{extensions.length}</p>
+          <p className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_#DF8EFF]">{extensions.length}</p>
         </div>
       </section>
 
-      {/* Contadores en grid responsive */}
+      {/* Summary */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">📊 Counts</h2>
+        <h2 className="text-2xl text-center font-semibold mb-8 border-b-1 border-slate-700 pb-4">Summary</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr">
-          {/* Genres primero, más alto */}
+          {/* Genres */}
           {Object.keys(countsGenres).length > 0 && (
-            <div className="bg-slate-700 p-4 rounded-xl row-span-2 flex flex-col">
-              <h3 className="text-lg font-semibold mb-2">🎭 Genres</h3>
-              <ul className="space-y-1 max-h-120 overflow-y-auto bg-slate-800/60 rounded-xl p-2
+            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md
+                            p-4 rounded-xl row-span-2 flex flex-col border border-indigo-500/70">
+              <h3 className="text-lg text-center font-semibold mb-2">🎭 Genres 🎭</h3>
+              <ul className="border border-indigo-500/70
+                            space-y-1.5 max-h-120 overflow-y-auto bg-slate-950/50 shadow-md rounded-xl p-2
                             [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-sm flex-1">
                 {Object.entries(countsGenres)
                   .sort((a, b) => b[1] - a[1])
                   .map(([label, count]) => (
                     <li
                       key={label}
-                      className="flex justify-between bg-slate-900/60 px-2 py-1 rounded"
+                      className="flex justify-between bg-violet-600/60 px-2 py-1 rounded"
                     >
                       <span>{label}</span>
                       <span className="font-bold">{count}</span>
@@ -185,25 +191,27 @@ function Stats() {
 
           {/* Resto de los contadores */}
           {[
-            { title: "📅 Years", data: countsYears },
-            { title: "🌍 Origins", data: countsOrigins },
-            { title: "💻 Platforms", data: countsPlatforms },
-            { title: "📂 Categories", data: countsCategories },
-            { title: "📑 Subcategories", data: countsSubcategories },
-            { title: "📑 Tiers", data: countsTiers },
+            { title: "📅 Years 📅", data: countsYears },
+            { title: "🌍 Origins 🌍", data: countsOrigins },
+            { title: "💻 Platforms 💻", data: countsPlatforms },
+            { title: "📋 Categories 📋", data: countsCategories },
+            { title: "📄 Subcategories 📄", data: countsSubcategories },
+            { title: "📊 Tiers 📊", data: countsTiers },
           ]
             .filter(section => Object.keys(section.data).length > 0)
             .map((section) => (
-              <div key={section.title} className="bg-slate-700 p-4 rounded-xl">
-                <h3 className="text-lg font-semibold mb-2">{section.title}</h3>
-                <ul className="space-y-1 max-h-48 overflow-y-auto bg-slate-800/60 rounded-xl p-2
-                              [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-sm">
+              <div key={section.title} className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md
+                                                  p-4 rounded-xl flex flex-col border border-indigo-500/70">
+                <h3 className="text-lg text-center font-semibold mb-2">{section.title}</h3>
+                <ul className="border border-indigo-500/70
+                              space-y-1.5 max-h-48 overflow-y-auto bg-slate-950/50 shadow-md rounded-xl p-2
+                              [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-sm flex-1">
                   {Object.entries(section.data)
                     .sort((a, b) => b[1] - a[1])
                     .map(([label, count]) => (
                       <li
                         key={label}
-                        className="flex justify-between bg-slate-900/60 px-2 py-1 rounded"
+                        className="flex justify-between bg-violet-600/60 px-2 py-1 rounded"
                       >
                         <span>{label}</span>
                         <span className="font-bold">{count}</span>
@@ -215,33 +223,39 @@ function Stats() {
         </div>
       </section>
 
-
-      {/* Favoritos con secciones desplegables */}
+      <h2 className="text-2xl text-center font-semibold mb-8 border-b-1 border-slate-700 pb-4">⭐ Favorites ⭐</h2>
       {[
-        { title: "⭐ Favorites by Year ⭐", data: favByYear },
-        { title: "⭐ Favorites by Genre ⭐", data: favByGenre },
-        { title: "⭐ Favorites by Origin ⭐", data: favByOrigin },
-        { title: "⭐ Favorites by Platform ⭐", data: favByPlatform },
-        { title: "⭐ Favorites by Category ⭐", data: favByCategory },
-        { title: "⭐ Favorites by Subcategory ⭐", data: favBySubcategory },
+        { title: "📅 Favorites by Year 📅", data: favByYear },
+        { title: "🎭 Favorites by Genre 🎭", data: favByGenre },
+        { title: "🌍 Favorites by Origin 🌍", data: favByOrigin },
+        { title: "💻 Favorites by Platform 💻", data: favByPlatform },
+        { title: "📋 Favorites by Category 📋", data: favByCategory },
+        { title: "📄 Favorites by Subcategory 📄", data: favBySubcategory },
       ].map(
         (section) =>
           section.data.length > 0 && (
-            <section key={section.title}>
+            <section
+              key={section.title}
+              className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md
+                        rounded-xl border border-indigo-500 overflow-hidden"
+            >
+              {/* Header */}
               <button
-                className="w-full flex items-center justify-center bg-slate-800 p-3 rounded-xl shadow mb-2 font-semibold text-lg text-gray-100 hover:bg-slate-700 transition-colors relative"
+                className="w-full flex items-center justify-center p-3 font-semibold text-lg 
+                          text-gray-100 hover:bg-indigo-900 transition-colors relative"
                 onClick={() => toggleSection(section.title)}
               >
-                {/* Icono a la izquierda */}
                 <span className="absolute left-3">
                   {openSections[section.title] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                 </span>
                 <span>{section.title}</span>
               </button>
+
+              {/* Contenido */}
               {openSections[section.title] && (
-                <div className="flex flex-wrap gap-6 justify-around">
+                <div className="p-4 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 border-t border-indigo-500 flex flex-wrap gap-6 justify-around">
                   {section.data.map(({ label, game }) => (
-                    <div key={label}>
+                    <div key={label} className="flex flex-col items-center">
                       <h3 className="text-center text-lg font-bold mb-2">{label}</h3>
                       <GameCard game={game} expandible />
                     </div>
@@ -251,6 +265,7 @@ function Stats() {
             </section>
           )
       )}
+
     </div>
   );
 }
