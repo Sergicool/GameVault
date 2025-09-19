@@ -1,13 +1,3 @@
-# Installation
-Pull
-npm install
-cd /frontend
-npm install
-cd ../backend
-npm install
-cs ..
-npm run ...
-
 # Dependencies
 
 npm install concurrently@8.2.2
@@ -100,32 +90,31 @@ pm2 serve frontend/dist 5173 --name gamevault-frontend --spa
 
 ---
 
-## 6️⃣ Save Processes for Auto-Start
+## 6️⃣ Set Up Auto-Start on Windows
+
+PM2 puede configurarse para arrancar automáticamente como un **servicio de Windows**, sin necesidad de scripts manuales.
+
+1. Instala el soporte de auto-start para Windows:
+
+```powershell
+npm install pm2-windows-startup -g
+```
+
+2. Registra el servicio:
+
+```powershell
+pm2-startup install
+```
+
+---
+
+## 7️⃣ Save Processes for Auto-Start
 
 ```powershell
 pm2 save
 ```
 
 * Saves the current processes so they can be restored later.
-
----
-
-## 7️⃣ Set Up Auto-Start on Windows
-
-1. Create a `pm2-start.bat` file (e.g., in `C:\Users\<User>\pm2-start.bat`) with this content:
-
-```bat
-@echo off
-cd /d %USERPROFILE%
-pm run pm2 resurrect
-```
-
-2. Add it to the Windows Startup folder:
-
-* Press `Win + R` → type `shell:startup` → Enter.
-* Copy the `.bat` file there.
-
-✅ On Windows startup, PM2 will automatically start **backend and frontend**.
 
 ---
 
