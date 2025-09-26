@@ -1,10 +1,10 @@
-import { Menu, Plus, ArrowDownUp, RefreshCw } from 'lucide-react';
+import { Menu, Plus, ArrowDownUp, RefreshCw, HardDrive, Upload } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const currentPath = window.location.pathname;
-  console.log(currentPath)
+  const fileInputRef = useRef(null);
 
   const navLinks = [
     { label: 'Tier List', href: '/TierList' },
@@ -16,12 +16,37 @@ function Header() {
   const menuOptions = [
     { label: 'Add new game', href: '/AddGame', icon: Plus },
     { label: 'Update tier list', href: '/UpdateTier', icon: ArrowDownUp },
-    { label: 'Update data', href: '/UpdateData', icon: RefreshCw }
+    { label: 'Update data', href: '/UpdateData', icon: RefreshCw },
+    { label: 'Download DB', href: 'http://localhost:3001/download-db', icon: HardDrive },
+    { label: 'Import DB', action: () => fileInputRef.current.click(), icon: Upload }
   ];
 
   const isActive = (href) => currentPath === href;
   
   const menuRef = useRef(null);
+
+  async function handleFileChange(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("dbfile", file);
+
+    try {
+      const res = await fetch("http://localhost:3001/upload-db", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Base de datos importada correctamente");
+      } else {
+        throw new Error(data.error || "Error en la importación");
+      }
+    } catch (err) {
+      alert("❌ " + err.message);
+    }
+  }
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -83,23 +108,63 @@ function Header() {
             <Menu className="w-6 h-6" />
           </button>
 
-
           {menuOpen && (
-            <div className="absolute right-0 mt-1 w-52 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md rounded-md border border-indigo-500/70 z-10 p-2">
-              {menuOptions.map(({ label, href, icon: Icon }) => (
-                <a
-                  key={href}
-                  href={href}
-                  className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md hover:bg-gray-600 active:bg-gray-500 transition-colors"
-                >
-                  <Icon className="w-4 h-4" />
-                  {label}
-                </a>
+            <div className="absolute right-0 mt-1 w-52 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 shadow-md rounded-md border border-indigo-500/70 z-10 p-2">
+              {menuOptions.map(({ label, href, icon: Icon, action }, idx) => (
+                <div key={label}>
+                  {/* separador antes de los dos últimos */}
+                  {idx === menuOptions.length - 2 && (
+                    <div className="my-2 border-t border-indigo-700" />
+                  )}
+
+                  {/* Botón especial para Download */}
+                  {label === "Download DB" ? (
+                    <a
+                      href={href}
+                      className="w-full flex items-center gap-x-2 px-4 py-2 text-sm rounded-md 
+                                bg-indigo-500 text-white font-semibold 
+                                hover:bg-indigo-700 active:bg-indigo-800 
+                                transition-colors shadow-sm"
+                    >
+                      <Icon className="w-4 h-4" />
+                      {label}
+                    </a>
+                  ) : label === "Import DB" ? (
+                    <button
+                      onClick={action}
+                      className="w-full flex items-center gap-x-2 px-4 py-2 mt-2 text-sm rounded-md 
+                                bg-violet-500 text-white font-semibold 
+                                hover:bg-violet-700 active:bg-violet-800 
+                                transition-colors shadow-sm"
+                    >
+                      <Icon className="w-4 h-4" />
+                      {label}
+                    </button>
+                  ) : (
+                    <a
+                      href={href}
+                      className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md 
+                                hover:bg-gray-600 active:bg-gray-500 transition-colors"
+                    >
+                      <Icon className="w-4 h-4" />
+                      {label}
+                    </a>
+                  )}
+                </div>
               ))}
             </div>
           )}
         </div>
       </div>
+
+      {/* Input oculto para subir archivo */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        accept=".db"
+        onChange={handleFileChange}
+      />
     </header>
   );
 }

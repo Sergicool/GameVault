@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require("path");
 const cors = require('cors');
 const db = require('./database/db');
 db.pragma('foreign_keys = ON'); // Para que ON UPDATE CASCADE funcione
@@ -8,6 +9,49 @@ const PORT = 3001;
 const URL = 'http://localhost:5173';
 app.use(cors({ origin: URL }));
 app.use(express.json());
+
+const multer = require('multer');
+
+const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
+const upload = multer({ storage });
+
+const fs = require("fs");
+const dbUpload = multer({ dest: "uploads/" });
+
+// -------------------------------------------------------------------- //
+//                       Download database backup                       //
+// -------------------------------------------------------------------- //
+
+app.get("/download-db", (req, res) => {
+  const dbPath = path.join(__dirname, "database", "game_vault.db");
+  res.download(dbPath, "game_vault.db", (err) => {
+    if (err) {
+      console.error("Error al enviar la DB:", err);
+      res.status(500).send("Error descargando la base de datos");
+    }
+  });
+});
+
+// -------------------------------------------------------------------- //
+//                         Import database file                         //
+// -------------------------------------------------------------------- //
+
+app.post("/upload-db", dbUpload.single("dbfile"), (req, res) => {
+  const tempPath = req.file.path; // archivo subido en /uploads
+  const targetPath = path.join(__dirname, "database", "game_vault.db");
+
+  fs.copyFile(tempPath, targetPath, (err) => {
+    if (err) {
+      console.error("❌ Error copiando DB:", err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+
+    // eliminar archivo temporal
+    fs.unlink(tempPath, () => {});
+    console.log("✅ Base de datos reemplazada");
+    res.json({ success: true, message: "Base de datos importada correctamente" });
+  });
+});
 
 // -------------------------------------------------------------------- //
 //                                Routes                                //
@@ -500,10 +544,6 @@ app.post('/games/tierlist', (req, res) => {
     res.status(400).json({ error: e.message });
   }
 });
-
-const multer = require('multer');
-const storage = multer.memoryStorage(); // Almacena en memoria, no en disco
-const upload = multer({ storage });
 
 app.post('/add-game', upload.single('image'), (req, res) => {
   const {
