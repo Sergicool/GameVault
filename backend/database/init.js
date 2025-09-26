@@ -3,7 +3,7 @@ const db = require('./db');
 db.exec(`
 
 CREATE TABLE IF NOT EXISTS years (
-  year INTEGER PRIMARY KEY CHECK(year >= 2010 AND year <= 2100)
+  year INTEGER PRIMARY KEY CHECK(year >= 2000 AND year <= 2100)
 );
 
 CREATE TABLE IF NOT EXISTS origins (
@@ -48,11 +48,11 @@ CREATE TABLE IF NOT EXISTS games (
   extension_of TEXT,
 
   FOREIGN KEY (year) REFERENCES years(year),
-  FOREIGN KEY (origin) REFERENCES origins(name),
-  FOREIGN KEY (platform) REFERENCES platforms(name),
-  FOREIGN KEY (category) REFERENCES categories(name),
-  FOREIGN KEY (subcategory) REFERENCES subcategories(name),
-  FOREIGN KEY (tier) REFERENCES tiers(name),
+  FOREIGN KEY (origin) REFERENCES origins(name) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (platform) REFERENCES platforms(name) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (category) REFERENCES categories(name) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (subcategory) REFERENCES subcategories(name) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (tier) REFERENCES tiers(name) ON UPDATE CASCADE ON DELETE SET NULL,
   FOREIGN KEY (extension_of) REFERENCES games(name) ON UPDATE CASCADE ON DELETE CASCADE
 );
 

@@ -311,7 +311,7 @@ app.post('/add-platform', (req, res) => {
 app.post('/update-platform', (req, res) => {
   const { oldName, newName } = req.body;
   try {
-    const stmt = db.prepare("UPDATE paltforms SET name = ? WHERE name = ?");
+    const stmt = db.prepare("UPDATE platforms SET name = ? WHERE name = ?");
     const result = stmt.run(newName, oldName);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
