@@ -1,28 +1,17 @@
-# Dependencies
+# Description
 
-npm install concurrently@8.2.2
+GameVault is a silly and simple local application that you can install on your PC to keep track of the video games you've played. It allows you to rate them, organize them by category, and keep your entire gaming history in one convenient, visual place.
 
-npm install cors@2.8.5
-
-npm install framer-motion@11.0.4
-
-npm install multer@2.0.2
-
-npm install react-beautiful-dnd@13.1.1
-
-npm install react-colorful@5.6.1
-
-npm install react-use@17.6.0
-
-
-
+It was created primarily for my personal use, as a sort of game journal, but if you want to try it out and give it a try, here's the step-by-step installation guide to help you do so.
 
 # GameVault - Instructions to Run on Windows with PM2
 
+You can use Visual Studio Code or whatever id you like to run the commands during the installation.
+
 ## 1️⃣ Prerequisites
 
-* Node.js and npm installed.
-* PM2 installed globally:
+* [Node.js and npm](https://nodejs.org/en/download) installed. Last version should work.
+* PM2 installed globally.
 
 ```powershell
 npm install -g pm2
