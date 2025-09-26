@@ -110,49 +110,63 @@ function Header() {
 
           {menuOpen && (
             <div className="absolute right-0 mt-1 w-52 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-900 shadow-md rounded-md border border-indigo-500/70 z-10 p-2">
-              {menuOptions.map(({ label, href, icon: Icon, action }, idx) => (
-                <div key={label}>
-                  {/* separador antes de los dos últimos */}
-                  {idx === menuOptions.length - 2 && (
-                    <div className="my-2 border-t border-indigo-700" />
-                  )}
+              {/* Bloque de los tres primeros botones */}
+              <div className="flex flex-col space-y-2">
+                {menuOptions.map(({ label, href, icon: Icon, action }, idx) => {
+                  if (label === "Download DB" || label === "Import DB") return null;
 
-                  {/* Botón especial para Download */}
-                  {label === "Download DB" ? (
+                  return (
                     <a
+                      key={label}
                       href={href}
-                      className="w-full flex items-center gap-x-2 px-4 py-2 text-sm rounded-md 
-                                bg-indigo-500 text-white font-semibold 
-                                hover:bg-indigo-700 active:bg-indigo-800 
-                                transition-colors shadow-sm"
+                      className="flex items-center gap-x-4 pl-3 py-2 text-sm rounded-md
+                                hover:bg-gray-600/40 active:bg-gray-500/40 transition-colors"
                     >
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-5 h-5" />
                       {label}
                     </a>
-                  ) : label === "Import DB" ? (
-                    <button
-                      onClick={action}
-                      className="w-full flex items-center gap-x-2 px-4 py-2 mt-2 text-sm rounded-md 
-                                bg-violet-500 text-white font-semibold 
-                                hover:bg-violet-700 active:bg-violet-800 
-                                transition-colors shadow-sm"
-                    >
-                      <Icon className="w-4 h-4" />
-                      {label}
-                    </button>
-                  ) : (
-                    <a
-                      href={href}
-                      className="flex items-center gap-x-2 px-4 py-2 text-sm rounded-md 
-                                hover:bg-gray-600 active:bg-gray-500 transition-colors"
-                    >
-                      <Icon className="w-4 h-4" />
-                      {label}
-                    </a>
-                  )}
-                </div>
-              ))}
+                  );
+                })}
+              </div>
+
+              {/* Divisor entre los grupos */}
+              <div className="my-2 border-t-2 border-indigo-500/70" />
+
+              {/* Bloque de Download e Import */}
+              {menuOptions.map(({ label, href, icon: Icon, action }, idx) => {
+                if (label !== "Download DB" && label !== "Import DB") return null;
+
+                return (
+                  <div key={label}>
+                    {label === "Download DB" ? (
+                      <a
+                        href={href}
+                        className="w-full flex items-center gap-x-4 pl-3 py-2 text-sm rounded-md 
+                                  bg-indigo-500 text-white font-semibold 
+                                  hover:bg-indigo-700 active:bg-indigo-800 
+                                  transition-colors shadow-sm"
+                      >
+                        <Icon className="w-5 h-5" />
+                        {label}
+                      </a>
+                    ) : (
+                      <button
+                        onClick={action}
+                        className="w-full flex items-center gap-x-4 pl-3 py-2 mt-2 text-sm rounded-md 
+                                  bg-violet-500 text-white font-semibold 
+                                  hover:bg-violet-700 active:bg-violet-800 
+                                  transition-colors shadow-sm"
+                      >
+                        <Icon className="w-4 h-4" />
+                        {label}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+
             </div>
+
           )}
         </div>
       </div>

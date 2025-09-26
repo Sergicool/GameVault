@@ -350,7 +350,7 @@ function UpdateData() {
     <div className="col-span-3">
       
       {/* Genres */}
-      <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[49.5rem]">
+      <div className="bg-gradient-to-br from-teal-400 to-cyan-700 rounded-xl shadow p-4 flex flex-col justify-between h-[50.2rem]">
         <h2 className="text-2xl font-semibold text-center mb-4">Genres</h2>
 
         <div className="overflow-y-auto bg-cyan-900/60 rounded-xl shadow-inner p-2 backdrop-blur-sm grow
