@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+/* Determina si un color HEX es oscuro, para decidir si el texto debe ser claro u oscuro encima. */
 function isColorDark(hexColor) {
   const hex = hexColor.replace("#", "");
   const r = parseInt(hex.substring(0, 2), 16);
@@ -11,21 +12,96 @@ function isColorDark(hexColor) {
   return luminance < 128;
 }
 
+/**
+ * Switch animado
+ * - checked: valor actual (boolean)
+ * - onChange: callback para cambiar valor
+ * - label: texto descriptivo
+ */
 function ToggleSwitch({ checked, onChange, label }) {
   return (
     <div className="flex items-center gap-3">
       <motion.div
-        className={`w-12 h-6 flex items-center rounded-full p-1 cursor-pointer transition-colors
-          ${checked ? "bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.8)]" : "bg-gray-600"}`}
+        className={`
+          flex h-6 w-12 
+          cursor-pointer 
+          items-center 
+          rounded-full 
+          p-1 
+          ${checked ? "bg-theme-sidebar-switch-1 ring-2 ring-theme-sidebar-ring" : "bg-theme-sidebar-switch-2"} `}
         onClick={onChange}
       >
         <motion.div
           animate={{ x: checked ? 24 : 0 }}
           transition={{ type: "spring", stiffness: 500, damping: 30 }}
-          className="w-4 h-4 bg-white rounded-full shadow-md"
+          className="h-4 w-4 rounded-full bg-white shadow-md"
         />
       </motion.div>
       <span className="text-sm font-medium text-gray-200">{label}</span>
+    </div>
+  );
+}
+
+/**
+ * Muestra un bloque de filtros
+ * Props:
+ * - title: nombre del grupo
+ * - items: array de opciones (strings o { value, color })
+ * - selected: valores seleccionados
+ * - onToggle: callback al hacer clic
+ * - colored: si usa colores personalizados (genres, tiers)
+ */
+function FilterSection({ title, items, selected, onToggle, colored }) {
+  return (
+    <div>
+      {/* Encabezado de la sección */}
+      <h2 className="
+        mb-3 
+        border-b border-theme-sidebar-divider
+        pb-2
+        text-sm font-bold tracking-wide text-gray-200 uppercase
+      ">
+        {title}
+      </h2>
+
+      {/* Lista de filtros */}
+      <div className="flex max-w-full flex-wrap gap-2">
+        {items.map((item) => {
+          const value =
+            typeof item === "string" || typeof item === "number"
+              ? item
+              : item.value;
+          const color = typeof item === "object" ? item.color : undefined;
+          const isActive = selected.includes(value);
+
+          // Determina el color del texto según el fondo
+          let textColor = "text-white";
+          if (isActive && colored && color) {
+            textColor = isColorDark(color) ? "text-white" : "text-black";
+          }
+
+          return (
+            <button
+              key={value}
+              onClick={() => onToggle(value)}
+              className={`rounded-full px-3 py-1 text-sm font-medium transition ${
+                isActive
+                  ? colored
+                    ? `shadow ${textColor}`
+                    : "border border-theme-sidebar-filter-on-border bg-theme-sidebar-filter-on-bg font-bold text-white"
+                  : "border border-theme-sidebar-filter-off-border text-gray-300 hover:bg-theme-sidebar-filter-off-bg-hover"
+              }`}
+              style={{
+                backgroundColor:
+                  isActive && colored && color ? color : undefined,
+                borderColor: colored && color ? color : undefined,
+              }}
+            >
+              {value}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
@@ -41,9 +117,12 @@ function SidebarFilters({
   subcategories,
   tiers,
 }) {
-  const [open, setOpen] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(400); // ancho inicial
+  /* ---------- Estado interno ---------- */
+  const [open, setOpen] = useState(false); // visibilidad del sidebar
+  const [sidebarWidth, setSidebarWidth] = useState(400); // ancho animado
 
+  /* ---------- Funciones auxiliares ---------- */
+  // Alterna un valor dentro de un array de filtros (years, genres, etc.)
   const toggleFilter = (type, value) => {
     setFilters((prev) => {
       const current = prev[type] || [];
@@ -56,6 +135,7 @@ function SidebarFilters({
     });
   };
 
+  // Alterna la opción "ignoreExtensions"
   const toggleIgnoreExtensions = () => {
     setFilters((prev) => ({
       ...prev,
@@ -67,48 +147,57 @@ function SidebarFilters({
     <motion.div
       animate={{ width: open ? sidebarWidth : 50 }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
-      className="h-[calc(100vh-4.4rem)] bg-gradient-to-t from-slate-950 via-indigo-950 to-slate-950 text-white fixed top-17.5 left-0
-                 shadow-lg flex flex-col overflow-y-auto overflow-x-hidden z-10
-                 border-r border-indigo-500"
-    >
-      {/* Encabezado con boton */}
+      className="
+        fixed top-17.5 left-0 z-10 flex flex-col
+        h-[calc(100vh-4.4rem)] 
+        overflow-y-auto no-scrollbar
+        border-r border-theme-sidebar-border
+        bg-gradient-to-t from-theme-sidebar-bg-1 via-theme-sidebar-bg-2 to-theme-sidebar-bg-3
+        text-white
+        shadow-lg
+      ">
+      {/* ---------- Encabezado ---------- */}
       <div
-        className={`flex justify-between items-center p-2 sticky top-0 bg-slate-950 z-1
-                    ${
-                      open
-                        ? "border-b border-indigo-500 shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]"
-                        : ""
-                    }`}
+        className={`
+          sticky top-0 z-1 flex items-center justify-between
+          bg-theme-sidebar-header-bg
+          p-2 
+        ${
+          open
+            ? "border-b border-theme-sidebar-border shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]"
+            : ""
+        }`}
       >
         {open && (
-          <h1 className="text-white text-xl font-semibold whitespace-nowrap">
+          <h1 className="text-xl font-semibold whitespace-nowrap text-white">
             Game Filters
           </h1>
         )}
 
         <button
           onClick={() => setOpen(!open)}
-          className="bg-gray-700 text-white p-2 rounded-md shadow-lg hover:bg-indigo-600 transition-all duration-300"
+          className="
+            rounded-md
+            bg-theme-sidebar-button
+            p-2
+            text-white
+            shadow-lg transition-all duration-300 hover:bg-theme-sidebar-button-hover"
         >
           {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>
       </div>
 
-      {/* Contenido del sidebar */}
+      {/* ---------- Contenido de filtros ---------- */}
       {open && (
-        <div className="p-4 space-y-6 max-w-full">
-          {/* Opcion Ignore Extensions */}
+        <div className="max-w-full space-y-6 p-4">
+          {/* Opción global */}
           <ToggleSwitch
-              checked={filters.ignoreExtensions || false}
-              onChange={() =>
-                  setFilters((prev) => ({
-                  ...prev,
-                  ignoreExtensions: !prev.ignoreExtensions,
-                  }))
-              }
-              label="Ignore Extensions"
+            checked={filters.ignoreExtensions || false}
+            onChange={toggleIgnoreExtensions}
+            label="Ignore Extensions"
           />
 
+          {/* Secciones de filtros */}
           <FilterSection
             title="Years"
             items={years.map((y) => y.year)}
@@ -133,7 +222,7 @@ function SidebarFilters({
 
           <FilterSection
             title="Platforms"
-            items={platforms.map((o) => o.name)}
+            items={platforms.map((p) => p.name)}
             selected={filters.platforms}
             onToggle={(val) => toggleFilter("platforms", val)}
           />
@@ -145,6 +234,7 @@ function SidebarFilters({
             onToggle={(val) => toggleFilter("categories", val)}
           />
 
+          {/* Subcategorías dependientes */}
           {filters.categories.length > 0 && (
             <FilterSection
               title="Subcategories"
@@ -166,53 +256,6 @@ function SidebarFilters({
         </div>
       )}
     </motion.div>
-  );
-}
-
-function FilterSection({ title, items, selected, onToggle, colored }) {
-  return (
-    <div>
-      <h2 className="text-sm uppercase tracking-wide font-bold text-gray-200 mb-3 border-b border-indigo-500/60 pb-2">
-        {title}
-      </h2>
-      <div className="flex flex-wrap gap-2 max-w-full">
-        {items.map((item) => {
-          const value =
-            typeof item === "string" || typeof item === "number"
-              ? item
-              : item.value;
-          const color = typeof item === "object" ? item.color : undefined;
-          const isActive = selected.includes(value);
-
-          let textColor = "text-white";
-          if (isActive && colored && color) {
-            textColor = isColorDark(color) ? "text-white" : "text-black";
-          }
-
-          return (
-            <button
-              key={value}
-              onClick={() => onToggle(value)}
-              className={`px-3 py-1 rounded-full text-sm font-medium transition 
-                                ${
-                                  isActive
-                                    ? colored
-                                      ? `shadow ${textColor}`
-                                      : "bg-indigo-600 text-white font-bold border border-indigo-400 shadow-lg shadow-blue-500/30"
-                                    : "text-gray-300 border border-gray-600 hover:bg-gray-700/50"
-                                }`}
-              style={{
-                backgroundColor:
-                  isActive && colored && color ? color : undefined,
-                borderColor: colored && color ? color : undefined,
-              }}
-            >
-              {value}
-            </button>
-          );
-        })}
-      </div>
-    </div>
   );
 }
 

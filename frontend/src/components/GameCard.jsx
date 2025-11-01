@@ -3,12 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import { getGameByName } from '../api/games';
 import { Monitor, Smartphone, Gamepad, Laptop } from "lucide-react";
 
+/* Iconos Constantes */
 const platformIcons = {
   PC: <Monitor className="w-4 h-4 inline-block mr-1" />,
   Mobile: <Smartphone className="w-4 h-4 inline-block mr-1" />,
   Console: <Gamepad className="w-4 h-4 inline-block mr-1" />,
 };
 
+/**
+ * Determina si un color HEX es oscuro
+ */
+function isColorDark(hexColor) {
+  const hex = hexColor.replace('#', '');
+  const r = parseInt(hex.substring(0, 2), 16);
+  const g = parseInt(hex.substring(2, 4), 16);
+  const b = parseInt(hex.substring(4, 6), 16);
+  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
+  return luminance < 128;
+}
+
+/* -------------------- Componentes Secundarios -------------------- */
+
+/**
+ * Muestra información del juego base si el juego es una extensión
+ */
 function ExtensionContent({ gameName }) {
   const [parentGame, setParentGame] = useState(null);
 
@@ -45,15 +63,9 @@ function ExtensionContent({ gameName }) {
     </div>
   );
 }
-
-function isColorDark(hexColor) {
-  const hex = hexColor.replace('#', '');
-  const r = parseInt(hex.substring(0, 2), 16);
-  const g = parseInt(hex.substring(2, 4), 16);
-  const b = parseInt(hex.substring(4, 6), 16);
-  const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-  return luminance < 128;
-}
+/* -------------------------------------------------------------- */
+/*                         Modal de Juego                         */
+/* -------------------------------------------------------------- */
 
 function GameModal({ game, onClose }) {
   const navigate = useNavigate();
@@ -93,22 +105,15 @@ function GameModal({ game, onClose }) {
       >
         {/* Imagen */}
         {game.imagePreview ? (
-          <div className="relative w-full aspect-[16/7] bg-gray-700 overflow-hidden flex-shrink-0">
+          <div className="relative w-full aspect-[16/7] overflow-hidden flex-shrink-0">
             <img
               src={game.imagePreview}
               alt={game.name}
               className="absolute inset-0 w-full h-full object-cover"
             />
-            {/* Botón cerrar */}
-            <button
-              onClick={onClose}
-              className="absolute top-2 right-4 text-white z-10 text-2xl hover:text-red-500"
-            >
-              ✕
-            </button>
           </div>
         ) : (
-          <div className="w-full aspect-[16/9] bg-gray-700 flex items-center justify-center text-gray-300">
+          <div className="w-full aspect-[16/9] flex items-center justify-center text-gray-300">
             No Image
           </div>
         )}
@@ -193,6 +198,10 @@ function GameModal({ game, onClose }) {
   );
 }
 
+/* -------------------------------------------------------------- */
+/*                      Componente Principal                      */
+/* -------------------------------------------------------------- */
+
 function GameCard({ game, expandible = false, inTierList = false, inLeaderboard = false, displayIndex})  {
   const navigate = useNavigate();
   const containerRef = useRef(null);
@@ -232,6 +241,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
     navigate('/AddGame', { state: { editingGame: game } });
   };
 
+  /* -------------------- Laderboard -------------------- */
   if (inLeaderboard) {
     let bgClass =
     "bg-gradient-to-r from-gray-800 via-slate-700 to-gray-800 shadow-md"; // default oscuro
@@ -289,7 +299,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-700 text-sm text-gray-400">
+              <div className="w-full h-full flex items-center justify-center text-sm text-gray-400">
                 No Img
               </div>
             )}
@@ -311,6 +321,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
   }
 
   return (
+    /* -------------------- Card View -------------------- */
     <>
       {inTierList && (
         <div className={`w-[10rem] rounded overflow-hidden shadow-lg bg-gradient-to-br from-gray-700 via-gray-500 to-gray-700 ${
@@ -331,7 +342,7 @@ function GameCard({ game, expandible = false, inTierList = false, inLeaderboard 
             shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)] border border-indigo-500`}
           onClick={openModal}
         >
-          <div className="h-48 bg-gray-200 flex items-center justify-center">
+          <div className="h-48 flex items-center justify-center">
             {game.imagePreview ? (
               <img src={game.imagePreview} alt={game.name} className="object-cover h-full w-full" />
             ) : (

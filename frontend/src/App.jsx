@@ -1,19 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import Header from './components/Header';
-import TierListView from './pages/TierListView';
-import Games from './pages/Games';
-import HallOfFame from './pages/HallOfFame';
-import Stats from './pages/Stats';
-import AddGame from './pages/AddGame';
-import UpdateTier from './pages/UpdateTier';
-import UpdateData from './pages/UpdateData';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Header from "./components/Header";
+import TierListView from "./pages/TierListView";
+import Games from "./pages/Games";
+import HallOfFame from "./pages/HallOfFame";
+import Stats from "./pages/Stats";
+import AddGame from "./pages/AddGame";
+import UpdateTier from "./pages/UpdateTier";
+import UpdateData from "./pages/UpdateData";
 
 function App() {
   return (
     <Router>
       <Header />
-      {/*Para que las paginas no se metan debajo del header: pt-18 */}
-      <div className="pt-18 min-h-screen bg-gradient-to-tr from-slate-950 via-indigo-950 to-slate-950">
+      {/*Color del fondo y margen para que las paginas no se metan debajo del header: pt-18 */}
+      <div className="
+        bg-gradient-to-tr from-theme-global-bg-1 via-theme-global-bg-2 to-theme-global-bg-3
+        min-h-screen pt-18
+      ">
         <Routes>
           <Route path="/" element={<Navigate to="/Games" />} />
           <Route path="/TierList" element={<TierListView />} />

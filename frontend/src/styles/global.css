@@ -5,4 +5,253 @@ html, body, #root {
   color: white;
   margin: 0;
   height: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer y Edge antiguos */
+}
+
+html::-webkit-scrollbar, 
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+/* globals.css */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE 10+ / Edge Legacy */
+  scrollbar-width: none;    /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+@theme {
+  --color-theme-global-bg-1: theme(--color-slate-950);
+  --color-theme-global-bg-2: theme(--color-indigo-950);
+  --color-theme-global-bg-3: theme(--color-slate-950);
+  --color-theme-border: theme(--color-indigo-500);
+  
+  /* --------------------------------------------------------------------------- */
+  /*                                    Header                                   */
+  /* --------------------------------------------------------------------------- */
+
+  --color-theme-header-bg-1: theme(--color-slate-950);
+  --color-theme-header-bg-2: theme(--color-slate-950);
+  --color-theme-header-bg-3: theme(--color-slate-900);
+  --color-theme-header-nav-bg: rgb(from theme(--color-indigo-950) r g b / 0.7);
+  --color-theme-header-nav-text-color: theme(--color-violet-200);
+  --color-theme-header-nav-text-hover: theme(--color-violet-300);
+  --drop-shadow-theme-header-nav-text-glow: 0 0 10px theme(--color-purple-400);
+
+
+  /* Header menu */
+  --color-theme-button-hover-1: theme(--color-indigo-600);
+  --color-theme-button-active-1: theme(--color-indigo-400);
+  
+  --color-theme-menu-bg-1: theme(--color-slate-900);
+  --color-theme-menu-bg-2: theme(--color-indigo-950);
+  --color-theme-menu-bg-3: theme(--color-slate-900);
+  --color-theme-menu-border: theme(--color-indigo-500);
+  --color-theme-menu-buttons-hover: rgb(from theme(--color-gray-600) r g b / 0.4);
+  --color-theme-menu-buttons-active: rgb(from theme(--color-gray-400) r g b / 0.4);
+
+  --color-theme-menu-themeselector-selected-bg: theme(--color-slate-900);
+  --color-theme-menu-themeselector-selected-hover-bg: theme(--color-slate-700);
+
+  --color-theme-menu-colorbutton-1: theme(--color-indigo-500);
+  --color-theme-menu-colorbutton-hover-1: theme(--color-indigo-700);
+  --color-theme-menu-colorbutton-active-1: theme(--color-indigo-800);
+
+  --color-theme-menu-colorbutton-2: theme(--color-violet-500);
+  --color-theme-menu-colorbutton-hover-2: theme(--color-violet-700);
+  --color-theme-menu-colorbutton-active-2: theme(--color-violet-800);
+
+  /* --------------------------------------------------------------------------- */
+  /*                                   Sidebar                                   */
+  /* --------------------------------------------------------------------------- */
+
+  --color-theme-sidebar-bg-1: theme(--color-slate-950);
+  --color-theme-sidebar-bg-2: theme(--color-indigo-950);
+  --color-theme-sidebar-bg-3: theme(--color-slate-950);
+  --color-theme-sidebar-border: theme(--color-indigo-500);
+
+  --color-theme-sidebar-header-bg: theme(--color-slate-950);
+
+  --color-theme-sidebar-button: theme(--color-gray-700);
+  --color-theme-sidebar-button-hover: theme(--color-indigo-600);
+
+  /* Switch */
+  --color-theme-sidebar-switch-1: theme(--color-blue-600);
+  --color-theme-sidebar-switch-2: theme(--color-gray-600);
+  --color-theme-sidebar-ring: theme(--color-indigo-300);
+  --color-theme-sidebar-divider: rgb(from theme(--color-indigo-500) r g b / 1);
+
+  --color-theme-sidebar-filter-on-bg: theme(--color-indigo-600);
+  --color-theme-sidebar-filter-on-border: theme(--color-indigo-400);
+  --color-theme-sidebar-filter-off-bg-hover: rgb(from theme(--color-gray-700) r g b / 0.5);
+  --color-theme-sidebar-filter-off-border: theme(--color-gray-600);
+}
+
+[data-theme="dark_purple"] {
+  --color-theme-global-bg-1: theme(--color-slate-950);
+  --color-theme-global-bg-2: theme(--color-indigo-950);
+  --color-theme-global-bg-3: theme(--color-slate-950);
+  --color-theme-border: theme(--color-indigo-500);
+  
+  /* --------------------------------------------------------------------------- */
+  /*                                    Header                                   */
+  /* --------------------------------------------------------------------------- */
+
+  --color-theme-header-bg-1: theme(--color-slate-950);
+  --color-theme-header-bg-2: theme(--color-slate-950);
+  --color-theme-header-bg-3: theme(--color-slate-900);
+  --color-theme-header-nav-bg: rgb(from theme(--color-indigo-950) r g b / 0.7);
+  --color-theme-header-nav-text-color: theme(--color-violet-200);
+  --color-theme-header-nav-text-hover: theme(--color-violet-300);
+  --drop-shadow-theme-header-nav-text-glow: 0 0 10px theme(--color-purple-400);
+
+
+  /* Header menu */
+  --color-theme-button-hover-1: theme(--color-indigo-600);
+  --color-theme-button-active-1: theme(--color-indigo-400);
+  
+  --color-theme-menu-bg-1: theme(--color-slate-900);
+  --color-theme-menu-bg-2: theme(--color-indigo-950);
+  --color-theme-menu-bg-3: theme(--color-slate-900);
+  --color-theme-menu-border: theme(--color-indigo-500);
+  --color-theme-menu-buttons-hover: rgb(from theme(--color-gray-600) r g b / 0.4);
+  --color-theme-menu-buttons-active: rgb(from theme(--color-gray-400) r g b / 0.4);
+
+  --color-theme-menu-themeselector-selected-bg: theme(--color-slate-900);
+  --color-theme-menu-themeselector-selected-hover-bg: theme(--color-slate-700);
+
+  --color-theme-menu-colorbutton-1: theme(--color-indigo-500);
+  --color-theme-menu-colorbutton-hover-1: theme(--color-indigo-700);
+  --color-theme-menu-colorbutton-active-1: theme(--color-indigo-800);
+
+  --color-theme-menu-colorbutton-2: theme(--color-violet-500);
+  --color-theme-menu-colorbutton-hover-2: theme(--color-violet-700);
+  --color-theme-menu-colorbutton-active-2: theme(--color-violet-800);
+
+  /* --------------------------------------------------------------------------- */
+  /*                                   Sidebar                                   */
+  /* --------------------------------------------------------------------------- */
+
+  --color-theme-sidebar-bg-1: theme(--color-slate-950);
+  --color-theme-sidebar-bg-2: theme(--color-indigo-950);
+  --color-theme-sidebar-bg-3: theme(--color-slate-950);
+  --color-theme-sidebar-border: theme(--color-indigo-500);
+
+  --color-theme-sidebar-header-bg: theme(--color-slate-950);
+
+  --color-theme-sidebar-button: theme(--color-gray-700);
+  --color-theme-sidebar-button-hover: theme(--color-indigo-600);
+
+  /* Switch */
+  --color-theme-sidebar-switch-1: theme(--color-blue-600);
+  --color-theme-sidebar-switch-2: theme(--color-gray-600);
+  --color-theme-sidebar-ring: theme(--color-indigo-300);
+  --color-theme-sidebar-divider: rgb(from theme(--color-indigo-500) r g b / 1);
+
+  --color-theme-sidebar-filter-on-bg: theme(--color-indigo-600);
+  --color-theme-sidebar-filter-on-border: theme(--color-indigo-400);
+  --color-theme-sidebar-filter-off-bg-hover: rgb(from theme(--color-gray-700) r g b / 0.5);
+  --color-theme-sidebar-filter-off-border: theme(--color-gray-600);
+
+  /* --------------------------------------------------------------------------- */
+  /*                                 Game Card                                   */
+  /* --------------------------------------------------------------------------- */
+
+  /* Expandible Modal */
+  --color-theme-gamecard-modal-shadow-bg: theme(--color-blue-600);
+
+  --color-theme-gamecard-modal-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-modal-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-modal-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-modal-border: theme(--color-blue-600);
+
+  --color-theme-gamecard-modal-infolabel-bg: theme(--color-blue-600);
+  --color-theme-gamecard-modal-infolabel-border: theme(--color-blue-600);
+
+  --color-theme-gamecard-modal-genres-bg: theme(--color-blue-600);
+  --color-theme-gamecard-modal-genres-border: theme(--color-blue-600);
+
+  --color-theme-gamecard-modal-extension-bg: theme(--color-blue-600);
+  --color-theme-gamecard-modal-extension-border: theme(--color-blue-600);
+
+  --color-theme-gamecard-modal-editbutton: theme(--color-blue-600);
+  --color-theme-gamecard-modal-editbutton-hover: theme(--color-blue-600);
+  --color-theme-gamecard-modal-editbutton-active: theme(--color-blue-600);
+
+  /* General Card View */
+  --color-theme-gamecard-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-border: theme(--color-blue-600);
+  --color-theme-gamecard-overflow-tag-bg: theme(--color-blue-600);
+  
+  /* Tier List Card View */
+  --color-theme-gamecard-tierlist-title-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-tierlist-title-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-tierlist-title-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-tierlist-title-border: theme(--color-blue-600);
+
+  /* Laderboard Card View */
+  --color-theme-gamecard-laderboard-top1-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-border: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top1-shadow-hover-2: theme(--color-blue-600);
+  
+  --color-theme-gamecard-laderboard-top2-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-border: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top2-shadow-hover-2: theme(--color-blue-600);
+  
+  --color-theme-gamecard-laderboard-top3-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-border: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-top3-shadow-hover-2: theme(--color-blue-600);
+  
+  --color-theme-gamecard-laderboard-featured-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-border: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-featured-shadow-hover-2: theme(--color-blue-600);
+  
+  --color-theme-gamecard-laderboard-default-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-border: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-laderboard-default-shadow-hover-2: theme(--color-blue-600);
+
+
+}
+
+[data-theme="blue"] {
+
 }

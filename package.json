@@ -5,7 +5,9 @@
     "dev": "concurrently \"npm:start --prefix backend\" \"npm:dev --prefix frontend\""
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.7.1"
   },
   "dependencies": {
     "cors": "^2.8.5",
