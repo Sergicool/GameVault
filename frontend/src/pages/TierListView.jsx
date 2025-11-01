@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo } from "react";
-import { getGames } from '../api/games';
-import { getTiers } from '../api/tiers';
-import { getGenres } from '../api/genres';
-import { getYears } from '../api/years';
-import { getOrigins } from '../api/origins';
-import { getPlatforms } from '../api/platforms';
-import { getCategories } from '../api/categories';
-import { getSubcategories } from '../api/subcategories';
+import { getGames } from "../api/games";
+import { getTiers } from "../api/tiers";
+import { getGenres } from "../api/genres";
+import { getYears } from "../api/years";
+import { getOrigins } from "../api/origins";
+import { getPlatforms } from "../api/platforms";
+import { getCategories } from "../api/categories";
+import { getSubcategories } from "../api/subcategories";
 import SidebarFilters from "../components/SidebarFilters";
 import TierList from "../components/TierList";
 
@@ -56,7 +56,7 @@ function TierListView() {
       const enrichedGames = gamesData.map((game) => ({
         ...game,
         imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
-          game.name
+          game.name,
         )}?t=${Date.now()}`,
       }));
 
@@ -93,7 +93,10 @@ function TierListView() {
       if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
         return false;
 
-      if (filters.platforms.length > 0 && !filters.platforms.includes(game.platform))
+      if (
+        filters.platforms.length > 0 &&
+        !filters.platforms.includes(game.platform)
+      )
         return false;
 
       if (
@@ -115,7 +118,6 @@ function TierListView() {
     });
   }, [games, filters]);
 
-
   const gamesByTier = useMemo(() => {
     const grouped = {};
     tiers.forEach((tier) => {
@@ -136,7 +138,12 @@ function TierListView() {
   }, [filteredGames, tiers]);
 
   if (tiers.length === 0) {
-    return <p className="text-md text-gray-400 italic text-center mt-20"> Loading games... </p>;
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        {" "}
+        Loading games...{" "}
+      </p>
+    );
   }
 
   return (

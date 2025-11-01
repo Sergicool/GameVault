@@ -8,9 +8,10 @@ import { getCategories } from "../api/categories";
 import { getSubcategories } from "../api/subcategories";
 import { getTiers } from "../api/tiers";
 import GameCard from "../components/GameCard";
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight } from "lucide-react";
 
 function Stats() {
+  /* Estados */
   const [games, setGames] = useState([]);
   const [genres, setGenres] = useState([]);
   const [origins, setOrigins] = useState([]);
@@ -22,6 +23,7 @@ function Stats() {
   const [loading, setLoading] = useState(true);
   const [openSections, setOpenSections] = useState({}); // Para desplegables
 
+  /* Carga de datos */
   useEffect(() => {
     const load = async () => {
       setLoading(true);
@@ -45,15 +47,16 @@ function Stats() {
         getYears(),
       ]);
 
+      /* Preview de imagen con timestamp para evitar caching */
       const enriched = gamesData.map((game) => ({
         ...game,
         imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
-          game.name
+          game.name,
         )}?t=${Date.now()}`,
       }));
 
+      /* Ordenar juegos por posición */
       enriched.sort((a, b) => a.position - b.position);
-
       setGames(enriched);
       setGenres(genresData);
       setOrigins(originsData);
@@ -67,18 +70,10 @@ function Stats() {
     load();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen text-gray-400">
-        Loading stats...
-      </div>
-    );
-  }
-
+  /* Filtro y favoritos */
   const mainGames = games.filter((g) => !g.extension_of);
   const extensions = games.filter((g) => g.extension_of);
 
-  // ---- FAVORITOS ----
   const getFavoriteByGroup = (items = [], getFilterFn, getLabel) => {
     return items
       .map((item) => {
@@ -91,31 +86,38 @@ function Stats() {
       .filter(Boolean);
   };
 
-
-  const favByYear = getFavoriteByGroup(years, (y) => (g) => g.year === y.year, (y) => y.year);
+  const favByYear = getFavoriteByGroup(
+    years,
+    (y) => (g) => g.year === y.year,
+    (y) => y.year,
+  );
   const favByGenre = getFavoriteByGroup(
     genres,
     (gen) => (g) => g.genres?.some((x) => x.name === gen.name),
-    (gen) => gen.name
+    (gen) => gen.name,
   );
-  const favByOrigin = getFavoriteByGroup(origins, (o) => (g) => g.origin === o.name, (o) => o.name);
+  const favByOrigin = getFavoriteByGroup(
+    origins,
+    (o) => (g) => g.origin === o.name,
+    (o) => o.name,
+  );
   const favByPlatform = getFavoriteByGroup(
     platforms,
     (p) => (g) => g.platform === p.name,
-    (p) => p.name
+    (p) => p.name,
   );
   const favByCategory = getFavoriteByGroup(
     categories,
     (c) => (g) => g.category === c.name,
-    (c) => c.name
+    (c) => c.name,
   );
   const favBySubcategory = getFavoriteByGroup(
     subcategories,
     (s) => (g) => g.subcategory === s.name,
-    (s) => s.name
+    (s) => s.name,
   );
-  
-  // ---- CONTEOS ----
+
+  /* Conteos */
   const countBy = (arr, keyFn) => {
     const counts = {};
     arr.forEach((g) => {
@@ -137,49 +139,62 @@ function Stats() {
   const countsSubcategories = countBy(mainGames, (g) => g.subcategory);
   const countsTiers = countBy(mainGames, (g) => g.tier);
 
+  /* Handler */
   const toggleSection = (key) => {
     setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // ---- RENDER ----
+  /* Loading state */
+  if (loading) {
+    return (
+      <div className="flex h-screen items-center justify-center text-gray-400">
+        Loading stats...
+      </div>
+    );
+  }
+
+  /* Render */
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-gray-100 p-8 space-y-12">
-      <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
+    <div className="min-h-screen space-y-12 p-8">
+      <h1 className="mb-8 text-center font-mono text-4xl font-bold tracking-tight text-gray-100 drop-shadow-md">
         Stats
       </h1>
 
       {/* Totals */}
-      <section className="grid grid-cols-4 gap-12 mb-8">
-        <div className="col-start-2 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md 
-                        p-4 rounded-xl text-center border border-indigo-500/70">
+      <section className="mb-8 grid grid-cols-4 gap-12">
+        <div className="col-start-2 rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4 text-center shadow-md">
           <h3 className="text-lg font-semibold">Total Games</h3>
-          <p className="text-3xl font-bold text-cyan-300 drop-shadow-[0_0_10px_#90D5FF]">{mainGames.length}</p>
+          <p className="text-3xl font-bold text-cyan-300 drop-shadow-[0_0_10px_#90D5FF]">
+            {mainGames.length}
+          </p>
         </div>
-        <div className="col-start-3 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md
-                        p-4 rounded-xl text-center border border-indigo-500/70">
+        <div className="col-start-3 rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4 text-center shadow-md">
           <h3 className="text-lg font-semibold">Extensions</h3>
-          <p className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_#DF8EFF]">{extensions.length}</p>
+          <p className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_#DF8EFF]">
+            {extensions.length}
+          </p>
         </div>
       </section>
 
       {/* Summary */}
       <section>
-        <h2 className="text-2xl text-center font-semibold mb-8 border-b-1 border-slate-700 pb-4">Summary</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-fr">
+        <h2 className="mb-8 border-b-1 border-slate-700 pb-4 text-center text-2xl font-semibold">
+          Summary
+        </h2>
+        <div className="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Genres */}
           {Object.keys(countsGenres).length > 0 && (
-            <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md
-                            p-4 rounded-xl row-span-2 flex flex-col border border-indigo-500/70">
-              <h3 className="text-lg text-center font-semibold mb-2">🎭 Genres 🎭</h3>
-              <ul className="border border-indigo-500/70
-                            space-y-1.5 max-h-120 overflow-y-auto bg-slate-950/50 shadow-md rounded-xl p-2
-                            [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-sm flex-1">
+            <div className="row-span-2 flex flex-col rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 shadow-md">
+              <h3 className="mb-2 text-center text-lg font-semibold">
+                🎭 Genres 🎭
+              </h3>
+              <ul className="max-h-120 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-500/70 bg-slate-950/50 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {Object.entries(countsGenres)
                   .sort((a, b) => b[1] - a[1])
                   .map(([label, count]) => (
                     <li
                       key={label}
-                      className="flex justify-between bg-violet-600/60 px-2 py-1 rounded"
+                      className="flex justify-between rounded bg-violet-600/60 px-2 py-1"
                     >
                       <span>{label}</span>
                       <span className="font-bold">{count}</span>
@@ -198,20 +213,22 @@ function Stats() {
             { title: "📄 Subcategories 📄", data: countsSubcategories },
             { title: "📊 Tiers 📊", data: countsTiers },
           ]
-            .filter(section => Object.keys(section.data).length > 0)
+            .filter((section) => Object.keys(section.data).length > 0)
             .map((section) => (
-              <div key={section.title} className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 shadow-md
-                                                  p-4 rounded-xl flex flex-col border border-indigo-500/70">
-                <h3 className="text-lg text-center font-semibold mb-2">{section.title}</h3>
-                <ul className="border border-indigo-500/70
-                              space-y-1.5 max-h-48 overflow-y-auto bg-slate-950/50 shadow-md rounded-xl p-2
-                              [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden text-sm flex-1">
+              <div
+                key={section.title}
+                className="flex flex-col rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 shadow-md"
+              >
+                <h3 className="mb-2 text-center text-lg font-semibold">
+                  {section.title}
+                </h3>
+                <ul className="max-h-48 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-500/70 bg-slate-950/50 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {Object.entries(section.data)
                     .sort((a, b) => b[1] - a[1])
                     .map(([label, count]) => (
                       <li
                         key={label}
-                        className="flex justify-between bg-violet-600/60 px-2 py-1 rounded"
+                        className="flex justify-between rounded bg-violet-600/60 px-2 py-1"
                       >
                         <span>{label}</span>
                         <span className="font-bold">{count}</span>
@@ -223,7 +240,9 @@ function Stats() {
         </div>
       </section>
 
-      <h2 className="text-2xl text-center font-semibold mb-8 border-b-1 border-slate-700 pb-4">⭐ Favorites ⭐</h2>
+      <h2 className="mb-8 border-b-1 border-slate-700 pb-4 text-center text-2xl font-semibold">
+        ⭐ Favorites ⭐
+      </h2>
       {[
         { title: "📅 Favorites by Year 📅", data: favByYear },
         { title: "🎭 Favorites by Genre 🎭", data: favByGenre },
@@ -236,36 +255,39 @@ function Stats() {
           section.data.length > 0 && (
             <section
               key={section.title}
-              className="bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md
-                        rounded-xl border border-indigo-500 overflow-hidden"
+              className="overflow-hidden rounded-xl border border-indigo-500 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md"
             >
               {/* Header */}
               <button
-                className="w-full flex items-center justify-center p-3 font-semibold text-lg 
-                          text-gray-100 hover:bg-indigo-900 transition-colors relative"
+                className="relative flex w-full items-center justify-center p-3 text-lg font-semibold text-gray-100 transition-colors hover:bg-indigo-900"
                 onClick={() => toggleSection(section.title)}
               >
                 <span className="absolute left-3">
-                  {openSections[section.title] ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                  {openSections[section.title] ? (
+                    <ChevronDown size={20} />
+                  ) : (
+                    <ChevronRight size={20} />
+                  )}
                 </span>
                 <span>{section.title}</span>
               </button>
 
               {/* Contenido */}
               {openSections[section.title] && (
-                <div className="p-4 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 border-t border-indigo-500 flex flex-wrap gap-6 justify-around">
+                <div className="flex flex-wrap justify-around gap-6 border-t border-indigo-500 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4">
                   {section.data.map(({ label, game }) => (
                     <div key={label} className="flex flex-col items-center">
-                      <h3 className="text-center text-lg font-bold mb-2">{label}</h3>
+                      <h3 className="mb-2 text-center text-lg font-bold">
+                        {label}
+                      </h3>
                       <GameCard game={game} expandible />
                     </div>
                   ))}
                 </div>
               )}
             </section>
-          )
+          ),
       )}
-
     </div>
   );
 }

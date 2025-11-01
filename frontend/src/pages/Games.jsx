@@ -1,13 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
-import { getGames } from '../api/games';
-import { getGenres } from '../api/genres';
-import { getYears } from '../api/years';
-import { getOrigins } from '../api/origins';
-import { getPlatforms } from '../api/platforms';
-import { getCategories } from '../api/categories';
-import { getSubcategories } from '../api/subcategories';
-import { getTiers } from '../api/tiers';
-import GameCard from '../components/GameCard';
+import { getGames } from "../api/games";
+import { getGenres } from "../api/genres";
+import { getYears } from "../api/years";
+import { getOrigins } from "../api/origins";
+import { getPlatforms } from "../api/platforms";
+import { getCategories } from "../api/categories";
+import { getSubcategories } from "../api/subcategories";
+import { getTiers } from "../api/tiers";
+import GameCard from "../components/GameCard";
 import SidebarFilters from "../components/SidebarFilters";
 import { Search } from "lucide-react";
 
@@ -31,7 +31,7 @@ function Games() {
     tiers: [],
   });
 
-  const [searchQuery, setSearchQuery] = useState(""); 
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -61,7 +61,7 @@ function Games() {
         const enrichedGames = gamesData.map((game) => ({
           ...game,
           imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
-            game.name
+            game.name,
           )}?t=${Date.now()}`,
         }));
 
@@ -109,7 +109,10 @@ function Games() {
       if (filters.origins.length > 0 && !filters.origins.includes(game.origin))
         return false;
 
-      if (filters.platforms.length > 0 && !filters.platforms.includes(game.platform))
+      if (
+        filters.platforms.length > 0 &&
+        !filters.platforms.includes(game.platform)
+      )
         return false;
 
       if (
@@ -131,7 +134,6 @@ function Games() {
     });
   }, [games, filters, searchQuery]);
 
-
   return (
     <div className="flex">
       <SidebarFilters
@@ -146,39 +148,39 @@ function Games() {
         setFilters={setFilters}
       />
 
-      <div className="ml-[50px] flex-1 p-6 min-h-screen">
+      <div className="ml-[50px] min-h-screen flex-1 p-6">
         {loading ? (
-          <p className="text-md text-gray-400 italic text-center mt-20">
+          <p className="text-md mt-20 text-center text-gray-400 italic">
             Loading games...
           </p>
         ) : (
           <>
             {/* Título */}
-            <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
+            <h1 className="mb-8 text-center font-mono text-4xl font-bold tracking-tight text-gray-100 drop-shadow-md">
               All Played Games
             </h1>
 
             {/* Barra de búsqueda siempre visible */}
-            <div className="relative max-w-md mx-auto mb-8">
+            <div className="relative mx-auto mb-8 max-w-md">
               <input
                 type="text"
                 placeholder="Search games..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 rounded-2xl border border-gray-600 bg-white text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md"
+                className="w-full rounded-2xl border border-gray-600 bg-white py-2 pr-4 pl-10 text-gray-900 placeholder-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
               />
-              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+              <Search className="absolute top-2.5 left-3 h-5 w-5 text-gray-400" />
             </div>
 
             {/* Resultados */}
             {filteredGames.length > 0 ? (
-              <div className="flex flex-wrap gap-6 justify-around">
+              <div className="flex flex-wrap justify-around gap-6">
                 {filteredGames.map((game) => (
                   <GameCard key={game.name} game={game} expandible />
                 ))}
               </div>
             ) : (
-              <p className="text-md text-gray-400 italic text-center mt-20">
+              <p className="text-md mt-20 text-center text-gray-400 italic">
                 No games found matching the filters
               </p>
             )}
@@ -187,7 +189,6 @@ function Games() {
       </div>
     </div>
   );
-
 }
 
 export default Games;

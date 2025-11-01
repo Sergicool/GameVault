@@ -249,6 +249,71 @@ body::-webkit-scrollbar {
   --color-theme-gamecard-laderboard-default-shadow-hover-1: theme(--color-blue-600);
   --color-theme-gamecard-laderboard-default-shadow-hover-2: theme(--color-blue-600);
 
+  /* --------------------------------------------------------------------------- */
+  /*                                  Tier List                                  */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-tierlist-bg: theme(--color-blue-600);
+  --color-theme-tierlist-border: theme(--color-blue-600);
+
+  /* --------------------------------------------------------------------------- */
+  /*                                 Games Page                                  */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-games-searchbar-bg: theme(--color-blue-600);
+  --color-theme-games-searchbar-ring-focus: theme(--color-blue-600);
+  
+  /* --------------------------------------------------------------------------- */
+  /*                                 Stats Page                                  */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-stats-border: theme(--color-blue-600);
+
+  --color-theme-stats-total-bg-1: theme(--color-blue-600);
+  --color-theme-stats-total-bg-2: theme(--color-blue-600);
+  --color-theme-stats-total-bg-3: theme(--color-blue-600);
+
+  --color-theme-stats-summary-bg-1: theme(--color-blue-600);
+  --color-theme-stats-summary-bg-2: theme(--color-blue-600);
+  --color-theme-stats-summary-bg-3: theme(--color-blue-600);
+  --color-theme-stats-summary-border: theme(--color-blue-600);
+  --color-theme-stats-summary-inner-bg: theme(--color-blue-600);
+  --color-theme-stats-summary-content-bg: theme(--color-blue-600);
+  
+  --color-theme-stats-favorites-bg-1: theme(--color-blue-600);
+  --color-theme-stats-favorites-bg-2: theme(--color-blue-600);
+  --color-theme-stats-favorites-bg-3: theme(--color-blue-600);
+  --color-theme-stats-favorites-border: theme(--color-blue-600);
+  --color-theme-stats-favorites-header-hover: theme(--color-blue-600);
+  
+  --color-theme-stats-favorites-content-bg-1: theme(--color-blue-600);
+  --color-theme-stats-favorites-content-bg-2: theme(--color-blue-600);
+  --color-theme-stats-favorites-content-bg-3: theme(--color-blue-600);
+  --color-theme-stats-favorites-content-border: theme(--color-blue-600);
+
+  /* --------------------------------------------------------------------------- */
+  /*                               Game Form Page                                */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-gameform-bg-1: theme(--color-blue-600);
+  --color-theme-gameform-bg-2: theme(--color-blue-600);
+  --color-theme-gameform-bg-3: theme(--color-blue-600);
+  --color-theme-gameform-border: theme(--color-blue-600);
+
+  --color-theme-gameform-input-bg: theme(--color-blue-600);
+  --color-theme-gameform-image-button: theme(--color-blue-600);
+  --color-theme-gameform-image-button-hover: theme(--color-blue-600);
+  --color-theme-gameform-selectbox-item-bg: theme(--color-blue-600);
+  
+  --color-theme-gameform-switch-bg-1: theme(--color-blue-600);
+  --color-theme-gameform-switch-bg-2: theme(--color-gray-600);
+  --color-theme-gameform-switch-ring: theme(--color-indigo-300);
+
+  --color-theme-gameform-genres-inner-bg: theme(--color-indigo-300);
+  --color-theme-gameform-genres-border: theme(--color-indigo-300);
+
+  --color-theme-gameform-genres-button-1: theme(--color-indigo-300);
+  --color-theme-gameform-genres-button-1-hover: theme(--color-indigo-300);
+  --color-theme-gameform-genres-button-1-active: theme(--color-indigo-300);
+  --color-theme-gameform-genres-button-2: theme(--color-indigo-300);
+  --color-theme-gameform-genres-button-2-hover: theme(--color-indigo-300);
+  --color-theme-gameform-genres-button-2-active: theme(--color-indigo-300);
 
 }
 
