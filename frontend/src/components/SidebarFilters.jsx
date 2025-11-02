@@ -84,7 +84,7 @@ function FilterSection({ title, items, selected, onToggle, colored }) {
             <button
               key={value}
               onClick={() => onToggle(value)}
-              className={`rounded-full px-3 py-1 text-sm font-medium transition ${
+              className={`rounded-full cursor-pointer px-3 py-1 text-sm font-medium transition ${
                 isActive
                   ? colored
                     ? `shadow ${textColor}`
@@ -152,7 +152,7 @@ function SidebarFilters({
         h-[calc(100vh-4.4rem)] 
         overflow-y-auto no-scrollbar
         border-r border-theme-sidebar-border
-        bg-gradient-to-t from-theme-sidebar-bg-1 via-theme-sidebar-bg-2 to-theme-sidebar-bg-3
+        bg-gradient-to-t from-theme-sidebar-bg-1 to-theme-sidebar-bg-2
         text-white
         shadow-lg
       ">
@@ -160,11 +160,11 @@ function SidebarFilters({
       <div
         className={`
           sticky top-0 z-1 flex items-center justify-between
-          bg-theme-sidebar-header-bg
+          bg-theme-sidebar-bg-2
           p-2 
         ${
           open
-            ? "border-b border-theme-sidebar-border shadow-[0_20px_50px_-1px_rgba(0,0,0,0.6)]"
+            ? "border-b border-theme-sidebar-border"
             : ""
         }`}
       >
@@ -179,10 +179,13 @@ function SidebarFilters({
           className="
             rounded-md
             bg-theme-sidebar-button
-            p-2
+            border border-theme-sidebar-button-border
+            p-1.5
             text-white
-            shadow-lg transition-all duration-300 hover:bg-theme-sidebar-button-hover"
-        >
+            shadow-lg transition-all duration-300
+            hover:bg-theme-sidebar-button-hover
+            active:bg-theme-sidebar-button-active
+          ">
           {open ? <ChevronLeft size={20} /> : <ChevronRight size={20} />}
         </button>
       </div>

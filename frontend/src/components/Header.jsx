@@ -73,6 +73,7 @@ function Header() {
       bg-gradient-to-t from-theme-header-bg-1 to-theme-header-bg-2 
       p-3 
       font-mono text-lg font-bold
+      shadow-[var(--shadow-theme-header-shadow)]
     ">
       <div className="flex">
         <div className="w-6" />
@@ -137,7 +138,7 @@ function Header() {
 
               {/* Selector de tema con HeadlessUI */}
               <div className="flex flex-col space-y-1 px-2">
-                <label className="pl-1 text-sm font-semibold text-theme-menu-themeselector-tittle-text">Theme</label>
+                <label className="pl-1 text-sm font-semibold text-theme-menu-themeselector-title-text">Theme</label>
                 <Listbox value={theme} onChange={changeTheme}>
                   <div className="relative">
                     <ListboxButton className="

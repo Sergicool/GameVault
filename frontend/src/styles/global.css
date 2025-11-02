@@ -39,6 +39,7 @@ body::-webkit-scrollbar {
   --color-theme-header-bg-1: theme(--color-indigo-950);
   --color-theme-header-bg-2: theme(--color-indigo-800);
   --color-theme-header-border: theme(--color-indigo-300);
+  --shadow-theme-header-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 
   --color-theme-header-text: theme(--color-gray-400);
   --color-theme-header-text-hover: theme(--color-gray-50);
@@ -47,7 +48,7 @@ body::-webkit-scrollbar {
   
   --color-theme-header-inner-bg: theme(--color-indigo-950);
 
-  /* Header menu */
+  /* Header menu ()*/
   --color-theme-button-hover: theme(--color-indigo-400);
   --color-theme-button-active: theme(--color-indigo-300);
   
@@ -58,7 +59,7 @@ body::-webkit-scrollbar {
   --color-theme-menu-buttons-active: theme(--color-indigo-300);
   --shadow-theme-menu-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
   
-  --color-theme-menu-themeselector-tittle-text: theme(--color-gray-50);
+  --color-theme-menu-themeselector-title-text: theme(--color-gray-50);
   --color-theme-menu-themeselector-selected-bg: theme(--color-slate-950);
   --color-theme-menu-themeselector-selected-hover-bg: theme(--color-indigo-700);
   --color-theme-menu-themeselector-option-bg: theme(--color-slate-950);
@@ -74,29 +75,29 @@ body::-webkit-scrollbar {
   --color-theme-menu-colorbutton-active-2: theme(--color-violet-700);
 
   /* --------------------------------------------------------------------------- */
-  /*                                   Sidebar                                   */
+  /*                                   Sidebar()                                   */
   /* --------------------------------------------------------------------------- */
 
-  --color-theme-sidebar-bg-1: theme(--color-slate-950);
+  --color-theme-sidebar-bg-1: theme(--color-slate-900);
   --color-theme-sidebar-bg-2: theme(--color-indigo-950);
-  --color-theme-sidebar-bg-3: theme(--color-slate-950);
-  --color-theme-sidebar-border: theme(--color-indigo-500);
+  --color-theme-sidebar-border: theme(--color-indigo-300);
+  --color-theme-sidebar-title-text: theme(--color-indigo-300);
 
-  --color-theme-sidebar-header-bg: theme(--color-slate-950);
-
-  --color-theme-sidebar-button: theme(--color-gray-700);
-  --color-theme-sidebar-button-hover: theme(--color-indigo-600);
+  --color-theme-sidebar-button: theme(--color-indigo-400);
+  --color-theme-sidebar-button-hover: theme(--color-indigo-500);
+  --color-theme-sidebar-button-active: theme(--color-indigo-600);
+  --color-theme-sidebar-button-border: theme(--color-indigo-300);
 
   /* Switch */
-  --color-theme-sidebar-switch-1: theme(--color-blue-600);
-  --color-theme-sidebar-switch-2: theme(--color-gray-600);
+  --color-theme-sidebar-switch-1: theme(--color-indigo-600);
+  --color-theme-sidebar-switch-2: theme(--color-gray-500);
   --color-theme-sidebar-ring: theme(--color-indigo-300);
-  --color-theme-sidebar-divider: rgb(from theme(--color-indigo-500) r g b / 1);
+  --color-theme-sidebar-divider: theme(--color-indigo-300);
 
   --color-theme-sidebar-filter-on-bg: theme(--color-indigo-600);
-  --color-theme-sidebar-filter-on-border: theme(--color-indigo-400);
-  --color-theme-sidebar-filter-off-bg-hover: rgb(from theme(--color-gray-700) r g b / 0.5);
-  --color-theme-sidebar-filter-off-border: theme(--color-gray-600);
+  --color-theme-sidebar-filter-on-border: theme(--color-indigo-300);
+  --color-theme-sidebar-filter-off-bg-hover: rgb(from theme(--color-gray-600) r g b / 0.5);
+  --color-theme-sidebar-filter-off-border: theme(--color-gray-400);
 
   /* --------------------------------------------------------------------------- */
   /*                                 Game Card                                   */
