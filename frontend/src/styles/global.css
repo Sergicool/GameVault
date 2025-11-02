@@ -28,112 +28,50 @@ body::-webkit-scrollbar {
 }
 
 @theme {
-  --color-theme-global-bg-1: theme(--color-slate-950);
+  /* General ()*/
+  --color-theme-global-bg-1: theme(--color-slate-900);
   --color-theme-global-bg-2: theme(--color-indigo-950);
-  --color-theme-global-bg-3: theme(--color-slate-950);
-  --color-theme-border: theme(--color-indigo-500);
   
   /* --------------------------------------------------------------------------- */
   /*                                    Header                                   */
   /* --------------------------------------------------------------------------- */
+  
+  --color-theme-header-bg-1: theme(--color-indigo-950);
+  --color-theme-header-bg-2: theme(--color-indigo-800);
+  --color-theme-header-border: theme(--color-indigo-300);
 
-  --color-theme-header-bg-1: theme(--color-slate-950);
-  --color-theme-header-bg-2: theme(--color-slate-950);
-  --color-theme-header-bg-3: theme(--color-slate-900);
-  --color-theme-header-nav-bg: rgb(from theme(--color-indigo-950) r g b / 0.7);
-  --color-theme-header-nav-text-color: theme(--color-violet-200);
-  --color-theme-header-nav-text-hover: theme(--color-violet-300);
-  --drop-shadow-theme-header-nav-text-glow: 0 0 10px theme(--color-purple-400);
-
+  --color-theme-header-text: theme(--color-gray-400);
+  --color-theme-header-text-hover: theme(--color-gray-50);
+  --color-theme-header-text-active: theme(--color-indigo-100);
+  --drop-theme-header-text-glow: 0 0 10px theme(--color-indigo-200);
+  
+  --color-theme-header-inner-bg: theme(--color-indigo-950);
 
   /* Header menu */
-  --color-theme-button-hover-1: theme(--color-indigo-600);
-  --color-theme-button-active-1: theme(--color-indigo-400);
+  --color-theme-button-hover: theme(--color-indigo-400);
+  --color-theme-button-active: theme(--color-indigo-300);
   
-  --color-theme-menu-bg-1: theme(--color-slate-900);
-  --color-theme-menu-bg-2: theme(--color-indigo-950);
-  --color-theme-menu-bg-3: theme(--color-slate-900);
-  --color-theme-menu-border: theme(--color-indigo-500);
-  --color-theme-menu-buttons-hover: rgb(from theme(--color-gray-600) r g b / 0.4);
-  --color-theme-menu-buttons-active: rgb(from theme(--color-gray-400) r g b / 0.4);
-
-  --color-theme-menu-themeselector-selected-bg: theme(--color-slate-900);
-  --color-theme-menu-themeselector-selected-hover-bg: theme(--color-slate-700);
+  --color-theme-menu-bg-1: theme(--color-indigo-950);
+  --color-theme-menu-bg-2: theme(--color-indigo-800);
+  --color-theme-menu-border: theme(--color-indigo-300);
+  --color-theme-menu-buttons-hover: theme(--color-indigo-500);
+  --color-theme-menu-buttons-active: theme(--color-indigo-300);
+  --shadow-theme-menu-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  
+  --color-theme-menu-themeselector-tittle-text: theme(--color-gray-50);
+  --color-theme-menu-themeselector-selected-bg: theme(--color-slate-950);
+  --color-theme-menu-themeselector-selected-hover-bg: theme(--color-indigo-700);
+  --color-theme-menu-themeselector-option-bg: theme(--color-slate-950);
+  --color-theme-menu-themeselector-option-hover-bg: theme(--color-indigo-700);
+  --color-theme-menu-themeselector-text: theme(--color-indigo-700);
 
   --color-theme-menu-colorbutton-1: theme(--color-indigo-500);
-  --color-theme-menu-colorbutton-hover-1: theme(--color-indigo-700);
-  --color-theme-menu-colorbutton-active-1: theme(--color-indigo-800);
+  --color-theme-menu-colorbutton-hover-1: theme(--color-indigo-600);
+  --color-theme-menu-colorbutton-active-1: theme(--color-indigo-700);
 
   --color-theme-menu-colorbutton-2: theme(--color-violet-500);
-  --color-theme-menu-colorbutton-hover-2: theme(--color-violet-700);
-  --color-theme-menu-colorbutton-active-2: theme(--color-violet-800);
-
-  /* --------------------------------------------------------------------------- */
-  /*                                   Sidebar                                   */
-  /* --------------------------------------------------------------------------- */
-
-  --color-theme-sidebar-bg-1: theme(--color-slate-950);
-  --color-theme-sidebar-bg-2: theme(--color-indigo-950);
-  --color-theme-sidebar-bg-3: theme(--color-slate-950);
-  --color-theme-sidebar-border: theme(--color-indigo-500);
-
-  --color-theme-sidebar-header-bg: theme(--color-slate-950);
-
-  --color-theme-sidebar-button: theme(--color-gray-700);
-  --color-theme-sidebar-button-hover: theme(--color-indigo-600);
-
-  /* Switch */
-  --color-theme-sidebar-switch-1: theme(--color-blue-600);
-  --color-theme-sidebar-switch-2: theme(--color-gray-600);
-  --color-theme-sidebar-ring: theme(--color-indigo-300);
-  --color-theme-sidebar-divider: rgb(from theme(--color-indigo-500) r g b / 1);
-
-  --color-theme-sidebar-filter-on-bg: theme(--color-indigo-600);
-  --color-theme-sidebar-filter-on-border: theme(--color-indigo-400);
-  --color-theme-sidebar-filter-off-bg-hover: rgb(from theme(--color-gray-700) r g b / 0.5);
-  --color-theme-sidebar-filter-off-border: theme(--color-gray-600);
-}
-
-[data-theme="dark_purple"] {
-  --color-theme-global-bg-1: theme(--color-slate-950);
-  --color-theme-global-bg-2: theme(--color-indigo-950);
-  --color-theme-global-bg-3: theme(--color-slate-950);
-  --color-theme-border: theme(--color-indigo-500);
-  
-  /* --------------------------------------------------------------------------- */
-  /*                                    Header                                   */
-  /* --------------------------------------------------------------------------- */
-
-  --color-theme-header-bg-1: theme(--color-slate-950);
-  --color-theme-header-bg-2: theme(--color-slate-950);
-  --color-theme-header-bg-3: theme(--color-slate-900);
-  --color-theme-header-nav-bg: rgb(from theme(--color-indigo-950) r g b / 0.7);
-  --color-theme-header-nav-text-color: theme(--color-violet-200);
-  --color-theme-header-nav-text-hover: theme(--color-violet-300);
-  --drop-shadow-theme-header-nav-text-glow: 0 0 10px theme(--color-purple-400);
-
-
-  /* Header menu */
-  --color-theme-button-hover-1: theme(--color-indigo-600);
-  --color-theme-button-active-1: theme(--color-indigo-400);
-  
-  --color-theme-menu-bg-1: theme(--color-slate-900);
-  --color-theme-menu-bg-2: theme(--color-indigo-950);
-  --color-theme-menu-bg-3: theme(--color-slate-900);
-  --color-theme-menu-border: theme(--color-indigo-500);
-  --color-theme-menu-buttons-hover: rgb(from theme(--color-gray-600) r g b / 0.4);
-  --color-theme-menu-buttons-active: rgb(from theme(--color-gray-400) r g b / 0.4);
-
-  --color-theme-menu-themeselector-selected-bg: theme(--color-slate-900);
-  --color-theme-menu-themeselector-selected-hover-bg: theme(--color-slate-700);
-
-  --color-theme-menu-colorbutton-1: theme(--color-indigo-500);
-  --color-theme-menu-colorbutton-hover-1: theme(--color-indigo-700);
-  --color-theme-menu-colorbutton-active-1: theme(--color-indigo-800);
-
-  --color-theme-menu-colorbutton-2: theme(--color-violet-500);
-  --color-theme-menu-colorbutton-hover-2: theme(--color-violet-700);
-  --color-theme-menu-colorbutton-active-2: theme(--color-violet-800);
+  --color-theme-menu-colorbutton-hover-2: theme(--color-violet-600);
+  --color-theme-menu-colorbutton-active-2: theme(--color-violet-700);
 
   /* --------------------------------------------------------------------------- */
   /*                                   Sidebar                                   */
@@ -165,11 +103,10 @@ body::-webkit-scrollbar {
   /* --------------------------------------------------------------------------- */
 
   /* Expandible Modal */
-  --color-theme-gamecard-modal-shadow-bg: theme(--color-blue-600);
+  --shadow-theme-gamecard-modal: 0 8px 15px -3px rgba(0, 0, 0, 0.6);
 
   --color-theme-gamecard-modal-bg-1: theme(--color-blue-600);
   --color-theme-gamecard-modal-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-modal-bg-3: theme(--color-blue-600);
   --color-theme-gamecard-modal-border: theme(--color-blue-600);
 
   --color-theme-gamecard-modal-infolabel-bg: theme(--color-blue-600);
@@ -185,12 +122,16 @@ body::-webkit-scrollbar {
   --color-theme-gamecard-modal-editbutton-hover: theme(--color-blue-600);
   --color-theme-gamecard-modal-editbutton-active: theme(--color-blue-600);
 
-  /* General Card View */
-  --color-theme-gamecard-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-border: theme(--color-blue-600);
-  --color-theme-gamecard-overflow-tag-bg: theme(--color-blue-600);
+  /* General Card View ()*/
+  --color-theme-gamecard-bg-1: theme(--color-indigo-800);
+  --color-theme-gamecard-bg-2: theme(--color-indigo-950);
+  --color-theme-gamecard-border: theme(--color-indigo-300);
+  --shadow-theme-gamecard: 0 8px 15px -3px rgba(0, 0, 0, 0.6);
+
+  --color-theme-gamecard-noimage-text: theme(--color-indigo-200);
+  --color-theme-gamecard-overflow-genre-tag-bg: theme(--color-indigo-600);
+  --color-theme-gamecard-overflow-genre-tag-border: theme(--color-indigo-400);
+  --color-theme-gamecard-overflow-genre-tag-text: theme(--color-white);
   
   /* Tier List Card View */
   --color-theme-gamecard-tierlist-title-bg-1: theme(--color-blue-600);
@@ -315,8 +256,85 @@ body::-webkit-scrollbar {
   --color-theme-gameform-genres-button-2-hover: theme(--color-indigo-300);
   --color-theme-gameform-genres-button-2-active: theme(--color-indigo-300);
 
+  /* --------------------------------------------------------------------------- */
+  /*                           Update Tier List Page                             */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-updatetierlist-button: theme(--color-indigo-300);
+  --color-theme-updatetierlist-button-hover: theme(--color-indigo-300);
+  --color-theme-updatetierlist-button-active: theme(--color-indigo-300);
+
+  /* --------------------------------------------------------------------------- */
+  /*                              Update Data Page                               */
+  /* --------------------------------------------------------------------------- */
+  --color-theme-updatedata-container-1-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-1-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-1-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-1-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-1-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-1-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-2-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-2-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-2-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-2-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-2-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-2-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-3-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-3-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-3-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-3-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-3-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-3-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-4-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-4-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-4-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-4-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-4-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-4-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-5-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-5-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-5-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-5-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-5-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-5-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-6-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-6-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-6-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-6-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-6-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-6-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-7-bg-1: theme(--color-indigo-300);
+  --color-theme-updatedata-container-7-bg-2: theme(--color-indigo-300);
+  --color-theme-updatedata-container-7-inner-bg: theme(--color-indigo-300);
+  --color-theme-updatedata-container-7-button: theme(--color-indigo-300);
+  --color-theme-updatedata-container-7-button-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-container-7-button-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-container-content-bg: theme(--color-indigo-300);
+
+  --color-theme-updatedata-button-edit: theme(--color-indigo-300);
+  --color-theme-updatedata-button-edit-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-button-edit-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-button-delete: theme(--color-indigo-300);
+  --color-theme-updatedata-button-delete-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-button-delete-active: theme(--color-indigo-300);
+
+  --color-theme-updatedata-button-arrow: theme(--color-indigo-300);
+  --color-theme-updatedata-button-arrow-hover: theme(--color-indigo-300);
+  --color-theme-updatedata-button-arrow-active: theme(--color-indigo-300);
+}
+
+[data-theme="indigo"] {
+  
 }
 
 [data-theme="blue"] {
-
+  --color-theme-global-bg-1: theme(--color-blue-900);
+  --color-theme-global-bg-2: theme(--color-blue-950);
 }

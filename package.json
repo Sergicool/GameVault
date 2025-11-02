@@ -10,6 +10,7 @@
     "prettier-plugin-tailwindcss": "^0.7.1"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.9",
     "cors": "^2.8.5",
     "framer-motion": "^11.0.4",
     "multer": "^2.0.2",

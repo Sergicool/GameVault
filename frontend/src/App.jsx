@@ -19,7 +19,8 @@ function App() {
       <Header />
       {/*Color del fondo y margen para que las paginas no se metan debajo del header: pt-18 */}
       <div className="
-        bg-gradient-to-tr from-theme-global-bg-1 via-theme-global-bg-2 to-theme-global-bg-3
+        bg-gradient-to-t
+        from-theme-global-bg-1 to-theme-global-bg-2
         min-h-screen pt-18
       ">
         <Routes>

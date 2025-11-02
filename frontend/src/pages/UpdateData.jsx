@@ -373,7 +373,7 @@ function UpdateData() {
                           if (e.key === 'Escape') setEditingGenre(null);
                         }}
                         autoFocus
-                        className="flex-1 px-2 py-1 rounded border border-gray-300"
+                        className="flex-1 px-2 py-1 rounded"
                       />
                     </>
                   ) : (
