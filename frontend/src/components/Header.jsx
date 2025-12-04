@@ -76,17 +76,26 @@ function Header() {
       shadow-[var(--shadow-theme-header-shadow)]
     ">
       <div className="flex">
-        <div className="w-6" />
+        <div className="flex w-12 items-center justify-center">
+          <img
+            src="/GameVaultLogo.png"
+            className="h-10 w-10 object-contain"
+          />
+        </div>
+
         {/* Contenedor de navegación */}
         <div className="flex flex-1 justify-center">
-          <nav className="
-            flex flex-nowrap items-center justify-center gap-x-10 overflow-hidden whitespace-nowrap
-            rounded-lg
-            border border-theme-header-border
-            bg-theme-header-inner-bg
-            px-10 py-2
-            inset-shadow-sm inset-shadow-zinc-900 md:gap-x-20 text-theme-header-text
-          ">
+          <nav
+            className="
+              flex flex-nowrap items-center justify-center gap-x-10
+              overflow-hidden whitespace-nowrap rounded-lg
+              border border-theme-header-border
+              bg-theme-header-inner-bg
+              px-10 py-2 md:gap-x-20
+              text-theme-header-text
+              inset-shadow-sm inset-shadow-zinc-900
+            "
+          >
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -104,7 +113,7 @@ function Header() {
         </div>
 
         {/* Menú desplegable */}
-        <div className="mr-4 w-6 relative" ref={menuRef}>
+        <div className="w-12 relative" ref={menuRef}>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`rounded-md p-2 transition-colors ${
@@ -117,7 +126,7 @@ function Header() {
           </button>
 
           {menuOpen && (
-            <div className="absolute right-3 z-10 mt-1 w-52 rounded-md border border-theme-menu-border bg-gradient-to-t from-theme-menu-bg-1 to-theme-menu-bg-2 p-2 shadow-md">
+            <div className="absolute right-2 z-10 mt-1 w-52 rounded-md border border-theme-menu-border bg-gradient-to-t from-theme-menu-bg-1 to-theme-menu-bg-2 p-2 shadow-md">
               {/* Bloque de botones */}
               <div className="flex flex-col space-y-2">
                 {menuOptions

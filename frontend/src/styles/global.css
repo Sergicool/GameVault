@@ -104,7 +104,7 @@ body::-webkit-scrollbar {
   /* --------------------------------------------------------------------------- */
 
   /* Expandible Modal */
-  --shadow-theme-gamecard-modal: 0 8px 15px -3px rgba(0, 0, 0, 0.6);
+  --color-theme-gamecard-modal-shadow: rgb(from theme(--color-black) r g b / 0.4);
 
   --color-theme-gamecard-modal-bg-1: theme(--color-blue-600);
   --color-theme-gamecard-modal-bg-2: theme(--color-blue-600);
@@ -126,7 +126,7 @@ body::-webkit-scrollbar {
   /* General Card View ()*/
   --color-theme-gamecard-bg-1: theme(--color-indigo-800);
   --color-theme-gamecard-bg-2: theme(--color-indigo-950);
-  --color-theme-gamecard-border: theme(--color-indigo-300);
+  --color-theme-gamecard-border: theme(--color-indigo-400);
   --shadow-theme-gamecard: 0 8px 15px -3px rgba(0, 0, 0, 0.6);
 
   --color-theme-gamecard-noimage-text: theme(--color-indigo-200);

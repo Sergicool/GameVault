@@ -96,11 +96,19 @@ function GameModal({ game, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6"
+      className="
+        fixed inset-0 z-50 flex items-center justify-center 
+        bg-theme-gamecard-modal-shadow
+        p-6"
       onClick={onClose}
     >
       <div
-        className="relative flex h-[46rem] w-full max-w-[50rem] flex-col overflow-hidden rounded-2xl border border-indigo-500 bg-gradient-to-bl from-slate-950 via-indigo-950 to-slate-950 text-white shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)]"
+        className="
+          relative flex h-[46rem] w-full max-w-[50rem] flex-col overflow-hidden
+          border border-indigo-500 
+          bg-gradient-to-bl from-slate-950 via-indigo-950 to-slate-950 text-white
+          shadow-[0_8px_15px_-3px_rgba(0,0,0,0.6)]
+        "
         onClick={(e) => e.stopPropagation()}
       >
         {/* Imagen */}
@@ -119,12 +127,34 @@ function GameModal({ game, onClose }) {
         )}
 
         {/* Contenido que hace scroll */}
-        <div className="flex flex-1 flex-col items-center justify-between space-y-6 overflow-y-auto p-6">
+        <div className="flex flex-1 flex-col items-center justify-between space-y-6 overflow-y-auto no-scrollbar p-6">
           <div className="flex w-full flex-col items-center">
             {/* Título */}
             <h2 className="mb-6 text-center text-4xl font-bold tracking-wide text-gray-100 drop-shadow-md">
               {game.name}
             </h2>
+
+            {/* Posición y Tier */}
+            <div className="mb-6 flex flex-col items-center space-y-2">
+              {game.position && (
+                <p className="text-lg font-semibold text-gray-300">
+                  🏆 Position: <span className="text-white">#{game.position}</span>
+                </p>
+              )}
+
+              {game.tier && (
+                <div
+                  className="rounded-full px-5 py-1 text-lg font-semibold shadow-[0_0_10px_rgba(0,0,0,0.3)] border-2"
+                  style={{
+                    backgroundColor: game.tier.color || "#444",
+                    borderColor: game.tier.color || "#666",
+                    color: isColorDark(game.tier.color || "#444") ? "white" : "black",
+                  }}
+                >
+                  {game.tier.name}
+                </div>
+              )}
+            </div>
 
             {/* Subtítulo */}
             <div className="mb-4 flex flex-wrap justify-center gap-2">
@@ -355,7 +385,6 @@ function GameCard({
         <div
           className={`
             flex w-[400px] flex-col overflow-hidden
-            rounded-lg 
             transition-transform duration-200
             ${expandible ? "cursor-pointer hover:scale-[1.05]" : ""}
             border-1 border-theme-gamecard-border
