@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { getGames } from "../api/games";
 import { getGenres } from "../api/genres";
 import { getYears } from "../api/years";
@@ -30,6 +31,8 @@ function Games() {
     subcategories: [],
     tiers: [],
   });
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -146,9 +149,14 @@ function Games() {
         tiers={tiers}
         filters={filters}
         setFilters={setFilters}
+        onOpenChange={setSidebarOpen}
       />
 
-      <div className="ml-[50px] min-h-screen flex-1 p-6">
+      <motion.div
+        animate={{ marginLeft: sidebarOpen ? 400 : 50 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="flex-1 min-h-screen p-6"
+      >
         {loading ? (
           <p className="text-md mt-20 text-center text-gray-400 italic">
             Loading games...
@@ -186,7 +194,7 @@ function Games() {
             )}
           </>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }

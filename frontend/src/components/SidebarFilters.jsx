@@ -116,6 +116,7 @@ function SidebarFilters({
   categories,
   subcategories,
   tiers,
+  onOpenChange,
 }) {
   /* ---------- Estado interno ---------- */
   const [open, setOpen] = useState(false); // visibilidad del sidebar
@@ -143,9 +144,16 @@ function SidebarFilters({
     }));
   };
 
+  const handleToggleSidebar = () => {
+    setOpen((o) => {
+      onOpenChange(!o);
+        return !o;
+      });
+  }
+
   return (
     <motion.div
-      animate={{ width: open ? sidebarWidth : 50 }}
+      animate={{ width: open ? 400 : 50 }}
       transition={{ type: "spring", stiffness: 200, damping: 20 }}
       className="
         fixed top-17.5 left-0 z-10 flex flex-col
@@ -175,7 +183,7 @@ function SidebarFilters({
         )}
 
         <button
-          onClick={() => setOpen(!open)}
+          onClick={handleToggleSidebar}
           className="
             rounded-md
             bg-theme-sidebar-button

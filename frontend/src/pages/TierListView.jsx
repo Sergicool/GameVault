@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { getGames } from "../api/games";
 import { getTiers } from "../api/tiers";
 import { getGenres } from "../api/genres";
@@ -30,6 +31,8 @@ function TierListView() {
     subcategories: [],
     tiers: [],
   });
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -158,11 +161,16 @@ function TierListView() {
         tiers={tiers}
         filters={filters}
         setFilters={setFilters}
+        onOpenChange={setSidebarOpen}
       />
 
-      <div className="ml-[50px] flex-1 p-6">
+      <motion.div
+        animate={{ marginLeft: sidebarOpen ? 400 : 50 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="flex-1 min-h-screen p-6"
+      >
         <TierList tiers={tiers} gamesByTier={gamesByTier} editable={false} />
-      </div>
+      </motion.div>
     </div>
   );
 }

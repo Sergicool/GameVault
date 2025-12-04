@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { motion } from "framer-motion";
 import { getGames } from '../api/games';
 import { getGenres } from '../api/genres';
 import { getYears } from '../api/years';
@@ -29,6 +30,8 @@ function HallOfFame() {
     tiers: [],
   });
   const [loading, setLoading] = useState(true);
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
@@ -137,9 +140,14 @@ function HallOfFame() {
         tiers={tiers}
         filters={filters}
         setFilters={setFilters}
+        onOpenChange={setSidebarOpen}
       />
 
-      <div className="ml-[50px] flex-1 p-6 min-h-screen">
+      <motion.div
+        animate={{ marginLeft: sidebarOpen ? 400 : 50 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        className="flex-1 min-h-screen p-6"
+      >
         {loading ? (
           <p className="text-md text-gray-400 italic text-center mt-20">
             Loading leaderboard...
@@ -161,7 +169,7 @@ function HallOfFame() {
             No games match the current filters
           </p>
         )}
-      </div>
+      </motion.div>
     </div>
   );
 }
