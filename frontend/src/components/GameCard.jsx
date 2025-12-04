@@ -136,9 +136,9 @@ function GameModal({ game, onClose }) {
 
             {/* Posición y Tier */}
             <div className="mb-6 flex flex-col items-center space-y-2">
-              {game.position && (
+              {game.position !== undefined && (
                 <p className="text-lg font-semibold text-gray-300">
-                  🏆 Position: <span className="text-white">#{game.position}</span>
+                  🏆 Position: <span className="text-white">#{game.position + 1}</span>
                 </p>
               )}
 
@@ -146,12 +146,12 @@ function GameModal({ game, onClose }) {
                 <div
                   className="rounded-full px-5 py-1 text-lg font-semibold shadow-[0_0_10px_rgba(0,0,0,0.3)] border-2"
                   style={{
-                    backgroundColor: game.tier.color || "#444",
-                    borderColor: game.tier.color || "#666",
-                    color: isColorDark(game.tier.color || "#444") ? "white" : "black",
+                    backgroundColor: game.tierColor || "#444",
+                    borderColor: game.tierColor || "#666",
+                    color: isColorDark(game.tierColor || "#444") ? "white" : "black",
                   }}
                 >
-                  {game.tier.name}
+                  {game.tier}
                 </div>
               )}
             </div>
@@ -384,13 +384,23 @@ function GameCard({
       {!inTierList && (
         <div
           className={`
-            flex w-[400px] flex-col overflow-hidden
-            transition-transform duration-200
-            ${expandible ? "cursor-pointer hover:scale-[1.05]" : ""}
-            border-1 border-theme-gamecard-border
-            shadow-[var(--shadow-theme-gamecard)]`}
+            relative flex w-[400px] flex-col
+            transition-all duration-300 ease-out
+            shadow-[var(--shadow-theme-gamecard)]
+            bg-gradient-to-tr from-theme-gamecard-bg-1 to-theme-gamecard-bg-2
+            ${expandible ? "cursor-pointer" : ""}
+
+            hover:-translate-y-1 hover:rotate-x-[6deg] hover:rotate-y-[4deg]
+            transform-gpu
+
+            before:absolute before:inset-0
+            before:bg-[linear-gradient(-135deg,rgba(255,255,255,0.2)_0%,rgba(255,255,255,0.15)_20%,rgba(255,255,255,0.1)_40%,transparent_80%)]
+            before:opacity-0 before:transition-all before:duration-300
+            hover:before:opacity-100
+          `}
           onClick={openModal}
         >
+
           <div className="flex h-48 items-center justify-center">
             {game.imagePreview ? (
               <img
@@ -401,47 +411,22 @@ function GameCard({
             ) : (
               <span className="text-theme-gamecard-noimage-text">No Image</span>
             )}
-          </div>
-          <div className="
-            p-4
-            bg-gradient-to-b from-theme-gamecard-bg-1 to-theme-gamecard-bg-2
-          ">
-            <h3 className="mb-2 text-xl font-bold">{game.name}</h3>
-
-            {game.genres && game.genres.length > 0 && (
-              <div className="mt-3">
-                <div
-                  className="flex max-w-full flex-wrap gap-2 overflow-hidden font-semibold"
-                  ref={containerRef}
-                >
-                  {visibleGenres.map((g, i) => {
-                    const textColor = isColorDark(g.color) ? "white" : "black";
-                    return (
-                      <span
-                        key={i}
-                        className="rounded-full px-2 py-0.5 text-xs"
-                        style={{
-                          backgroundColor: g.color,
-                          color: textColor,
-                          whiteSpace: "nowrap",
-                        }}
-                      >
-                        {g.name}
-                      </span>
-                    );
-                  })}
-
-                  {hiddenCount > 0 && (
-                    <span className="
-                      rounded-full 
-                      bg-theme-gamecard-overflow-genre-tag-bg
-                      border border-theme-gamecard-overflow-genre-tag-border
-                      px-2 py-0.5
-                      text-xs text-theme-gamecard-overflow-genre-tag-text italic">
-                      +{hiddenCount} more
-                    </span>
-                  )}
-                </div>
+            {game.tier && (
+              <div
+                className="
+                  absolute
+                  bottom-0 left-1/2
+                  transform -translate-x-1/2 translate-y-1/2
+                  px-1
+                  rounded-sm
+                  text-sm font-semibold text-white text-center
+                  min-w-[5rem]"
+                style={{
+                  backgroundColor: game.tierColor,
+                  color: isColorDark(game.tierColor) ? 'white' : 'black',
+                }}
+              >
+                {game.tier}
               </div>
             )}
           </div>

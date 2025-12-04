@@ -472,7 +472,12 @@ app.post('/delete-year', (req, res) => {
 
 app.get('/games', (req, res) => {
   try {
-    const gameStmt = db.prepare('SELECT * FROM games');
+    const gameStmt = db.prepare(`
+      SELECT g.*, t.color as tierColor
+      FROM games g
+      LEFT JOIN tiers t ON g.tier = t.name
+    `);
+
     const genreStmt = db.prepare(`
       SELECT g.name, g.color, gg.order_index
       FROM game_genres gg
@@ -488,6 +493,7 @@ app.get('/games', (req, res) => {
       return {
         ...game,
         genres,
+        tierColor: game.tierColor, // color del tier
       };
     });
 
@@ -497,6 +503,7 @@ app.get('/games', (req, res) => {
     res.status(500).json({ error: 'Error al obtener juegos' });
   }
 });
+
 
 app.get('/games/:name', (req, res) => {
   try {
