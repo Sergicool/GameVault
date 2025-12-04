@@ -33,7 +33,7 @@ function TierList({
             <div className="flex min-h-[110px] flex-1 flex-wrap gap-2 bg-gray-900 p-2">
               {(gamesByTier[tier.name] || []).map((game) => (
                 <div key={game.name}>
-                  <GameCard game={game} displayIndex={game.position + 1} expandible inTierList />
+                  <GameCard game={game} expandible inTierList />
                 </div>
               ))}
             </div>
@@ -88,7 +88,7 @@ function TierList({
                             ...provided.draggableProps.style,
                           }}
                         >
-                          <GameCard game={game} displayIndex={game.position + 1} inTierList />
+                          <GameCard game={game} inTierList />
                         </div>
                       )}
                     </Draggable>
@@ -126,7 +126,7 @@ function TierList({
                           ...provided.draggableProps.style,
                         }}
                       >
-                        <GameCard game={game} displayIndex={game.position + 1} inTierList />
+                        <GameCard game={game} inTierList />
                       </div>
                     )}
                   </Draggable>

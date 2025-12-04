@@ -280,7 +280,7 @@ function Stats() {
                       <h3 className="mb-2 text-center text-lg font-bold">
                         {label}
                       </h3>
-                      <GameCard game={game} displayIndex={game.position + 1} expandible />
+                      <GameCard game={game} expandible />
                     </div>
                   ))}
                 </div>

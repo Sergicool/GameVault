@@ -140,56 +140,56 @@ body::-webkit-scrollbar {
   --color-theme-gamecard-tierlist-title-bg-3: theme(--color-blue-600);
   --color-theme-gamecard-tierlist-title-border: theme(--color-blue-600);
 
-  /* Laderboard Card View */
-  --color-theme-gamecard-laderboard-top1-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-border: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-border-hover: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-shadow-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-shadow-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-shadow-hover-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top1-shadow-hover-2: theme(--color-blue-600);
+  /* Leaderboard Card View */
+  --color-theme-gamecard-leaderboard-top1-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-border: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top1-shadow-hover-2: theme(--color-blue-600);
   
-  --color-theme-gamecard-laderboard-top2-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-border: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-border-hover: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-shadow-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-shadow-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-shadow-hover-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top2-shadow-hover-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-border: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top2-shadow-hover-2: theme(--color-blue-600);
   
-  --color-theme-gamecard-laderboard-top3-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-border: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-border-hover: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-shadow-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-shadow-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-shadow-hover-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-top3-shadow-hover-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-border: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-top3-shadow-hover-2: theme(--color-blue-600);
   
-  --color-theme-gamecard-laderboard-featured-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-border: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-border-hover: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-shadow-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-shadow-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-shadow-hover-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-featured-shadow-hover-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-border: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-featured-shadow-hover-2: theme(--color-blue-600);
   
-  --color-theme-gamecard-laderboard-default-bg-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-bg-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-bg-3: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-border: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-border-hover: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-shadow-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-shadow-2: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-shadow-hover-1: theme(--color-blue-600);
-  --color-theme-gamecard-laderboard-default-shadow-hover-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-bg-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-bg-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-bg-3: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-border: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-border-hover: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-shadow-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-shadow-2: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-shadow-hover-1: theme(--color-blue-600);
+  --color-theme-gamecard-leaderboard-default-shadow-hover-2: theme(--color-blue-600);
 
   /* --------------------------------------------------------------------------- */
   /*                                  Tier List                                  */

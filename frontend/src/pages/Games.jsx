@@ -176,7 +176,7 @@ function Games() {
             {filteredGames.length > 0 ? (
               <div className="flex flex-wrap justify-around gap-6">
                 {filteredGames.map((game) => (
-                  <GameCard key={game.name} game={game} displayIndex={game.position + 1} expandible />
+                  <GameCard key={game.name} game={game} expandible />
                 ))}
               </div>
             ) : (

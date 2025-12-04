@@ -94,18 +94,18 @@ function ExtensionContent({ gameName }) {
 /*                         Modal de Juego                         */
 /* -------------------------------------------------------------- */
 
-function GameModal({ game, onClose, displayIndex = position + 1}) {
+function GameModal({ game, onClose }) {
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-
+    
     return () => {
       document.body.style.overflow = original;
     };
   }, []);
-
+  
   const navigate = useNavigate();
-
+  
   if (!game) return null;
 
   // Excluir imagen por tamaño
@@ -123,16 +123,16 @@ function GameModal({ game, onClose, displayIndex = position + 1}) {
           extension_of: game.extension_of,
           genres:
             game.genres?.map((g) => ({ name: g.name, color: g.color })) || [],
-          imagePreview: game.imagePreview, // solo la URL
+            imagePreview: game.imagePreview, // solo la URL
+          },
         },
-      },
-    });
-  };
-
-  const positionBgClass = getLeaderboardBg(displayIndex, true);
-
-  return (
-    <div
+      });
+    };
+    
+    const positionBgClass = getLeaderboardBg(game.position + 1, true);
+    
+    return (
+      <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       onClick={onClose}
     >
@@ -304,8 +304,8 @@ function GameCard({
   const handleEdit = () => {
     navigate("/AddGame", { state: { editingGame: game } });
   };
-
-  /* -------------------- Laderboard -------------------- */
+  
+  /* -------------------- Leaderboard -------------------- */
   if (inLeaderboard) {
     const bgClass = getLeaderboardBg(displayIndex, false);
 
@@ -340,7 +340,7 @@ function GameCard({
           </div>
         </div>
 
-        {isExpanded && <GameModal game={game} onClose={closeModal} displayIndex={displayIndex} />}
+        {isExpanded && <GameModal game={game} onClose={closeModal} />}
       </>
     );
   }
@@ -421,7 +421,7 @@ function GameCard({
       )}
 
       {expandible && isExpanded && (
-        <GameModal game={game} onClose={closeModal} displayIndex={displayIndex} />
+        <GameModal game={game} onClose={closeModal} />
       )}
     </>
   );
