@@ -163,18 +163,18 @@ function GameModal({ game, onClose }) {
           </h2>
 
           {/* Tier y posición */}
-          <div className="flex flex-wrap justify-center gap-4">
-            {game.position !== undefined && (
-              <div className="group-hover-none">
-                <div
-                  className={`flex items-center gap-1 rounded-full px-4 py-1 text-sm font-semibold ${positionBgClass}`}
-                >
-                  <Trophy size={16} />
-                  <span>#{game.position + 1}</span>
+          {game.tier && (
+            <div className="flex flex-wrap justify-center gap-4">
+              {game.position !== undefined && (
+                <div className="group-hover-none">
+                  <div
+                    className={`flex items-center gap-1 rounded-full px-4 py-1 text-sm font-semibold ${positionBgClass}`}
+                  >
+                    <Trophy size={16} />
+                    <span>#{game.position + 1}</span>
+                  </div>
                 </div>
-              </div>
-            )}
-            {game.tier && (
+              )}
               <div
                 className="rounded-full px-4 py-1 text-sm font-semibold shadow"
                 style={{
@@ -184,8 +184,8 @@ function GameModal({ game, onClose }) {
               >
                 {game.tier}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Etiquetas principales */}
           <div className="flex flex-wrap justify-center gap-3 text-sm text-indigo-200">
