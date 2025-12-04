@@ -152,7 +152,7 @@ function HallOfFame() {
 
             <div className="flex flex-col gap-3 max-w-3xl mx-auto">
               {filteredGames.map((game, index) => (
-                <GameCard key={game.name} game={game} inLeaderboard expandible displayIndex={index + 1}/>
+                <GameCard key={game.name} game={game} displayIndex={index + 1} inLeaderboard expandible/>
               ))}
             </div>
           </>
