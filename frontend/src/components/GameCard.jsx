@@ -1,7 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getGameByName } from "../api/games";
-import { Monitor, Smartphone, Gamepad, Calendar, Globe, Laptop, Tag, Trophy  } from "lucide-react";
+import {
+  Monitor,
+  Smartphone,
+  Gamepad,
+  Calendar,
+  Globe,
+  Laptop,
+  Tag,
+  Trophy,
+} from "lucide-react";
 
 /* Iconos Constantes */
 const platformIcons = {
@@ -98,14 +107,14 @@ function GameModal({ game, onClose }) {
   useEffect(() => {
     const original = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    
+
     return () => {
       document.body.style.overflow = original;
     };
   }, []);
-  
+
   const navigate = useNavigate();
-  
+
   if (!game) return null;
 
   // Excluir imagen por tamaño
@@ -123,21 +132,26 @@ function GameModal({ game, onClose }) {
           extension_of: game.extension_of,
           genres:
             game.genres?.map((g) => ({ name: g.name, color: g.color })) || [],
-            imagePreview: game.imagePreview, // solo la URL
-          },
+          imagePreview: game.imagePreview, // solo la URL
         },
-      });
-    };
-    
-    const positionBgClass = getLeaderboardBg(game.position + 1, true);
-    
-    return (
-      <div
+      },
+    });
+  };
+
+  const positionBgClass = getLeaderboardBg(game.position + 1, true);
+
+  return (
+    <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden rounded-md bg-gradient-to-b from-indigo-900 via-indigo-950 to-indigo-900 text-white shadow-xl"
+        className="
+          relative flex max-h-[90hv] w-full max-w-4xl flex-col overflow-hidden
+          rounded-sm
+          bg-gradient-to-b from-indigo-900 via-indigo-950 to-indigo-900 
+          text-white shadow-xl
+        "
         onClick={(e) => e.stopPropagation()}
       >
         {/* Imagen */}
@@ -156,7 +170,7 @@ function GameModal({ game, onClose }) {
         </div>
 
         {/* Contenido */}
-        <div className="flex max-h-[60%] flex-col gap-4 overflow-y-auto no-scrollbar p-6">
+        <div className="no-scrollbar flex max-h-[60%] flex-col gap-4 overflow-y-auto p-6">
           {/* Título */}
           <h2 className="text-center text-4xl font-extrabold tracking-wide text-indigo-100 drop-shadow-md">
             {game.name}
@@ -179,7 +193,9 @@ function GameModal({ game, onClose }) {
                 className="rounded-full px-4 py-1 text-sm font-semibold shadow"
                 style={{
                   backgroundColor: game.tierColor || "#4f46e5",
-                  color: isColorDark(game.tierColor || "#4f46e5") ? "white" : "black",
+                  color: isColorDark(game.tierColor || "#4f46e5")
+                    ? "white"
+                    : "black",
                 }}
               >
                 {game.tier}
@@ -245,7 +261,7 @@ function GameModal({ game, onClose }) {
           <div className="flex justify-end">
             <button
               onClick={handleEdit}
-              className="rounded-lg bg-indigo-700 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 transition"
+              className="rounded-lg bg-indigo-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-600"
             >
               Edit
             </button>
@@ -304,7 +320,7 @@ function GameCard({
   const handleEdit = () => {
     navigate("/AddGame", { state: { editingGame: game } });
   };
-  
+
   /* -------------------- Leaderboard -------------------- */
   if (inLeaderboard) {
     const bgClass = getLeaderboardBg(displayIndex, false);
@@ -387,7 +403,6 @@ function GameCard({
           `}
           onClick={openModal}
         >
-
           <div className="flex h-48 items-center justify-center">
             {game.imagePreview ? (
               <img
@@ -400,17 +415,10 @@ function GameCard({
             )}
             {game.tier && (
               <div
-                className="
-                  absolute
-                  bottom-0 left-1/2
-                  transform -translate-x-1/2 translate-y-1/2
-                  px-1
-                  rounded-sm
-                  text-sm font-semibold text-white text-center
-                  min-w-[5rem]"
+                className="absolute bottom-0 left-1/2 min-w-[5rem] -translate-x-1/2 translate-y-1/2 transform rounded-sm px-1 text-center text-sm font-semibold text-white"
                 style={{
                   backgroundColor: game.tierColor,
-                  color: isColorDark(game.tierColor) ? 'white' : 'black',
+                  color: isColorDark(game.tierColor) ? "white" : "black",
                 }}
               >
                 {game.tier}
