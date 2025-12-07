@@ -45,7 +45,7 @@ function getLeaderboardBg(displayIndex, isModal = false) {
     return isModal
       ? "bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 border-2 border-[#b86a2f] shadow-[0_0_15px_rgba(180,83,9,0.7),0_0_30px_rgba(245,158,11,0.5)]"
       : "bg-gradient-to-r from-amber-700 via-amber-600 to-amber-800 border-2 border-[#b86a2f] shadow-[0_0_15px_rgba(180,83,9,0.7),0_0_30px_rgba(245,158,11,0.5)] hover:border-amber-400 hover:shadow-[0_0_20px_rgba(180,83,9,0.9),0_0_40px_rgba(245,158,11,0.7)]";
-  } else if (displayIndex <= 20) {
+  } else if (displayIndex <= 30) {
     return isModal
       ? "bg-gradient-to-r from-indigo-600 via-purple-500 to-purple-700 border-2 border-purple-400/60 shadow-[0_0_12px_rgba(139,92,246,0.6),0_0_25px_rgba(236,72,153,0.4)]"
       : "bg-gradient-to-r from-indigo-600 via-purple-500 to-purple-700 border-2 border-purple-400/60 shadow-[0_0_12px_rgba(139,92,246,0.6),0_0_25px_rgba(236,72,153,0.4)] hover:border-pink-400 hover:shadow-[0_0_18px_rgba(139,92,246,0.8),0_0_35px_rgba(236,72,153,0.6)]";
@@ -77,7 +77,7 @@ function ExtensionContent({ gameName }) {
     fetchParentGame();
   }, [gameName]);
 
-  if (!parentGame) return <p className="text-gray-500">Loading base game...</p>;
+  if (!parentGame) return <p className="mb-2 text-sm text-indigo-200 italic"> Loading base game... </p>;
 
   return (
     <div className="flex items-center gap-4">
@@ -89,8 +89,8 @@ function ExtensionContent({ gameName }) {
         />
       </div>
       <div>
-        <h4 className="mb-1 text-lg font-semibold">{parentGame.name}</h4>
-        <p className="text-sm text-gray-400">
+        <h4 className="mb-1 text-xl font-bold text-indigo-100">{parentGame.name}</h4>
+        <p className="mb-2 text-sm text-indigo-200 italic">
           {parentGame.year} · {parentGame.origin} · {parentGame.platform} ·{" "}
           {parentGame.category} - {parentGame.subcategory}
         </p>
@@ -147,9 +147,10 @@ function GameModal({ game, onClose }) {
     >
       <div
         className="
-          relative flex max-h-[90hv] w-full max-w-4xl flex-col overflow-hidden
+          relative flex w-full max-w-4xl flex-col overflow-hidden
+          max-h-[90vh]
+          my-10
           rounded-sm
-          bg-gradient-to-b from-indigo-900 via-indigo-950 to-indigo-900 
           text-white shadow-xl
         "
         onClick={(e) => e.stopPropagation()}
@@ -169,33 +170,43 @@ function GameModal({ game, onClose }) {
           )}
         </div>
 
-        {/* Contenido */}
-        <div className="no-scrollbar flex max-h-[60%] flex-col gap-4 overflow-y-auto p-6">
-          {/* Título */}
-          <h2 className="text-center text-4xl font-extrabold tracking-wide text-indigo-100 drop-shadow-md">
+        {/* Título */}
+        <div className="relative w-full
+                        bg-gradient-to-b from-indigo-700 via-indigo-600/80 to-indigo-700
+                        border-1 border-y-2 border-indigo-400
+                        shadow-[0_8px_20px_rgba(0,0,0,0.5)]
+        ">
+          <h2 className="py-4 text-center text-4xl font-extrabold tracking-wide text-indigo-100 drop-shadow-lg">
             {game.name}
           </h2>
+        </div>
 
+        {/* Contenido */}
+        <div className="
+          no-scrollbar flex max-h-[60%] flex-col gap-4 overflow-y-auto
+          p-6
+          rounded-b-lg
+          border-x-1 border-b-1 border-indigo-400
+          bg-indigo-900/85
+        ">
           {/* Tier y posición */}
           {game.tier && (
             <div className="flex flex-wrap justify-center gap-4">
               {game.position !== undefined && (
                 <div className="group-hover-none">
                   <div
-                    className={`flex items-center gap-1 rounded-full px-4 py-1 text-sm font-semibold ${positionBgClass}`}
+                    className={`flex items-center gap-1 rounded-md px-4 py-1 text-base font-bold ${positionBgClass}`}
                   >
-                    <Trophy size={16} />
-                    <span>#{game.position + 1}</span>
+                    <Trophy size={20} />
+                    <span>{game.position + 1}</span>
                   </div>
                 </div>
               )}
               <div
-                className="rounded-full px-4 py-1 text-sm font-semibold shadow"
+                className="rounded-md px-6 py-1 text-base font-bold shadow"
                 style={{
                   backgroundColor: game.tierColor || "#4f46e5",
-                  color: isColorDark(game.tierColor || "#4f46e5")
-                    ? "white"
-                    : "black",
+                  color: isColorDark(game.tierColor || "#4f46e5") ? "white" : "black",
                 }}
               >
                 {game.tier}
@@ -204,53 +215,56 @@ function GameModal({ game, onClose }) {
           )}
 
           {/* Etiquetas principales */}
-          <div className="flex flex-wrap justify-center gap-3 text-sm text-indigo-200">
-            <div className="flex items-center gap-1 rounded-md bg-indigo-800 px-3 py-1">
-              <Calendar size={16} />
+          <div className="flex flex-wrap justify-center gap-3 text-base font-bold text-indigo-200">
+            <div className="flex items-center gap-1 rounded-md border border-indigo-400 bg-indigo-600/80 px-3 py-1">
+              <Calendar size={20} />
               {game.year}
             </div>
-            <div className="flex items-center gap-1 rounded-md bg-indigo-800 px-3 py-1">
-              <Globe size={16} />
+            <div className="flex items-center gap-1 rounded-md border border-indigo-400 bg-indigo-600/80 px-3 py-1">
+              <Globe size={20} />
               {game.origin}
             </div>
-            <div className="flex items-center gap-1 rounded-md bg-indigo-800 px-3 py-1">
-              <Laptop size={16} />
+            <div className="flex items-center gap-1 rounded-md border border-indigo-400 bg-indigo-600/80 px-3 py-1">
+              <Laptop size={20} />
               {game.platform}
             </div>
-            <div className="flex items-center gap-1 rounded-md bg-indigo-800 px-3 py-1">
-              <Tag size={16} />
+            <div className="flex items-center gap-1 rounded-md border border-indigo-400 bg-indigo-600/80 px-3 py-1">
+              <Tag size={20} />
               {game.category}
               {game.subcategory && ` - ${game.subcategory}`}
             </div>
           </div>
 
+
           {/* Géneros */}
           {game.genres?.length > 0 && (
-            <div className="mt-2 w-full rounded-lg border border-indigo-700 bg-indigo-950 p-4">
-              <p className="mb-2 text-center text-sm font-semibold text-indigo-300 uppercase">
+            <div>
+              <p className="text-center text-md mb-2 font-semibold text-indigo-100 uppercase">
                 Genres
               </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {game.genres.map((g, i) => (
-                  <span
-                    key={i}
-                    className="rounded-full px-3 py-1 text-sm font-semibold"
-                    style={{
-                      backgroundColor: g.color,
-                      color: isColorDark(g.color) ? "white" : "black",
-                    }}
-                  >
-                    {g.name}
-                  </span>
-                ))}
+              <div className="w-full rounded-lg border border-indigo-400 bg-indigo-700/80 p-4">
+                <div className="flex flex-wrap justify-center gap-2">
+                  {game.genres.map((g, i) => (
+                    <span
+                      key={i}
+                      className="rounded-full px-3 py-1 text-base font-semibold"
+                      style={{
+                        backgroundColor: g.color,
+                        color: isColorDark(g.color) ? "white" : "black",
+                      }}
+                    >
+                      {g.name}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           )}
 
           {/* Extensión del juego */}
           {game.extension_of && (
-            <div className="rounded-lg border border-indigo-700 bg-indigo-950 p-4">
-              <p className="mb-2 text-sm text-indigo-400 italic">
+            <div className="w-full rounded-lg border border-indigo-400 bg-indigo-700 p-4">
+              <p className="mb-2 text-sm text-indigo-200 italic">
                 This game is an extension of:
               </p>
               <ExtensionContent gameName={game.extension_of} />
@@ -261,8 +275,10 @@ function GameModal({ game, onClose }) {
           <div className="flex justify-end">
             <button
               onClick={handleEdit}
-              className="rounded-lg bg-indigo-700 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-600"
-            >
+              className="
+                rounded-lg bg-theme-gamecard-modal-editbutton px-6 py-2 text-sm font-bold text-white transition
+                hover:bg-theme-gamecard-modal-editbutton-hover active:bg-theme-gamecard-modal-editbutton-active
+            ">
               Edit
             </button>
           </div>
@@ -393,7 +409,8 @@ function GameCard({
             bg-gradient-to-tr from-theme-gamecard-bg-1 to-theme-gamecard-bg-2
             ${expandible ? "cursor-pointer" : ""}
 
-            hover:-translate-y-1 hover:rotate-x-[6deg] hover:rotate-y-[4deg]
+            hover:-translate-y-1 hover:rotate-x-[10deg] hover:rotate-y-[4deg]
+            hover:scale-[1.05]
             transform-gpu
 
             before:absolute before:inset-0

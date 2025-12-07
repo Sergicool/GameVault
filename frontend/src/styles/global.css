@@ -119,9 +119,9 @@ body::-webkit-scrollbar {
   --color-theme-gamecard-modal-extension-bg: theme(--color-blue-600);
   --color-theme-gamecard-modal-extension-border: theme(--color-blue-600);
 
-  --color-theme-gamecard-modal-editbutton: theme(--color-blue-600);
+  --color-theme-gamecard-modal-editbutton: theme(--color-blue-500);
   --color-theme-gamecard-modal-editbutton-hover: theme(--color-blue-600);
-  --color-theme-gamecard-modal-editbutton-active: theme(--color-blue-600);
+  --color-theme-gamecard-modal-editbutton-active: theme(--color-blue-700);
 
   /* General Card View ()*/
   --color-theme-gamecard-bg-1: theme(--color-indigo-800);
