@@ -28,6 +28,8 @@ function HallOfFame() {
     categories: [],
     subcategories: [],
     tiers: [],
+    showGames: true,
+    showExtensions: true,
   });
   const [loading, setLoading] = useState(true);
 
@@ -87,9 +89,14 @@ function HallOfFame() {
   const filteredGames = useMemo(() => {
     let juegos = [...games];
 
-    if (filters.ignoreExtensions) {
-      juegos = juegos.filter((g) => !g.extension_of);
-    }
+    juegos = juegos.filter((g) => {
+      const isExtension = !!g.extension_of;
+
+      if (!filters.showGames && !isExtension) return false;
+      if (!filters.showExtensions && isExtension) return false;
+
+      return true;
+    });
 
     return juegos.filter((game) => {
       if (!game.tier) return false;
@@ -154,10 +161,6 @@ function HallOfFame() {
           </p>
         ) : filteredGames.length > 0 ? (
           <>
-            <h1 className="text-4xl text-center font-mono font-bold tracking-tight text-gray-100 mb-8 drop-shadow-md">
-              🎖️ Hall of Fame 🎖️
-            </h1>
-
             <div className="flex flex-col gap-3 max-w-3xl mx-auto">
               {filteredGames.map((game, index) => (
                 <GameCard key={game.name} game={game} displayIndex={index + 1} inLeaderboard expandible/>

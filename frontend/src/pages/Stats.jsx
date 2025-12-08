@@ -156,10 +156,6 @@ function Stats() {
   /* Render */
   return (
     <div className="min-h-screen space-y-12 p-8">
-      <h1 className="mb-8 text-center font-mono text-4xl font-bold tracking-tight text-gray-100 drop-shadow-md">
-        Stats
-      </h1>
-
       {/* Totals */}
       <section className="mb-8 grid grid-cols-4 gap-12">
         <div className="col-start-2 rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4 text-center shadow-md">

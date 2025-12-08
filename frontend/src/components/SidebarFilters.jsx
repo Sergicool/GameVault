@@ -136,11 +136,17 @@ function SidebarFilters({
     });
   };
 
-  // Alterna la opción "ignoreExtensions"
-  const toggleIgnoreExtensions = () => {
+  const toggleShowGames = () => {
     setFilters((prev) => ({
       ...prev,
-      ignoreExtensions: !prev.ignoreExtensions,
+      showGames: !prev.showGames,
+    }));
+  };
+
+  const toggleShowExtensions = () => {
+    setFilters((prev) => ({
+      ...prev,
+      showExtensions: !prev.showExtensions,
     }));
   };
 
@@ -202,11 +208,20 @@ function SidebarFilters({
       {open && (
         <div className="max-w-full space-y-6 p-4">
           {/* Opción global */}
-          <ToggleSwitch
-            checked={filters.ignoreExtensions || false}
-            onChange={toggleIgnoreExtensions}
-            label="Ignore Extensions"
-          />
+          <div className="space-y-3">
+            <ToggleSwitch
+              checked={filters.showGames}
+              onChange={toggleShowGames}
+              label="Show Games"
+            />
+
+            <ToggleSwitch
+              checked={filters.showExtensions}
+              onChange={toggleShowExtensions}
+              label="Show Extensions"
+            />
+          </div>
+
 
           {/* Secciones de filtros */}
           <FilterSection

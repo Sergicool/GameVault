@@ -30,6 +30,8 @@ function TierListView() {
     categories: [],
     subcategories: [],
     tiers: [],
+    showGames: true,
+    showExtensions: true,
   });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -79,9 +81,14 @@ function TierListView() {
   const filteredGames = useMemo(() => {
     let juegos = [...games];
 
-    if (filters.ignoreExtensions) {
-      juegos = juegos.filter((g) => !g.extension_of);
-    }
+    juegos = juegos.filter((g) => {
+      const isExtension = !!g.extension_of;
+
+      if (!filters.showGames && !isExtension) return false;
+      if (!filters.showExtensions && isExtension) return false;
+
+      return true;
+    });
 
     return juegos.filter((game) => {
       if (filters.years.length > 0 && !filters.years.includes(game.year))
