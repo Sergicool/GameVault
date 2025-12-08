@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, Plus, ArrowDownUp, RefreshCw, HardDrive, Upload, Check, ChevronsUpDown } from "lucide-react";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "@headlessui/react";
+import { useLocation } from "react-router-dom";
 
 // Definir tus temas de manera centralizada
 const themes = [
@@ -13,7 +14,7 @@ function Header() {
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "dark");
   const fileInputRef = useRef(null);
   const menuRef = useRef(null);
-  const currentPath = window.location.pathname;
+  const { pathname: currentPath } = useLocation();
 
   const navLinks = [
     { label: "Tier List", href: "/TierList" },
