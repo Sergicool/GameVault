@@ -215,7 +215,7 @@ function GameModal({ game, onClose }) {
           )}
 
           {/* Etiquetas principales */}
-          <div className="flex flex-wrap justify-center gap-3 text-base font-bold text-indigo-200">
+          <div className="flex flex-wrap justify-center gap-3 text-base font-bold text-indigo-100">
             <div className="flex items-center gap-1 rounded-md border border-indigo-400 bg-indigo-600/80 px-3 py-1">
               <Calendar size={20} />
               {game.year}

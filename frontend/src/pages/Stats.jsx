@@ -8,7 +8,18 @@ import { getCategories } from "../api/categories";
 import { getSubcategories } from "../api/subcategories";
 import { getTiers } from "../api/tiers";
 import GameCard from "../components/GameCard";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  Calendar,
+  Globe,
+  Monitor,
+  List,
+  Layers,
+  BarChart,
+  Tags,
+  Star,
+} from "lucide-react";
 
 function Stats() {
   /* Estados */
@@ -141,7 +152,22 @@ function Stats() {
 
   /* Handler */
   const toggleSection = (key) => {
-    setOpenSections((prev) => ({ ...prev, [key]: !prev[key] }));
+    setOpenSections((prev) => {
+      const isOpening = !prev[key];
+
+      // Scroll suave automático al abrir
+      if (isOpening) {
+        setTimeout(() => {
+          const el = document.getElementById(`section-${key}`);
+          el?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
+          });
+        }, 150);
+      }
+
+      return { ...prev, [key]: isOpening };
+    });
   };
 
   /* Loading state */
@@ -157,16 +183,17 @@ function Stats() {
   return (
     <div className="min-h-screen space-y-12 p-8">
       {/* Totals */}
-      <section className="mb-8 grid grid-cols-4 gap-12">
-        <div className="col-start-2 rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4 text-center shadow-md">
+      <section className="mb-8 flex flex-wrap justify-center gap-10">
+        <div className="w-60 rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 text-center shadow-md">
           <h3 className="text-lg font-semibold">Total Games</h3>
-          <p className="text-3xl font-bold text-cyan-300 drop-shadow-[0_0_10px_#90D5FF]">
+          <p className="text-4xl font-bold text-cyan-300 drop-shadow-[0_0_12px_#67E8F9]">
             {mainGames.length}
           </p>
         </div>
-        <div className="col-start-3 rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4 text-center shadow-md">
+
+        <div className="w-60 rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 text-center shadow-md">
           <h3 className="text-lg font-semibold">Extensions</h3>
-          <p className="text-3xl font-bold text-purple-400 drop-shadow-[0_0_10px_#DF8EFF]">
+          <p className="text-4xl font-bold text-fuchsia-300 drop-shadow-[0_0_12px_#E879F9]">
             {extensions.length}
           </p>
         </div>
@@ -174,23 +201,25 @@ function Stats() {
 
       {/* Summary */}
       <section>
-        <h2 className="mb-8 border-b-1 border-slate-700 pb-4 text-center text-2xl font-semibold">
-          Summary
-        </h2>
         <div className="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Genres */}
           {Object.keys(countsGenres).length > 0 && (
-            <div className="row-span-2 flex flex-col rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 shadow-md">
-              <h3 className="mb-2 text-center text-lg font-semibold">
-                🎭 Genres 🎭
+            <div className="row-span-2 flex flex-col rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 shadow-md">
+              <h3 className="
+                mb-3 flex items-center justify-center gap-2
+                text-lg font-bold text-indigo-100
+                drop-shadow-[0_0_6px_#818CF8]
+              ">
+                <Tags size={18} />
+                Genres - {Object.keys(countsGenres).length}
               </h3>
-              <ul className="max-h-120 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-500/70 bg-slate-950/50 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <ul className="max-h-120 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {Object.entries(countsGenres)
                   .sort((a, b) => b[1] - a[1])
                   .map(([label, count]) => (
                     <li
                       key={label}
-                      className="flex justify-between rounded bg-violet-600/60 px-2 py-1"
+                      className="flex justify-between rounded border border-indigo-500 bg-indigo-600/80 px-2 py-1"
                     >
                       <span>{label}</span>
                       <span className="font-bold">{count}</span>
@@ -202,29 +231,34 @@ function Stats() {
 
           {/* Resto de los contadores */}
           {[
-            { title: "📅 Years 📅", data: countsYears },
-            { title: "🌍 Origins 🌍", data: countsOrigins },
-            { title: "💻 Platforms 💻", data: countsPlatforms },
-            { title: "📋 Categories 📋", data: countsCategories },
-            { title: "📄 Subcategories 📄", data: countsSubcategories },
-            { title: "📊 Tiers 📊", data: countsTiers },
+            { title: "Years", icon: Calendar, data: countsYears },
+            { title: "Origins", icon: Globe, data: countsOrigins },
+            { title: "Platforms", icon: Monitor, data: countsPlatforms },
+            { title: "Categories", icon: List, data: countsCategories },
+            { title: "Subcategories", icon: Layers, data: countsSubcategories },
+            { title: "Tiers", icon: BarChart, data: countsTiers },
           ]
             .filter((section) => Object.keys(section.data).length > 0)
             .map((section) => (
               <div
                 key={section.title}
-                className="flex flex-col rounded-xl border border-indigo-500/70 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-4 shadow-md"
+                className="flex flex-col rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 shadow-md"
               >
-                <h3 className="mb-2 text-center text-lg font-semibold">
-                  {section.title}
+                <h3 className="
+                  mb-3 flex items-center justify-center gap-2
+                  text-lg font-bold text-indigo-100
+                  drop-shadow-[0_0_6px_#818CF8]
+                ">
+                  <section.icon size={18} />
+                  {section.title} - {Object.keys(section.data).length}
                 </h3>
-                <ul className="max-h-48 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-500/70 bg-slate-950/50 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                <ul className="max-h-48 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                   {Object.entries(section.data)
                     .sort((a, b) => b[1] - a[1])
                     .map(([label, count]) => (
                       <li
                         key={label}
-                        className="flex justify-between rounded bg-violet-600/60 px-2 py-1"
+                        className="flex justify-between rounded border border-indigo-500 bg-indigo-600/80 px-2 py-1"
                       >
                         <span>{label}</span>
                         <span className="font-bold">{count}</span>
@@ -236,22 +270,38 @@ function Stats() {
         </div>
       </section>
 
-      <h2 className="mb-8 border-b-1 border-slate-700 pb-4 text-center text-2xl font-semibold">
-        ⭐ Favorites ⭐
+      <h2 className="
+        mb-8 flex items-center justify-center gap-3 pb-4
+        text-center text-3xl font-bold
+        text-indigo-200
+        drop-shadow-[0_0_6px_#818CF8]
+        border-b-2 border-indigo-400
+      ">
+        <Star className="
+          text-yellow-300
+          drop-shadow-[0_0_6px_#FACC15]
+        " size={30}/>
+        Favorites
+        <Star className="
+          text-yellow-300
+          drop-shadow-[0_0_6px_#FACC15]
+          " size={30}/>
       </h2>
+
       {[
-        { title: "📅 Favorites by Year 📅", data: favByYear },
-        { title: "🎭 Favorites by Genre 🎭", data: favByGenre },
-        { title: "🌍 Favorites by Origin 🌍", data: favByOrigin },
-        { title: "💻 Favorites by Platform 💻", data: favByPlatform },
-        { title: "📋 Favorites by Category 📋", data: favByCategory },
-        { title: "📄 Favorites by Subcategory 📄", data: favBySubcategory },
+        { title: "Year", icon: Calendar, data: favByYear },
+        { title: "Genre", icon: Tags, data: favByGenre },
+        { title: "Origin", icon: Globe, data: favByOrigin },
+        { title: "Platform", icon: Monitor, data: favByPlatform },
+        { title: "Category", icon: List, data: favByCategory },
+        { title: "Subcategory", icon: Layers, data: favBySubcategory },
       ].map(
         (section) =>
           section.data.length > 0 && (
             <section
+              id={`section-${section.title}`}
               key={section.title}
-              className="overflow-hidden rounded-xl border border-indigo-500 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 shadow-md"
+              className="overflow-hidden rounded-xl border border-indigo-400 bg-indigo-800/80 shadow-md"
             >
               {/* Header */}
               <button
@@ -260,29 +310,57 @@ function Stats() {
               >
                 <span className="absolute left-3">
                   {openSections[section.title] ? (
-                    <ChevronDown size={20} />
+                    <ChevronDown
+                      size={20}
+                      className="transition-transform duration-300 rotate-180"
+                    />
                   ) : (
-                    <ChevronRight size={20} />
+                    <ChevronRight
+                      size={20}
+                      className="transition-transform duration-300"
+                    />
                   )}
                 </span>
-                <span>{section.title}</span>
+
+                <span
+                  className="
+                    flex items-center gap-2
+                    text-indigo-100 font-bold
+                    drop-shadow-[0_0_6px_#818CF8]
+                  "
+                >
+                  <section.icon size={18} />
+                  {section.title}
+                  <section.icon size={18} />
+                </span>
               </button>
 
-              {/* Contenido */}
-              {openSections[section.title] && (
-                <div className="flex flex-wrap justify-around gap-6 border-t border-indigo-500 bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950 p-4">
+              {/* CONTENIDO ANIMADO */}
+              <div
+                className={`
+                  overflow-hidden transition-all duration-500 ease-in-out
+                  ${
+                    openSections[section.title]
+                      ? "max-h-[2000px] opacity-100"
+                      : "max-h-0 opacity-0"
+                  }
+                  border-t border-indigo-500
+                  bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950
+                `}
+              >
+                <div className="flex flex-wrap justify-around gap-6 p-4">
                   {section.data.map(({ label, game }) => (
                     <div key={label} className="flex flex-col items-center">
-                      <h3 className="mb-2 text-center text-lg font-bold">
+                      <h3 className="mb-2 text-center text-lg font-bold text-indigo-100 drop-shadow-[0_0_6px_#818CF8]">
                         {label}
                       </h3>
                       <GameCard game={game} expandible />
                     </div>
                   ))}
                 </div>
-              )}
+              </div>
             </section>
-          ),
+          )
       )}
     </div>
   );
