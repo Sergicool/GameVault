@@ -201,7 +201,7 @@ function Stats() {
 
       {/* Summary */}
       <section>
-        <div className="grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="h-138 grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Genres */}
           {Object.keys(countsGenres).length > 0 && (
             <div className="row-span-2 flex flex-col rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 shadow-md">

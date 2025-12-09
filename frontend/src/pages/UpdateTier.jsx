@@ -133,8 +133,10 @@ function UpdateTier() {
       <div className="pl-6 pr-6 pb-6">
         <button
           onClick={handleSave}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
-        >
+          className="
+                rounded-lg bg-theme-updateTierlist-button px-6 py-2 text-sm font-bold text-white transition
+                hover:bg-theme-updateTierlist-button-hover active:bg-theme-updateTierlist-button-active
+        ">
           Save Changes
         </button>
       </div>

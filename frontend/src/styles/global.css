@@ -197,6 +197,10 @@ body::-webkit-scrollbar {
   --color-theme-tierlist-bg: theme(--color-blue-600);
   --color-theme-tierlist-border: theme(--color-blue-600);
 
+  --color-theme-updateTierlist-button: theme(--color-blue-600);
+  --color-theme-updateTierlist-button-hover: theme(--color-blue-700);
+  --color-theme-updateTierlist-button-active: theme(--color-blue-800);
+
   /* --------------------------------------------------------------------------- */
   /*                                 Games Page                                  */
   /* --------------------------------------------------------------------------- */
