@@ -165,7 +165,7 @@ function GameModal({ game, onClose }) {
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-indigo-800 text-indigo-200">
-              No Image
+              
             </div>
           )}
         </div>
@@ -428,7 +428,7 @@ function GameCard({
                 className="h-full w-full object-cover"
               />
             ) : (
-              <span className="text-theme-gamecard-noimage-text">No Image</span>
+              <span className="text-theme-gamecard-noimage-text"></span>
             )}
             {game.tier && (
               <div
