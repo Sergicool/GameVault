@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export function useCrudModal(defaultColor = null) {
+export function useTierModal(defaultColor = null) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState({
     name: '',
