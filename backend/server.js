@@ -88,12 +88,17 @@ app.get('/genres', (req, res) => {
 });
 
 app.post('/update-genre', (req, res) => {
-  const { oldName, newName } = req.body;
+  const { oldName, newName, color } = req.body;
+  if (!oldName || !newName || !color) {
+    return res.status(400).json({ error: 'Datos incompletos' });
+  }
+
   try {
-    const stmt = db.prepare("UPDATE genres SET name = ? WHERE name = ?");
-    const result = stmt.run(newName, oldName);
+    const stmt = db.prepare("UPDATE genres SET name = ?, color = ? WHERE name = ?");
+    const result = stmt.run(newName, color, oldName);
     res.json({ success: true, changes: result.changes });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ error: 'Error al actualizar género' });
   }
 });

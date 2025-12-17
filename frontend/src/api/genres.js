@@ -21,15 +21,16 @@ export async function addGenre(name, color) {
   return res.json();
 }
 
-export async function updateGenre(oldName, newName) {
+export async function updateGenre(oldName, newName, color) {
   const res = await fetch(`${API_URL}/update-genre`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ oldName, newName }),
+    body: JSON.stringify({ oldName, newName, color }),
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al actualizar género');
 }
+
 
 export async function deleteGenre(name) {
   const res = await fetch(`${API_URL}/delete-genre`, {
