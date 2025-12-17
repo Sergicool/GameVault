@@ -3,22 +3,32 @@ import { Pencil, Trash2 } from 'lucide-react';
 export default function SubcategoryItem({ subcategory, onEdit, onDelete }) {
   return (
     <li className="bg-gray-50 rounded-lg px-3 py-2 flex items-center justify-between shadow transition hover:shadow-md">
-      <span className="flex-1 font-medium text-gray-800">
+      <span className="flex-1 font-semibold text-gray-800">
         {subcategory.name} <span className="text-xs text-gray-500">({subcategory.category})</span>
       </span>
       <div className="flex gap-2">
+        {/* Edit */}
         <button
           onClick={onEdit}
-          className="text-blue-500 hover:text-blue-700 p-1 rounded transition"
+          className="p-1 rounded transition hover:bg-blue-100 active:bg-blue-200"
+          title="Edit genre"
         >
-          <Pencil size={18} />
+          <Pencil className="w-4 h-4 text-blue-600" />
         </button>
+
+        {/* Delete */}
         <button
-          onClick={onDelete}
           disabled={subcategory.inUse}
-          className={`p-1 rounded transition ${subcategory.inUse ? 'text-gray-300 cursor-not-allowed' : 'text-red-500 hover:text-red-700'}`}
+          onClick={onDelete}
+          className={`
+            p-1 rounded transition
+            ${subcategory.inUse
+              ? 'opacity-30 cursor-not-allowed'
+              : 'hover:bg-red-100 active:bg-red-200'}
+          `}
+          title={subcategory.inUse ? 'Subcategory in use' : 'Delete subcategory'}
         >
-          <Trash2 size={18} />
+          <Trash2 className="w-4 h-4 text-red-600" />
         </button>
       </div>
     </li>

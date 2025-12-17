@@ -214,7 +214,7 @@ export default function UpdateData() {
 
         {/* Origins */}
         <div className="bg-gradient-to-br from-amber-400 to-orange-700 rounded-xl shadow-lg p-4 flex flex-col">
-          <h2 className="text-2xl font-semibold text-center mb-4">Origins</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">Origins</h2>
           <div className="flex-1 bg-orange-900/60 rounded-xl p-2 shadow-inner overflow-y-auto min-h-0
                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <OriginList
@@ -233,7 +233,7 @@ export default function UpdateData() {
 
         {/* Categories */}
         <div className="bg-gradient-to-br from-emerald-400 to-green-700 rounded-xl shadow-lg p-4 flex flex-col">
-          <h2 className="text-2xl font-semibold text-center mb-4">Categories</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">Categories</h2>
           <div className="flex-1 bg-green-900/60 rounded-xl p-2 shadow-inner overflow-y-auto min-h-0
                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <CategoryList
@@ -252,7 +252,7 @@ export default function UpdateData() {
 
         {/* Subcategories */}
         <div className="bg-gradient-to-br from-blue-400 to-indigo-700 rounded-xl shadow-lg p-4 flex flex-col">
-          <h2 className="text-2xl font-semibold text-center mb-4">Subcategories</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">Subcategories</h2>
           <div className="flex-1 bg-indigo-900/60 rounded-xl p-2 shadow-inner overflow-y-auto min-h-0
                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <SubcategoryList
@@ -271,7 +271,7 @@ export default function UpdateData() {
 
         {/* Platforms */}
         <div className="bg-gradient-to-br from-gray-400 to-slate-700 rounded-xl shadow-lg p-4 flex flex-col">
-          <h2 className="text-2xl font-semibold text-center mb-4">Platforms</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">Platforms</h2>
           <div className="flex-1 bg-slate-900/60 rounded-xl p-2 shadow-inner overflow-y-auto min-h-0
                           [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             <PlatformList
