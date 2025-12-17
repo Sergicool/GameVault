@@ -17,15 +17,18 @@ export async function addTier(name, color, position) {
   if (!res.ok) throw new Error(data.error || 'Error al añadir tier');
 }
 
-export async function updateTier(oldName, newName) {
+export async function updateTier(oldName, newName, color) {
   const res = await fetch(`${API_URL}/update-tier`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ oldName, newName }),
+    body: JSON.stringify({ oldName, newName, color }),
   });
+
   const data = await res.json();
   if (!res.ok) throw new Error(data.error || 'Error al actualizar tier');
+  return data;
 }
+
 
 export async function moveTierUp(name) {
   const res = await fetch(`${API_URL}/move-tier-up`, {

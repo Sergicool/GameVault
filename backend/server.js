@@ -349,23 +349,51 @@ app.get('/tiers', (req, res) => {
 });
 
 app.post('/add-tier', (req, res) => {
-  const { name, color, position } = req.body;
+  const { name, color } = req.body;
+
   try {
-    const stmt = db.prepare("INSERT INTO tiers (name, color, position) VALUES (?, ?, ?)");
+    const lastPos = db
+      .prepare('SELECT MAX(position) as maxPos FROM tiers')
+      .get();
+
+    const position = (lastPos.maxPos ?? -1) + 1;
+
+    const stmt = db.prepare(`
+      INSERT INTO tiers (name, color, position)
+      VALUES (?, ?, ?)
+    `);
+
     const result = stmt.run(name, color, position);
-    res.json({ success: true, id: result.lastInsertRowid });
+
+    res.json({ success: true });
   } catch (e) {
+    console.error(e);
     res.status(400).json({ error: e.message });
   }
 });
 
 app.post('/update-tier', (req, res) => {
-  const { oldName, newName } = req.body;
+  const { oldName, newName, color } = req.body;
+
+  if (!oldName || !newName || !color) {
+    return res.status(400).json({ error: 'Datos incompletos' });
+  }
+
   try {
-    const stmt = db.prepare("UPDATE tiers SET name = ? WHERE name = ?");
-    const result = stmt.run(newName, oldName);
-    res.json({ success: true, changes: result.changes });
+    const stmt = db.prepare(`
+      UPDATE tiers
+      SET name = ?, color = ?
+      WHERE name = ?
+    `);
+
+    const result = stmt.run(newName, color, oldName);
+
+    res.json({
+      success: true,
+      changes: result.changes
+    });
   } catch (e) {
+    console.error(e);
     res.status(500).json({ error: 'Error al actualizar tier' });
   }
 });
