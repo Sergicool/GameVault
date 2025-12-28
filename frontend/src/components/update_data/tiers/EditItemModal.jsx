@@ -13,7 +13,7 @@ export default function EditItemModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 w-80 shadow-xl">
+      <div className="border-2 border-purple-600 bg-white rounded-2xl p-6 w-80 shadow-xl">
         <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
           {title}
         </h3>

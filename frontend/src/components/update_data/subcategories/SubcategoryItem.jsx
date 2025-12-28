@@ -11,7 +11,7 @@ export default function SubcategoryItem({ subcategory, onEdit, onDelete }) {
         <button
           onClick={onEdit}
           className="p-1 rounded transition hover:bg-blue-100 active:bg-blue-200"
-          title="Edit genre"
+          title="Edit subcategory"
         >
           <Pencil className="w-4 h-4 text-blue-600" />
         </button>

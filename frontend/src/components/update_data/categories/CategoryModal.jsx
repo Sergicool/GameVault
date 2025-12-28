@@ -3,7 +3,7 @@ export default function CategoryModal({ isOpen, value, setValue, onClose, onSave
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-2xl p-6 w-72 shadow-xl">
+      <div className="border-2 border-green-600 bg-white rounded-2xl p-6 w-72 shadow-xl">
         <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">
           {value.originalName ? 'Edit Category' : 'New Category'}
         </h3>

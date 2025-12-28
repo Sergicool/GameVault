@@ -1,4 +1,4 @@
-import EditItemModal from '../EditItemModal';
+import EditItemModal from './EditItemModal';
 
 export default function TierModal({ modal, onSave }) {
   return (
