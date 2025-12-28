@@ -3,7 +3,12 @@ import { getGames, updateGamesTierList } from '../api/games';
 import { getTiers } from '../api/tiers';
 import TierList from '../components/TierList';
 
+import { useNavigate } from 'react-router-dom';
+
 function UpdateTier() {
+
+  const navigate = useNavigate();
+
   const [tiers, setTiers] = useState([]);
   const [gamesByTier, setGamesByTier] = useState({});
   const [unassignedGames, setUnassignedGames] = useState([]);
@@ -110,6 +115,7 @@ function UpdateTier() {
     try {
       await updateGamesTierList(allGames);
       alert('Tier list actualizada correctamente');
+      navigate('/TierList');
     } catch (e) {
       alert('Error al actualizar tier list');
       console.error('❌ Error in handleSave:', e);

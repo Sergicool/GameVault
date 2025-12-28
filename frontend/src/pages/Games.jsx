@@ -39,6 +39,8 @@ function Games() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
+  const hasGames = games.length > 0;
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -191,7 +193,11 @@ function Games() {
             </div>
 
             {/* Resultados */}
-            {filteredGames.length > 0 ? (
+            {!hasGames ? (
+              <p className="text-md mt-20 text-center text-gray-400 italic">
+                No games added yet
+              </p>
+            ) : filteredGames.length > 0 ? (
               <div className="flex flex-wrap justify-around gap-6">
                 {filteredGames.map((game) => (
                   <GameCard key={game.name} game={game} expandible />
@@ -202,6 +208,7 @@ function Games() {
                 No games found matching the filters
               </p>
             )}
+
           </>
         )}
       </motion.div>
