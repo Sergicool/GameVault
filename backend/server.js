@@ -18,6 +18,8 @@ const upload = multer({ storage });
 const fs = require("fs");
 const dbUpload = multer({ dest: "uploads/" });
 
+const recomputeGamePositions = require('./recomputeGamePositions');
+
 // -------------------------------------------------------------------- //
 //                       Download database backup                       //
 // -------------------------------------------------------------------- //
@@ -408,6 +410,7 @@ app.post('/delete-tier', (req, res) => {
   try {
     const stmt = db.prepare("DELETE FROM tiers WHERE name = ?");
     const result = stmt.run(name);
+
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -430,6 +433,7 @@ app.post('/move-tier-up', (req, res) => {
     update.run(above.position, current.name);
     update.run(current.position, above.name);
 
+    recomputeGamePositions(db);
     res.json({ success: true });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -452,6 +456,7 @@ app.post('/move-tier-down', (req, res) => {
     update.run(below.position, current.name);
     update.run(current.position, below.name);
 
+    recomputeGamePositions(db);
     res.json({ success: true });
   } catch (e) {
     res.status(400).json({ error: e.message });
@@ -708,6 +713,7 @@ app.post('/delete-game', (req, res) => {
       return res.status(404).json({ error: 'Juego no encontrado' });
     }
 
+    recomputeGamePositions(db);
     res.json({ success: true });
   } catch (e) {
     console.error('Error al eliminar juego:', e.message);

@@ -155,7 +155,7 @@ export default function UpdateData() {
           <GenreList
             genres={genres}
             onEdit={genreModal.openEdit}
-            onDelete={async (name) => { await deleteGenre(name); loadGenres(); }}
+            onDelete={handleDeleteGenre}
           />
         </div>
         <button
@@ -178,9 +178,9 @@ export default function UpdateData() {
             <TierList
               tiers={tiers}
               onEdit={tierModal.openEdit}
-              onDelete={async (name) => { await deleteTier(name); loadTiers(); }}
-              onMoveUp={async (index) => { if(index===0) return; await moveTierUp(tiers[index].name); loadTiers(); }}
-              onMoveDown={async (index) => { if(index===tiers.length-1) return; await moveTierDown(tiers[index].name); loadTiers(); }}
+              onDelete={handleDeleteTier}
+              onMoveUp={async (index) => { if(index===0) return; await moveTierUp(tiers[index].name); loadAll(); }}
+              onMoveDown={async (index) => { if(index===tiers.length-1) return; await moveTierDown(tiers[index].name); loadAll(); }}
             />
           </div>
           <button
