@@ -145,8 +145,11 @@ function Header() {
               </div>
 
               <div className="my-2 border-t-2 border-theme-menu-border" />
-
+              
               {/* Selector de tema con HeadlessUI */}
+
+              {/* Quitado temporalmente al ser una funcionalid inacabada
+
               <div className="flex flex-col space-y-1 px-2">
                 <label className="pl-1 text-sm font-semibold text-theme-menu-themeselector-title-text">Theme</label>
                 <Listbox value={theme} onChange={changeTheme}>
@@ -197,6 +200,8 @@ function Header() {
               </div>
 
               <div className="my-2 border-t-2 border-theme-menu-border" />
+              
+              */}
 
               {/* Bloque Download e Import */}
               {menuOptions
