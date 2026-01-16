@@ -135,6 +135,14 @@ function HallOfFame() {
     });
   }, [games, filters]);
 
+  if (games.length === 0) {
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        No games registered yet.
+      </p>
+    );
+  }
+
   return (
     <div className="flex">
       <SidebarFilters

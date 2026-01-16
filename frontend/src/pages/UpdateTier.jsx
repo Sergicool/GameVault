@@ -123,7 +123,11 @@ function UpdateTier() {
   };
 
   if (tiers.length === 0) {
-    return <div className="text-white p-6">Loading data...</div>;
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        Theres have to be tiers and games registered.
+      </p>
+    );
   }
 
   return (

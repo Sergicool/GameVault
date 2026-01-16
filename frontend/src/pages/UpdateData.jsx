@@ -119,7 +119,7 @@ export default function UpdateData() {
 
   const saveSubcategory = async () => {
     const { name, category, originalName } = subcategoryModal.value;
-    if (!name.trim() || !category) return;
+    if (!name.trim()) return;
     if (originalName) await updateSubcategory(originalName, name, category);
     else await addSubcategory(name, category);
     subcategoryModal.close();
@@ -262,7 +262,7 @@ export default function UpdateData() {
             />
           </div>
           <button
-            onClick={subcategoryModal.openCreate}
+            onClick={() => subcategoryModal.openCreate(categories)}
             className="mt-2 sm:mt-4 bg-white text-indigo-600 font-bold px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg shadow transition hover:bg-indigo-200 active:bg-indigo-300"
           >
             Add subcategory

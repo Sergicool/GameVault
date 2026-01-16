@@ -31,13 +31,11 @@ function Stats() {
   const [subcategories, setSubcategories] = useState([]);
   const [tiers, setTiers] = useState([]);
   const [years, setYears] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [openSections, setOpenSections] = useState({}); // Para desplegables
 
   /* Carga de datos */
   useEffect(() => {
     const load = async () => {
-      setLoading(true);
       const [
         gamesData,
         genresData,
@@ -76,7 +74,6 @@ function Stats() {
       setSubcategories(subcategoriesData);
       setTiers(tiersData);
       setYears(yearsData);
-      setLoading(false);
     };
     load();
   }, []);
@@ -170,15 +167,6 @@ function Stats() {
     });
   };
 
-  /* Loading state */
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center text-gray-400">
-        Loading stats...
-      </div>
-    );
-  }
-
   /* Render */
   return (
     <div className="min-h-screen space-y-12 p-8">
@@ -203,31 +191,29 @@ function Stats() {
       <section>
         <div className="h-138 grid auto-rows-fr grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {/* Genres */}
-          {Object.keys(countsGenres).length > 0 && (
-            <div className="row-span-2 flex flex-col rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 shadow-md">
-              <h3 className="
-                mb-3 flex items-center justify-center gap-2
-                text-lg font-bold text-indigo-100
-                drop-shadow-[0_0_6px_#818CF8]
-              ">
-                <Tags size={18} />
-                Genres - {Object.keys(countsGenres).length}
-              </h3>
-              <ul className="max-h-120 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="row-span-2 flex flex-col rounded-xl border border-indigo-400 bg-indigo-800/80 p-4 shadow-md">
+            <h3 className="mb-3 flex items-center justify-center gap-2 text-lg font-bold text-indigo-100">
+              <Tags size={18} />
+              Genres - {Object.keys(countsGenres).length}
+            </h3>
+
+            {Object.keys(countsGenres).length === 0 ? (
+              <p className="flex flex-1 items-center justify-center text-sm text-gray-400 italic">
+                No games registered yet with this data.
+              </p>
+            ) : (
+              <ul className="max-h-120 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm">
                 {Object.entries(countsGenres)
                   .sort((a, b) => b[1] - a[1])
                   .map(([label, count]) => (
-                    <li
-                      key={label}
-                      className="flex justify-between rounded border border-indigo-500 bg-indigo-600/80 px-2 py-1"
-                    >
+                    <li key={label} className="flex justify-between rounded bg-indigo-600/80 px-2 py-1">
                       <span>{label}</span>
                       <span className="font-bold">{count}</span>
                     </li>
                   ))}
               </ul>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Resto de los contadores */}
           {[
@@ -238,7 +224,6 @@ function Stats() {
             { title: "Subcategories", icon: Layers, data: countsSubcategories },
             { title: "Tiers", icon: BarChart, data: countsTiers },
           ]
-            .filter((section) => Object.keys(section.data).length > 0)
             .map((section) => (
               <div
                 key={section.title}
@@ -252,19 +237,25 @@ function Stats() {
                   <section.icon size={18} />
                   {section.title} - {Object.keys(section.data).length}
                 </h3>
-                <ul className="max-h-48 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                  {Object.entries(section.data)
-                    .sort((a, b) => b[1] - a[1])
-                    .map(([label, count]) => (
-                      <li
-                        key={label}
-                        className="flex justify-between rounded border border-indigo-500 bg-indigo-600/80 px-2 py-1"
-                      >
-                        <span>{label}</span>
-                        <span className="font-bold">{count}</span>
-                      </li>
-                    ))}
-                </ul>
+                {Object.keys(section.data).length === 0 ? (
+                  <p className="flex flex-1 items-center justify-center text-sm text-gray-400 italic">
+                    No games registered yet with this data.
+                  </p>
+                ) : (
+                  <ul className="max-h-48 flex-1 space-y-1.5 overflow-y-auto rounded-xl border border-indigo-400 bg-slate-900 p-2 text-sm shadow-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    {Object.entries(section.data)
+                      .sort((a, b) => b[1] - a[1])
+                      .map(([label, count]) => (
+                        <li
+                          key={label}
+                          className="flex justify-between rounded border border-indigo-500 bg-indigo-600/80 px-2 py-1"
+                        >
+                          <span>{label}</span>
+                          <span className="font-bold">{count}</span>
+                        </li>
+                      ))}
+                  </ul>
+                )}
               </div>
             ))}
         </div>
@@ -295,60 +286,64 @@ function Stats() {
         { title: "Platform", icon: Monitor, data: favByPlatform },
         { title: "Category", icon: List, data: favByCategory },
         { title: "Subcategory", icon: Layers, data: favBySubcategory },
-      ].map(
-        (section) =>
-          section.data.length > 0 && (
-            <section
-              id={`section-${section.title}`}
-              key={section.title}
-              className="overflow-hidden rounded-xl border border-indigo-400 bg-indigo-800/80 shadow-md"
+      ].map(section =>
+        <section
+          id={`section-${section.title}`}
+          key={section.title}
+          className="overflow-hidden rounded-xl border border-indigo-400 bg-indigo-800/80 shadow-md"
+        >
+          {/* Header */}
+          <button
+            className="relative flex w-full items-center justify-center p-3 text-lg font-semibold text-gray-100 transition-colors hover:bg-indigo-900"
+            onClick={() => toggleSection(section.title)}
+          >
+            <span className="absolute left-3">
+              {openSections[section.title] ? (
+                <ChevronDown
+                  size={20}
+                  className="transition-transform duration-300 rotate-180"
+                />
+              ) : (
+                <ChevronRight
+                  size={20}
+                  className="transition-transform duration-300"
+                />
+              )}
+            </span>
+
+            <span
+              className="
+                flex items-center gap-2
+                text-indigo-100 font-bold
+                drop-shadow-[0_0_6px_#818CF8]
+              "
             >
-              {/* Header */}
-              <button
-                className="relative flex w-full items-center justify-center p-3 text-lg font-semibold text-gray-100 transition-colors hover:bg-indigo-900"
-                onClick={() => toggleSection(section.title)}
-              >
-                <span className="absolute left-3">
-                  {openSections[section.title] ? (
-                    <ChevronDown
-                      size={20}
-                      className="transition-transform duration-300 rotate-180"
-                    />
-                  ) : (
-                    <ChevronRight
-                      size={20}
-                      className="transition-transform duration-300"
-                    />
-                  )}
-                </span>
+              <section.icon size={18} />
+              {section.title}
+              <section.icon size={18} />
+            </span>
+          </button>
 
-                <span
-                  className="
-                    flex items-center gap-2
-                    text-indigo-100 font-bold
-                    drop-shadow-[0_0_6px_#818CF8]
-                  "
-                >
-                  <section.icon size={18} />
-                  {section.title}
-                  <section.icon size={18} />
-                </span>
-              </button>
-
-              {/* CONTENIDO ANIMADO */}
-              <div
-                className={`
-                  overflow-hidden transition-all duration-500 ease-in-out
-                  ${
-                    openSections[section.title]
-                      ? "opacity-100"
-                      : "max-h-0 opacity-0"
-                  }
-                  border-t border-indigo-500
-                  bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950
-                `}
-              >
-                <div className="flex flex-wrap justify-around gap-6 p-4 mb-4">
+          {/* CONTENIDO ANIMADO */}
+          <div
+            className={`
+              overflow-hidden transition-all duration-500 ease-in-out
+              ${
+                openSections[section.title]
+                  ? "opacity-100"
+                  : "max-h-0 opacity-0"
+              }
+              border-t border-indigo-500
+              bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950
+            `}
+          >
+            <div className="p-4">
+              {section.data.length === 0 ? (
+                <p className="text-center text-gray-400 italic">
+                  No favorites yet.
+                </p>
+              ) : (
+                <div className="flex flex-wrap justify-around gap-6 mb-4">
                   {section.data.map(({ label, game }) => (
                     <div key={label} className="flex flex-col items-center">
                       <h3 className="mb-2 text-center text-lg font-bold text-indigo-100 drop-shadow-[0_0_6px_#818CF8]">
@@ -358,9 +353,10 @@ function Stats() {
                     </div>
                   ))}
                 </div>
-              </div>
-            </section>
-          )
+              )}
+            </div>
+          </div>
+        </section>
       )}
     </div>
   );

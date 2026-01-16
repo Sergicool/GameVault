@@ -374,7 +374,6 @@ function AddGame() {
                 }))}
               />
             </div>
-
             
             <div className="flex-1">
               <CustomSelect

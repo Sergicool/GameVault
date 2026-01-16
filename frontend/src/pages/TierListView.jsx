@@ -35,48 +35,54 @@ function TierListView() {
   });
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadData = async () => {
-      const [
-        gamesData,
-        tiersData,
-        yearsData,
-        genresData,
-        originsData,
-        platformsData,
-        categoriesData,
-        subcategoriesData,
-      ] = await Promise.all([
-        getGames(),
-        getTiers(),
-        getYears(),
-        getGenres(),
-        getOrigins(),
-        getPlatforms(),
-        getCategories(),
-        getSubcategories(),
-      ]);
+      try {
+        const [
+          gamesData,
+          tiersData,
+          yearsData,
+          genresData,
+          originsData,
+          platformsData,
+          categoriesData,
+          subcategoriesData,
+        ] = await Promise.all([
+          getGames(),
+          getTiers(),
+          getYears(),
+          getGenres(),
+          getOrigins(),
+          getPlatforms(),
+          getCategories(),
+          getSubcategories(),
+        ]);
 
-      const enrichedGames = gamesData.map((game) => ({
-        ...game,
-        imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
-          game.name,
-        )}?t=${Date.now()}`,
-      }));
+        const enrichedGames = gamesData.map((game) => ({
+          ...game,
+          imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
+            game.name,
+          )}?t=${Date.now()}`,
+        }));
 
-      setGames(enrichedGames);
-      setTiers(tiersData);
-      setYears(yearsData);
-      setGenres(genresData);
-      setOrigins(originsData);
-      setPlatforms(platformsData);
-      setCategories(categoriesData);
-      setSubcategories(subcategoriesData);
+        setGames(enrichedGames);
+        setTiers(tiersData);
+        setYears(yearsData);
+        setGenres(genresData);
+        setOrigins(originsData);
+        setPlatforms(platformsData);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
+      } finally {
+        setLoading(false);
+      }
     };
 
     loadData();
   }, []);
+
 
   const filteredGames = useMemo(() => {
     let juegos = [...games];
@@ -147,11 +153,18 @@ function TierListView() {
     return grouped;
   }, [filteredGames, tiers]);
 
+  if (loading) {
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        Loading games...
+      </p>
+    );
+  }
+
   if (tiers.length === 0) {
     return (
       <p className="text-md mt-20 text-center text-gray-400 italic">
-        {" "}
-        Loading games...{" "}
+        Theres have to be tiers and games registered.
       </p>
     );
   }

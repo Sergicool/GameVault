@@ -146,6 +146,14 @@ function Games() {
     });
   }, [games, filters, searchQuery]);
 
+  if (games.length === 0) {
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        No games registered yet.
+      </p>
+    );
+  }
+
   return (
     <div className="flex">
       <SidebarFilters
@@ -193,11 +201,7 @@ function Games() {
             </div>
 
             {/* Resultados */}
-            {!hasGames ? (
-              <p className="text-md mt-20 text-center text-gray-400 italic">
-                No games added yet
-              </p>
-            ) : filteredGames.length > 0 ? (
+            {filteredGames.length > 0 ? (
               <div className="flex flex-wrap justify-around gap-6">
                 {filteredGames.map((game) => (
                   <GameCard key={game.name} game={game} expandible />

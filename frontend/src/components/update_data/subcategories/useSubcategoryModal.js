@@ -4,8 +4,12 @@ export function useSubcategoryModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState({ name: '', category: '', originalName: null });
 
-  const openCreate = () => {
-    setValue({ name: '', category: '', originalName: null });
+  const openCreate = (categories = []) => {
+    setValue({
+      name: "",
+      category: categories.length === 1 ? categories[0].name : "",
+      originalName: null,
+    });
     setIsOpen(true);
   };
 
