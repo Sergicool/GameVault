@@ -47,7 +47,7 @@ For easier access, you can save this address as a browser bookmark.
 GameVault will start automatically every time Windows boots.
 You just need to open it in your browser.
 
-## ❌ Uninstallation (manual)
+## ❌ Uninstallation
 
 Stop and remove the PM2 processes, open a terminal and execute:
 
@@ -58,3 +58,17 @@ pm2 save
 ```
 
 Delete the GameVault folder from the location where you installed it.
+
+To uninstall GameVault:
+
+* Place the uninstall-gamevault.bat file in the same folder where GameVault was installed.
+* Right-click the .bat file and select “Run as administrator”.
+
+The uninstaller will, ask if you want to delete the GameVault folder entirely.
+
+After running the uninstaller:
+
+* If you confirmed, the folder will be deleted automatically.
+* If not, you can remove the folder manually if desired.
+
+This ensures GameVault is completely removed from your system, including PM2 processes.
