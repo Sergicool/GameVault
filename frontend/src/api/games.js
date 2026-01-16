@@ -2,13 +2,13 @@ const API_URL = 'http://localhost:3001';
 
 export async function getGames() {
   const res = await fetch(`${API_URL}/games`);
-  if (!res.ok) throw new Error('Error al obtener juegos');
+  if (!res.ok) throw new Error('Error obtaining games');
   return res.json();
 }
 
 export async function getGameByName(name) {
   const res = await fetch(`${API_URL}/games/${encodeURIComponent(name)}`);
-  if (!res.ok) throw new Error('Error al obtener juego');
+  if (!res.ok) throw new Error('Error obtaining game');
   return res.json();
 }
 
@@ -35,7 +35,7 @@ export async function addGame(gameData) {
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || 'Error al agregar juego');
+    throw new Error(err.error || 'Error adding game');
   }
 
   return res.json();
@@ -67,7 +67,7 @@ export async function updateGame(gameData) {
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || 'Error al actualizar juego');
+    throw new Error(err.error || 'Error updating game');
   }
 
   return res.json();
@@ -80,7 +80,7 @@ export async function updateGamesTierList(games) {
     body: JSON.stringify(games),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar tier list');
+  if (!res.ok) throw new Error(data.error || 'Error updating tier list');
   return data;
 }
 
@@ -94,7 +94,7 @@ export async function deleteGame(name) {
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || 'Error al eliminar juego');
+    throw new Error(err.error || 'Error deleting game');
   }
 
   return res.json();

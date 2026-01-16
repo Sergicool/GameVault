@@ -28,8 +28,8 @@ app.get("/download-db", (req, res) => {
   const dbPath = path.join(__dirname, "database", "game_vault.db");
   res.download(dbPath, "game_vault.db", (err) => {
     if (err) {
-      console.error("Error al enviar la DB:", err);
-      res.status(500).send("Error descargando la base de datos");
+      console.error("Error sending DB:", err);
+      res.status(500).send("Error downloading the database");
     }
   });
 });
@@ -44,14 +44,14 @@ app.post("/upload-db", dbUpload.single("dbfile"), (req, res) => {
 
   fs.copyFile(tempPath, targetPath, (err) => {
     if (err) {
-      console.error("❌ Error copiando DB:", err);
+      console.error("❌ Error copying DB:", err);
       return res.status(500).json({ success: false, error: err.message });
     }
 
     // eliminar archivo temporal
     fs.unlink(tempPath, () => {});
-    console.log("✅ Base de datos reemplazada");
-    res.json({ success: true, message: "Base de datos importada correctamente" });
+    console.log("✅ Database imported successfully");
+    res.json({ success: true, message: "Database imported successfully" });
   });
 });
 
@@ -92,7 +92,7 @@ app.get('/genres', (req, res) => {
 app.post('/update-genre', (req, res) => {
   const { oldName, newName, color } = req.body;
   if (!oldName || !newName || !color) {
-    return res.status(400).json({ error: 'Datos incompletos' });
+    return res.status(400).json({ error: 'Incomplete data' });
   }
 
   try {
@@ -101,7 +101,7 @@ app.post('/update-genre', (req, res) => {
     res.json({ success: true, changes: result.changes });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Error al actualizar género' });
+    res.status(500).json({ error: 'Error updating genre' });
   }
 });
 
@@ -117,7 +117,7 @@ app.post('/delete-genre', (req, res) => {
 
     if (inUse) {
       return res.status(400).json({
-        error: 'No se puede eliminar el género porque está asignado a uno o más juegos',
+        error: 'Cannot delete genre because it is in use by one or more games.',
       });
     }
 
@@ -383,7 +383,7 @@ app.post('/update-tier', (req, res) => {
   const { oldName, newName, color } = req.body;
 
   if (!oldName || !newName || !color) {
-    return res.status(400).json({ error: 'Datos incompletos' });
+    return res.status(400).json({ error: 'Incomplete data' });
   }
 
   try {
@@ -401,7 +401,7 @@ app.post('/update-tier', (req, res) => {
     });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Error al actualizar tier' });
+    res.status(500).json({ error: 'Error updating tier' });
   }
 });
 
@@ -421,10 +421,10 @@ app.post('/move-tier-up', (req, res) => {
   const { name } = req.body;
   try {
     const current = db.prepare("SELECT * FROM tiers WHERE name = ?").get(name);
-    if (!current) throw new Error("Tier no encontrado");
+    if (!current) throw new Error("Tier not found");
 
     const above = db.prepare("SELECT * FROM tiers WHERE position < ? ORDER BY position DESC LIMIT 1").get(current.position);
-    if (!above) return res.json({ success: false, message: "Ya está en la primera posición" });
+    if (!above) return res.json({ success: false, message: "Already at the first position" });
 
     const update = db.prepare("UPDATE tiers SET position = ? WHERE name = ?");
 
@@ -444,10 +444,10 @@ app.post('/move-tier-down', (req, res) => {
   const { name } = req.body;
   try {
     const current = db.prepare("SELECT * FROM tiers WHERE name = ?").get(name);
-    if (!current) throw new Error("Tier no encontrado");
+    if (!current) throw new Error("Tier not found");
 
     const below = db.prepare("SELECT * FROM tiers WHERE position > ? ORDER BY position ASC LIMIT 1").get(current.position);
-    if (!below) return res.json({ success: false, message: "Ya está en la última posición" });
+    if (!below) return res.json({ success: false, message: "Already at the last position" });
 
     const update = db.prepare("UPDATE tiers SET position = ? WHERE name = ?");
 
@@ -537,8 +537,8 @@ app.get('/games', (req, res) => {
 
     res.json(enrichedGames);
   } catch (err) {
-    console.error('Error al obtener juegos:', err.message);
-    res.status(500).json({ error: 'Error al obtener juegos' });
+    console.error('Error obtaining games:', err.message);
+    res.status(500).json({ error: 'Error obtaining games' });
   }
 });
 
@@ -555,13 +555,13 @@ app.get('/games/:name', (req, res) => {
     `);
 
     const game = gameStmt.get(req.params.name);
-    if (!game) return res.status(404).json({ error: 'Juego no encontrado' });
+    if (!game) return res.status(404).json({ error: 'Game not found' });
 
     const genres = genreStmt.all(game.name);
     res.json({ ...game, genres });
   } catch (err) {
-    console.error('Error al obtener juego:', err.message);
-    res.status(500).json({ error: 'Error al obtener juego' });
+    console.error('Error obtaining game:', err.message);
+    res.status(500).json({ error: 'Error obtaining game' });
   }
 });
 
@@ -710,14 +710,14 @@ app.post('/delete-game', (req, res) => {
     const result = deleteGame.run(name);
 
     if (result.changes === 0) {
-      return res.status(404).json({ error: 'Juego no encontrado' });
+      return res.status(404).json({ error: 'Game not found' });
     }
 
     recomputeGamePositions(db);
     res.json({ success: true });
   } catch (e) {
-    console.error('Error al eliminar juego:', e.message);
-    res.status(500).json({ error: 'Error al eliminar juego' });
+    console.error('Error deleting game:', e.message);
+    res.status(500).json({ error: 'Error deleting game' });
   }
 });
 
@@ -731,7 +731,7 @@ app.get('/game-image/:name', (req, res) => {
     const result = stmt.get(name);
 
     if (!result || !result.image) {
-      return res.status(404).send('Imagen no encontrada');
+      return res.status(404).send('Image not found');
     }
 
     res.set('Content-Type', 'image/jpeg'); // o 'image/png' si usas PNG
@@ -760,5 +760,5 @@ app.post('/update-game-image', upload.single('image'), (req, res) => {
 // -------------------------------------------------------------------- //
 
 app.listen(PORT, () => {
-  console.log(`✅ Backend corriendo en http://localhost:${PORT}`);
+  console.log(`✅ Backend running on http://localhost:${PORT}`);
 });

@@ -7,12 +7,12 @@ export async function addYear(year) {
     body: JSON.stringify({ year }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al añadir año');
+  if (!res.ok) throw new Error(data.error || 'Error adding year');
 }
 
 export async function getYears() {
   const res = await fetch(`${API_URL}/years`);
-  if (!res.ok) throw new Error('Error al obtener los años');
+  if (!res.ok) throw new Error('Error obtaining years');
   return await res.json();
 }
 
@@ -23,5 +23,5 @@ export async function deleteYear(year) {
     body: JSON.stringify({ year }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al eliminar año');
+  if (!res.ok) throw new Error(data.error || 'Error deleting year');
 }

@@ -3,7 +3,7 @@ const API_URL = 'http://localhost:3001';
 export async function getTiers() {
   const res = await fetch(`${API_URL}/tiers`);
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al obtener tiers');
+  if (!res.ok) throw new Error(data.error || 'Error obtaining tiers');
   return data;
 }
 
@@ -14,7 +14,7 @@ export async function addTier(name, color, position) {
     body: JSON.stringify({ name, color, position }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al añadir tier');
+  if (!res.ok) throw new Error(data.error || 'Error adding tier');
 }
 
 export async function updateTier(oldName, newName, color) {
@@ -25,7 +25,7 @@ export async function updateTier(oldName, newName, color) {
   });
 
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar tier');
+  if (!res.ok) throw new Error(data.error || 'Error updating tier');
   return data;
 }
 
@@ -37,7 +37,7 @@ export async function moveTierUp(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al subir tier');
+  if (!res.ok) throw new Error(data.error || 'Error moving tier up');
 }
 
 export async function moveTierDown(name) {
@@ -47,7 +47,7 @@ export async function moveTierDown(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al bajar tier');
+  if (!res.ok) throw new Error(data.error || 'Error moving tier down');
 }
 
 export async function deleteTier(name) {
@@ -57,5 +57,5 @@ export async function deleteTier(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al borrar tier');
+  if (!res.ok) throw new Error(data.error || 'Error deleting tier');
 }

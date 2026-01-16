@@ -7,12 +7,12 @@ export async function addCategory(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al añadir categoría');
+  if (!res.ok) throw new Error(data.error || 'Error adding category');
 }
 
 export async function getCategories() {
   const res = await fetch(`${API_URL}/categories`);
-  if (!res.ok) throw new Error('Error al obtener las categorías');
+  if (!res.ok) throw new Error('Error obtaining categories');
   return await res.json();
 }
 
@@ -23,7 +23,7 @@ export async function updateCategory(oldName, newName) {
     body: JSON.stringify({ oldName, newName }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar categoria');
+  if (!res.ok) throw new Error(data.error || 'Error updating category');
 }
 
 export async function deleteCategory(name) {
@@ -33,5 +33,5 @@ export async function deleteCategory(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al eliminar categoría');
+  if (!res.ok) throw new Error(data.error || 'Error deleting category');
 }

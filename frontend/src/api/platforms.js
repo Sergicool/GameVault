@@ -7,12 +7,12 @@ export async function addPlatform(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al añadir plataforma');
+  if (!res.ok) throw new Error(data.error || 'Error adding platform');
 }
 
 export async function getPlatforms() {
   const res = await fetch(`${API_URL}/platforms`);
-  if (!res.ok) throw new Error('Error al obtener las plataformas');
+  if (!res.ok) throw new Error('Error obtaining platforms');
   return await res.json();
 }
 
@@ -23,7 +23,7 @@ export async function updatePlatform(oldName, newName) {
     body: JSON.stringify({ oldName, newName }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar plataforma');
+  if (!res.ok) throw new Error(data.error || 'Error updating platform');
 }
 
 export async function deletePlatform(name) {
@@ -33,5 +33,5 @@ export async function deletePlatform(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al eliminar plataforma');
+  if (!res.ok) throw new Error(data.error || 'Error deleting platform');
 }

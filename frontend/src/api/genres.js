@@ -2,7 +2,7 @@ const API_URL = 'http://localhost:3001';
 
 export async function getGenres() {
   const res = await fetch(`${API_URL}/genres`);
-  if (!res.ok) throw new Error('Error al obtener géneros');
+  if (!res.ok) throw new Error('Error obtaining genres');
   return res.json();
 }
 
@@ -15,7 +15,7 @@ export async function addGenre(name, color) {
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || 'Error al agregar género');
+    throw new Error(err.error || 'Error adding genre');
   }
 
   return res.json();
@@ -28,7 +28,7 @@ export async function updateGenre(oldName, newName, color) {
     body: JSON.stringify({ oldName, newName, color }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar género');
+  if (!res.ok) throw new Error(data.error || 'Error updating genre');
 }
 
 
@@ -41,7 +41,7 @@ export async function deleteGenre(name) {
 
   if (!res.ok) {
     const err = await res.json();
-    throw new Error(err.error || 'Error al eliminar género');
+    throw new Error(err.error || 'Error deleting genre');
   }
 
   return res.json();

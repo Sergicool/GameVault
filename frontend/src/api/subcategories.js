@@ -7,12 +7,12 @@ export async function addSubcategory(name, category) {
     body: JSON.stringify({ name, category }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al añadir subcategoría');
+  if (!res.ok) throw new Error(data.error || 'Error adding subcategory');
 }
 
 export async function getSubcategories() {
   const res = await fetch(`${API_URL}/subcategories`);
-  if (!res.ok) throw new Error('Error al obtener subcategorías');
+  if (!res.ok) throw new Error('Error obtaining subcategories');
   return await res.json();
 }
 
@@ -23,7 +23,7 @@ export async function updateSubcategory(oldName, newName) {
     body: JSON.stringify({ oldName, newName }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al actualizar subcategoría');
+  if (!res.ok) throw new Error(data.error || 'Error updating subcategory');
 }
 
 export async function deleteSubcategory(name) {
@@ -33,5 +33,5 @@ export async function deleteSubcategory(name) {
     body: JSON.stringify({ name }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Error al eliminar subcategoría');
+  if (!res.ok) throw new Error(data.error || 'Error deleting subcategory');
 }
