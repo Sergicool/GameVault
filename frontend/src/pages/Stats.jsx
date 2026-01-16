@@ -341,14 +341,14 @@ function Stats() {
                   overflow-hidden transition-all duration-500 ease-in-out
                   ${
                     openSections[section.title]
-                      ? "max-h-[2000px] opacity-100"
+                      ? "opacity-100"
                       : "max-h-0 opacity-0"
                   }
                   border-t border-indigo-500
                   bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-950
                 `}
               >
-                <div className="flex flex-wrap justify-around gap-6 p-4">
+                <div className="flex flex-wrap justify-around gap-6 p-4 mb-4">
                   {section.data.map(({ label, game }) => (
                     <div key={label} className="flex flex-col items-center">
                       <h3 className="mb-2 text-center text-lg font-bold text-indigo-100 drop-shadow-[0_0_6px_#818CF8]">
