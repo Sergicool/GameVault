@@ -33,47 +33,53 @@ function Stats() {
   const [years, setYears] = useState([]);
   const [openSections, setOpenSections] = useState({}); // Para desplegables
 
+  const [loading, setLoading] = useState(true);
+
   /* Carga de datos */
   useEffect(() => {
     const load = async () => {
-      const [
-        gamesData,
-        genresData,
-        originsData,
-        platformsData,
-        categoriesData,
-        subcategoriesData,
-        tiersData,
-        yearsData,
-      ] = await Promise.all([
-        getGames(),
-        getGenres(),
-        getOrigins(),
-        getPlatforms(),
-        getCategories(),
-        getSubcategories(),
-        getTiers(),
-        getYears(),
-      ]);
+      try{
+        const [
+          gamesData,
+          genresData,
+          originsData,
+          platformsData,
+          categoriesData,
+          subcategoriesData,
+          tiersData,
+          yearsData,
+        ] = await Promise.all([
+          getGames(),
+          getGenres(),
+          getOrigins(),
+          getPlatforms(),
+          getCategories(),
+          getSubcategories(),
+          getTiers(),
+          getYears(),
+        ]);
 
-      /* Preview de imagen con timestamp para evitar caching */
-      const enriched = gamesData.map((game) => ({
-        ...game,
-        imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
-          game.name,
-        )}?t=${Date.now()}`,
-      }));
+        /* Preview de imagen con timestamp para evitar caching */
+        const enriched = gamesData.map((game) => ({
+          ...game,
+          imagePreview: `http://localhost:3001/game-image/${encodeURIComponent(
+            game.name,
+          )}?t=${Date.now()}`,
+        }));
 
-      /* Ordenar juegos por posición */
-      enriched.sort((a, b) => a.position - b.position);
-      setGames(enriched);
-      setGenres(genresData);
-      setOrigins(originsData);
-      setPlatforms(platformsData);
-      setCategories(categoriesData);
-      setSubcategories(subcategoriesData);
-      setTiers(tiersData);
-      setYears(yearsData);
+        /* Ordenar juegos por posición */
+        enriched.sort((a, b) => a.position - b.position);
+        setGames(enriched);
+        setGenres(genresData);
+        setOrigins(originsData);
+        setPlatforms(platformsData);
+        setCategories(categoriesData);
+        setSubcategories(subcategoriesData);
+        setTiers(tiersData);
+        setYears(yearsData);
+      } finally {
+        setLoading(false);
+      }
     };
     load();
   }, []);
@@ -166,6 +172,14 @@ function Stats() {
       return { ...prev, [key]: isOpening };
     });
   };
+
+  if (loading) {
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        Loading games...
+      </p>
+    );
+  }
 
   /* Render */
   return (

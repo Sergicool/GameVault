@@ -39,12 +39,9 @@ function Games() {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const hasGames = games.length > 0;
-
   useEffect(() => {
     const loadData = async () => {
       try {
-        setLoading(true);
         const [
           gamesData,
           yearsData,
@@ -83,7 +80,7 @@ function Games() {
         setSubcategories(subcategoriesData);
         setTiers(tiersData);
       } finally {
-        setLoading(false); // termina la carga
+        setLoading(false);
       }
     };
 
@@ -146,6 +143,14 @@ function Games() {
     });
   }, [games, filters, searchQuery]);
 
+  if (loading) {
+    return (
+      <p className="text-md mt-20 text-center text-gray-400 italic">
+        Loading games...
+      </p>
+    );
+  }
+  
   if (games.length === 0) {
     return (
       <p className="text-md mt-20 text-center text-gray-400 italic">
